@@ -1,3 +1,4 @@
+import Menu from "@/components/Menu";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -17,6 +18,7 @@ export default function dashboardLayout({
           <Image src={"/logo.png"} alt="logo" width={32} height={32} />
           <span className="hidden lg:block">SchooLama</span>
         </Link>
+        <Menu />
       </div>
 
       {/* RIGHT */}
