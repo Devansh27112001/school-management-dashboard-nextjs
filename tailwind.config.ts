@@ -11,6 +11,12 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        devanshSky: "#C3EBFA",
+        devanshSkyLight: "#EDF9FD",
+        devanshPurple: "#CFCEFF",
+        devanshPurpleLight: "#F1F0FF",
+        devanshYellow: "#FAE27C",
+        devanshYellowLight: "#FEFCE8",
       },
     },
   },
