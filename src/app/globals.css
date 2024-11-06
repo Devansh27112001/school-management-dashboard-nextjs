@@ -29,10 +29,10 @@
 }
 
 .react-calendar {
-  width: 100%;
+  width: 100% !important;
   max-width: 100%;
   background: white;
-  border: none;
+  border: none !important;
   font-family: "Inter", sans-serif;
   line-height: 1.125em;
 }
