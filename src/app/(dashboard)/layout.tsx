@@ -17,9 +17,7 @@ export default function dashboardLayout({
           className="flex items-center justify-center lg:justify-start gap-1 tracking-tight"
         >
           <Image src={"/logo.png"} alt="logo" width={32} height={32} />
-          <span className="hidden lg:block font-semibold uppercase">
-            SchooLama
-          </span>
+          <span className="hidden lg:block font-bold uppercase">SchooLama</span>
         </Link>
         <Menu />
       </div>
