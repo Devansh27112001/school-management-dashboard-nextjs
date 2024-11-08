@@ -1,19 +1,29 @@
-import { Calendar, momentLocalizer } from "react-big-calendar";
+import { Calendar, momentLocalizer, View, Views } from "react-big-calendar";
 import moment from "moment";
 import { calendarEvents } from "@/lib/data";
+import { useState } from "react";
 
 const localizer = momentLocalizer(moment);
 
-const BigCalender = () => (
-  <div>
+const BigCalender = () => {
+  const [view, setView] = useState<View>(Views.WORK_WEEK);
+  const handleOnChangeView = (selectedView: View) => {
+    setView(selectedView);
+  };
+  return (
     <Calendar
       localizer={localizer}
       events={calendarEvents}
       startAccessor="start"
       endAccessor="end"
-      style={{ height: 500 }}
+      views={["work_week", "day"]}
+      view={view}
+      style={{ height: "98%" }}
+      min={new Date(2024, 10, 1, 8, 0, 0)}
+      max={new Date(2024, 10, 1, 17, 0, 0)}
+      onView={handleOnChangeView}
     />
-  </div>
-);
+  );
+};
 
 export default BigCalender;
