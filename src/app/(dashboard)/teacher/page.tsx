@@ -1,5 +1,4 @@
 "use client";
-
 import Announcements from "@/components/Announcements";
 import BigCalender from "@/components/BigCalender";
 import "react-big-calendar/lib/css/react-big-calendar.css";
