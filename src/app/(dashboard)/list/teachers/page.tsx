@@ -55,10 +55,10 @@ const columns = [
 
 const TeachersListPage = () => {
   const renderRow = (item: Teacher) => (
-    <tr>
-      <td>
+    <tr key={item.id} className="text-left">
+      <td className="flex items-center gap-4 p-4">
         <Image
-          src={item.phone}
+          src={item.photo}
           width={40}
           height={40}
           alt=""

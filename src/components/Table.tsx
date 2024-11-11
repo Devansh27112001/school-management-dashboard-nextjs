@@ -4,29 +4,17 @@ interface TableColumnProps {
   className?: string;
 }
 
-interface TeachersDataProp {
-  id: number;
-  teacherId: string;
-  name: string;
-  email?: string;
-  photo: string;
-  phone: string;
-  subjects: string[];
-  classes: string[];
-  address: string;
-}
-
 interface TableProps {
   columns: TableColumnProps[];
-  renderRow: (item: TeachersDataProp) => React.ReactNode;
-  data: TeachersDataProp[];
+  renderRow: (item: any) => React.ReactNode;
+  data: any[];
 }
 
 const Table = ({ columns, renderRow, data }: TableProps) => {
   return (
     <table className="w-full mt-4">
       <thead>
-        <tr>
+        <tr className="text-left text-gray-400 text-sm">
           {columns.map((column) => (
             <th key={column.accessor} className={column.className || ""}>
               {column.header}
@@ -34,6 +22,7 @@ const Table = ({ columns, renderRow, data }: TableProps) => {
           ))}
         </tr>
       </thead>
+      <tbody>{data.map((item) => renderRow(item))}</tbody>
     </table>
   );
 };
