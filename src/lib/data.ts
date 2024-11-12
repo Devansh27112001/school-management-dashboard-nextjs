@@ -6,7 +6,7 @@ export const menuItems = [
       {
         icon: "/home.png",
         label: "Home",
-        href: "/",
+        href: "/admin",
         visible: ["admin", "teacher", "student", "parent"],
       },
       {
@@ -18,7 +18,7 @@ export const menuItems = [
       {
         icon: "/student.png",
         label: "Students",
-        href: "/list/teachers",
+        href: "/list/students",
         visible: ["admin", "teacher"],
       },
       {
