@@ -1,38 +1,25 @@
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
-import { parentsData, role } from "@/lib/data";
+import { role, subjectsData } from "@/lib/data";
 import Image from "next/image";
 import Link from "next/link";
 
-type Parent = {
+type Subject = {
   id: number;
   name: string;
-  email?: string;
-  phone?: string;
-  students: string[];
-  address: string;
+  teachers: string[];
 };
 
 const columns = [
   {
-    header: "Info",
-    accessor: "info",
+    header: "Subject Name",
+    accessor: "subjectName",
   },
   {
-    header: "Student Names",
-    accessor: "studentName",
+    header: "Teachers",
+    accessor: "teachers",
     className: "hidden md:table-cell",
-  },
-  {
-    header: "Phone",
-    accessor: "phone",
-    className: "hidden lg:table-cell",
-  },
-  {
-    header: "Address",
-    accessor: "address",
-    className: "hidden lg:table-cell",
   },
   {
     header: "Actions",
@@ -40,21 +27,16 @@ const columns = [
   },
 ];
 
-const ParentListPage = () => {
-  const renderRow = (item: Parent) => (
+const SubjectListPage = () => {
+  const renderRow = (item: Subject) => (
     <tr
       key={item.id}
       className="border-b border-b-200 even:bg-slate-50 text-sm hover:bg-devanshPurpleLight"
     >
       <td className="flex items-center gap-4 p-4">
-        <div className="flex flex-col">
-          <h3 className="font-semibold">{item.name}</h3>
-          <p className="text-sm text-gray-500">{item?.email}</p>
-        </div>
+        <h3 className="font-medium text-sm">{item.name}</h3>
       </td>
-      <td className="hidden md:table-cell">{item.students?.join(",")}</td>
-      <td className="hidden lg:table-cell">{item.phone}</td>
-      <td className="hidden lg:table-cell">{item.address}</td>
+      <td className="hidden md:table-cell">{item.teachers?.join(", ")}</td>
       <td>
         <div className="flex gap-2 items-center">
           <Link href={`/list/teachers/${item.id}`}>
@@ -101,7 +83,7 @@ const ParentListPage = () => {
       </div>
 
       {/* LIST SECTION */}
-      <Table columns={columns} renderRow={renderRow} data={parentsData} />
+      <Table columns={columns} renderRow={renderRow} data={subjectsData} />
 
       {/* PAGINATION SECTION */}
       <Pagination />
@@ -109,4 +91,4 @@ const ParentListPage = () => {
   );
 };
 
-export default ParentListPage;
+export default SubjectListPage;
