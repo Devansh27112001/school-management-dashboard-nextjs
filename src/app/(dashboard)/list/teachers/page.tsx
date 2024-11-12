@@ -110,9 +110,11 @@ const TeachersListPage = () => {
               <Image src={"/sort.png"} width={14} height={14} alt={""} />
             </button>
 
-            <button className="size-8 bg-devanshYellow rounded-full flex items-center justify-center">
-              <Image src={"/plus.png"} width={14} height={14} alt={""} />
-            </button>
+            {role === "admin" && (
+              <button className="size-8 bg-devanshYellow rounded-full flex items-center justify-center">
+                <Image src={"/plus.png"} width={14} height={14} alt={""} />
+              </button>
+            )}
           </div>
         </div>
       </div>
