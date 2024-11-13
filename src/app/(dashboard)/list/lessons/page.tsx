@@ -32,7 +32,7 @@ const columns = [
   },
 ];
 
-const LessonsListPage = () => {
+const LessonListPage = () => {
   const renderRow = (item: Lessons) => (
     <tr
       key={item.id}
@@ -98,4 +98,4 @@ const LessonsListPage = () => {
   );
 };
 
-export default LessonsListPage;
+export default LessonListPage;

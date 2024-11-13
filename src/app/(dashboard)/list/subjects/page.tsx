@@ -41,7 +41,7 @@ const SubjectListPage = () => {
         <div className="flex gap-2 items-center">
           <Link href={`/list/teachers/${item.id}`}>
             <button className="size-7 flex items-center justify-center bg-devanshSky rounded-full">
-              <Image width={16} height={16} alt="" src={"/view.png"} />
+              <Image width={16} height={16} alt="" src={"/edit.png"} />
             </button>
           </Link>
           {role === "admin" && (
@@ -59,7 +59,7 @@ const SubjectListPage = () => {
       {/* TOP SECTION */}
       <div className="flex items-center justify-between">
         {/* RIGHT CORNER */}
-        <h1 className="hidden md:block text-lg font-semibold">All Students</h1>
+        <h1 className="hidden md:block text-lg font-semibold">All Subjects</h1>
 
         {/* LEFT CORNER */}
         <div className="flex flex-col md:flex-row gap-4 items-center w-full md:w-auto">
