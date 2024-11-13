@@ -1,36 +1,29 @@
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
-import { classesData, role } from "@/lib/data";
+import { lessonsData, role } from "@/lib/data";
 import Image from "next/image";
 import Link from "next/link";
 
-type Classes = {
+type Lessons = {
   id: number;
-  name: string;
-  capacity: number;
-  grade: number;
-  supervisor: string;
+  subject: string;
+  class: string;
+  teacher: string;
 };
 
 const columns = [
   {
-    header: "Class Name",
-    accessor: "className",
+    header: "Subject Name",
+    accessor: "subjectName",
   },
   {
-    header: "Capacity",
-    accessor: "capacity",
-    className: "hidden md:table-cell",
+    header: "Class",
+    accessor: "class",
   },
   {
-    header: "Grade",
-    accessor: "grade",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Supervisor",
-    accessor: "supervisor",
+    header: "Teacher",
+    accessor: "teacher",
     className: "hidden md:table-cell",
   },
   {
@@ -39,24 +32,23 @@ const columns = [
   },
 ];
 
-const ClassesListPage = () => {
-  const renderRow = (item: Classes) => (
+const LessonsListPage = () => {
+  const renderRow = (item: Lessons) => (
     <tr
       key={item.id}
       className="border-b border-b-200 even:bg-slate-50 text-sm hover:bg-devanshPurpleLight"
     >
       <td className="flex items-center gap-4 p-4">
-        <h3 className="font-medium text-sm">{item.name}</h3>
+        <h3 className="font-medium text-sm">{item.subject}</h3>
       </td>
-      <td className="hidden md:table-cell">{item.capacity}</td>
-      <td className="hidden md:table-cell">{item.grade}</td>
-      <td className="hidden lg:table-cell">{item.supervisor}</td>
+      <td className="">{item.class}</td>
+      <td className="hidden md:table-cell">{item.teacher}</td>
 
       <td>
         <div className="flex gap-2 items-center">
           <Link href={`/list/teachers/${item.id}`}>
             <button className="size-7 flex items-center justify-center bg-devanshSky rounded-full">
-              <Image width={16} height={16} alt="" src={"/view.png"} />
+              <Image width={16} height={16} alt="" src={"/edit.png"} />
             </button>
           </Link>
           {role === "admin" && (
@@ -74,7 +66,7 @@ const ClassesListPage = () => {
       {/* TOP SECTION */}
       <div className="flex items-center justify-between">
         {/* RIGHT CORNER */}
-        <h1 className="hidden md:block text-lg font-semibold">All Classes</h1>
+        <h1 className="hidden md:block text-lg font-semibold">All Lessons</h1>
 
         {/* LEFT CORNER */}
         <div className="flex flex-col md:flex-row gap-4 items-center w-full md:w-auto">
@@ -98,7 +90,7 @@ const ClassesListPage = () => {
       </div>
 
       {/* LIST SECTION */}
-      <Table columns={columns} renderRow={renderRow} data={classesData} />
+      <Table columns={columns} renderRow={renderRow} data={lessonsData} />
 
       {/* PAGINATION SECTION */}
       <Pagination />
@@ -106,4 +98,4 @@ const ClassesListPage = () => {
   );
 };
 
-export default ClassesListPage;
+export default LessonsListPage;
