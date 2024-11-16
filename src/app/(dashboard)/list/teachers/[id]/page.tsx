@@ -2,6 +2,9 @@
 import Image from "next/image";
 import BigCalender from "@/components/BigCalender";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import Announcements from "@/components/Announcements";
+import Link from "next/link";
+import PerformancePieChart from "@/components/PerformancePieChart";
 
 const SingleTeacherPage = () => {
   return (
@@ -115,7 +118,35 @@ const SingleTeacherPage = () => {
       </div>
 
       {/* RIGHT */}
-      <div className="w-full xl:w-1/3">Right side</div>
+      <div className="w-full xl:w-1/3 flex flex-col gap-4">
+        {/* SHORCUT LINKS */}
+        <div className="bg-white p-4 rounded-md">
+          <h1 className="text-xl font-semibold">Shortcuts</h1>
+          <div className="mt-4 flex flex-wrap gap-4 text-xs text-gray-400">
+            <Link className="p-2 rounded-md bg-devanshSkyLight" href={"/"}>
+              Teacher&apos;s Classes
+            </Link>
+            <Link className="p-2 rounded-md bg-devanshPurpleLight" href={"/"}>
+              Teacher&apos;s Students
+            </Link>
+            <Link className="p-2 rounded-md bg-devanshYellowLight" href={"/"}>
+              Teacher&apos;s Lessons
+            </Link>
+            <Link className="p-2 rounded-md bg-pink-100" href={"/"}>
+              Teacher&apos;s Exams
+            </Link>
+            <Link className="p-2 rounded-md bg-devanshSkyLight" href={"/"}>
+              Teacher&apos;s Assignments
+            </Link>
+          </div>
+        </div>
+
+        {/* Performance Report */}
+        <PerformancePieChart />
+
+        {/* ANNOUNCEMENTS */}
+        <Announcements />
+      </div>
     </div>
   );
 };

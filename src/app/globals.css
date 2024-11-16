@@ -5,6 +5,8 @@
   --primary: #f8fafc;
   --secondary: #f1f5f9;
 }
+
+/* Scrollbar */
 *::-webkit-scrollbar {
   width: 5px;
 }
@@ -23,6 +25,13 @@
 ::-webkit-scrollbar-thumb:hover {
   background-color: #a8bbbf;
 }
+
+/* Custom class for reacharts-wrapper for reponsiveness */
+.recharts-wrapper {
+  width: 100% !important;
+}
+
+/* Custom class for react-calendar */
 
 .react-calendar {
   width: 100% !important;
