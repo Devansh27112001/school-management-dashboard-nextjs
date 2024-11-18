@@ -1,3 +1,4 @@
+import FormModal from "@/components/FormModal";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
@@ -54,15 +55,11 @@ const ClassesListPage = () => {
 
       <td>
         <div className="flex gap-2 items-center">
-          <Link href={`/list/teachers/${item.id}`}>
-            <button className="size-7 flex items-center justify-center bg-devanshSky rounded-full">
-              <Image width={16} height={16} alt="" src={"/edit.png"} />
-            </button>
-          </Link>
           {role === "admin" && (
-            <button className="size-7 flex items-center justify-center bg-devanshPurple rounded-full">
-              <Image width={16} height={16} alt="" src={"/delete.png"} />
-            </button>
+            <>
+              <FormModal table="class" type="update" data={item} />
+              <FormModal table="class" type="delete" id={item.id} />
+            </>
           )}
         </div>
       </td>
@@ -88,11 +85,7 @@ const ClassesListPage = () => {
               <Image src={"/sort.png"} width={14} height={14} alt={""} />
             </button>
 
-            {role === "admin" && (
-              <button className="size-8 bg-devanshYellow rounded-full flex items-center justify-center">
-                <Image src={"/plus.png"} width={14} height={14} alt={""} />
-              </button>
-            )}
+            {role === "admin" && <FormModal table="class" type="create" />}
           </div>
         </div>
       </div>
