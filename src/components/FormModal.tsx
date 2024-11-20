@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
+import TeacherForm from "./forms/TeacherForm";
 
 type FormModalProps = {
   table:
@@ -43,7 +44,7 @@ const FormModal = ({ table, type, data, id }: FormModalProps) => {
         </button>
       </form>
     ) : (
-      "Create or update record"
+      <TeacherForm type="create" />
     );
   };
 
