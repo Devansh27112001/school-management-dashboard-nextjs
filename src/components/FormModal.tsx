@@ -38,7 +38,7 @@ const FormModal = ({ table, type, data, id }: FormModalProps) => {
           All data will be lost. Are you sure you want to delete this {table}{" "}
           record?
         </span>
-        <button className="bg-red-700 text-white py-2 px-4 rounded-md border-none">
+        <button className="bg-red-700 text-white py-2 px-4 rounded-md border-none self-center w-max">
           Delete
         </button>
       </form>
