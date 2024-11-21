@@ -5,6 +5,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import Announcements from "@/components/Announcements";
 import Link from "next/link";
 import PerformancePieChart from "@/components/PerformancePieChart";
+import FormModal from "@/components/FormModal";
 
 const SingleTeacherPage = () => {
   return (
@@ -27,7 +28,27 @@ const SingleTeacherPage = () => {
               />
             </div>
             <div className="w-2/3 flex flex-col justify-between gap-4">
-              <h1 className="text-xl font-semibold">Devansh Kansara</h1>
+              <div className="flex justify-between items-center gap-4">
+                <h1 className="text-xl font-semibold">Devansh Kansara</h1>
+                <FormModal
+                  table="teacher"
+                  type="update"
+                  data={{
+                    id: 1,
+                    username: "devanshkansara",
+                    email: "devansh@gmail",
+                    password: "123456",
+                    firstName: "Devansh",
+                    lastName: "Kansara",
+                    phone: "1234567890",
+                    address: "123 Main St, Anytown, USA",
+                    bloodType: "A+",
+                    birthday: "2001-27-11",
+                    sex: "male",
+                    img: "https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=1200",
+                  }}
+                />
+              </div>
               <p className="text-sm text-gray-500">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
               </p>

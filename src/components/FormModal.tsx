@@ -44,7 +44,7 @@ const FormModal = ({ table, type, data, id }: FormModalProps) => {
         </button>
       </form>
     ) : (
-      <TeacherForm type="create" />
+      <TeacherForm type="update" data={data} />
     );
   };
 
