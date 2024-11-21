@@ -20,12 +20,14 @@ const InputField = ({
   inputProps,
 }: InputFieldProps) => {
   return (
-    <div className="flex flex-col gap-2 w-full md:w-1/4">
-      <label className="text-xs text-gray-400">{label}</label>
+    <div className="flex flex-col gap-2 w-full md:w-1/4 group">
+      <label className="text-xs text-gray-500 group-focus-within:font-semibold transition-all duration-300">
+        {label}
+      </label>
       <input
         type={type}
         {...register(name)}
-        className="ring-[1.5px] ring-gray-300 p-2 rounded-md w-full"
+        className="ring-[1.5px] ring-gray-300 p-2 rounded-md w-full focus:ring-blue-300 outline-none transition-all duration-300 text-sm"
         defaultValue={defaultValue}
         {...inputProps}
       />

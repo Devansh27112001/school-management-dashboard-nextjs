@@ -16,11 +16,8 @@ const schema = z.object({
   firstName: z.string().min(1, { message: "First name is required" }),
   lastName: z.string().min(1, { message: "Last name is required" }),
   phone: z
-    .number({
-      required_error: "Phone number is required",
-      invalid_type_error: "Phone number must be a number",
-    })
-    .min(1, { message: "Phone number is required" }),
+    .string()
+    .regex(/^\+?[1-9]\d{9,13}$/, { message: "Invalid phone number!" }),
   address: z.string().min(1, { message: "Address is required" }),
   birthday: z.date({ message: "Birth date is required" }),
   sex: z.enum(["male", "female", "other"], {
@@ -55,16 +52,57 @@ const TeacherForm = ({ type, data }: TeacherFormProps) => {
       <span className="text-xs text-gray-400 font-medium">
         Authentication information
       </span>
-      <InputField
-        label="Username"
-        error={errors?.username}
-        register={register}
-        name="username"
-        defaultValue={data?.username}
-      />
+      <div className="flex justify-between flex-wrap gap-4">
+        <InputField
+          label="Username"
+          error={errors?.username}
+          register={register}
+          name="username"
+          defaultValue={data?.username}
+        />{" "}
+        <InputField
+          label="Email"
+          type="email"
+          error={errors?.email}
+          register={register}
+          name="email"
+          defaultValue={data?.email}
+        />{" "}
+        <InputField
+          label="Password"
+          type="password"
+          error={errors?.password}
+          register={register}
+          name="password"
+          defaultValue={data?.password}
+        />
+      </div>
       <span className="text-xs text-gray-400 font-medium">
         Personal information
       </span>
+      <div className="flex justify-between flex-wrap gap-4">
+        <InputField
+          label="First name"
+          error={errors?.firstName}
+          register={register}
+          name="firstName"
+          defaultValue={data?.firstName}
+        />
+        <InputField
+          label="Last name"
+          error={errors?.lastName}
+          register={register}
+          name="lastName"
+          defaultValue={data?.lastName}
+        />
+        <InputField
+          label="Phone"
+          error={errors?.phone}
+          register={register}
+          name="phone"
+          defaultValue={data?.phone}
+        />
+      </div>
       <button type="submit" className="bg-blue-400 text-white rounded-md p-2">
         {type === "create" ? "create" : "update"}
       </button>
