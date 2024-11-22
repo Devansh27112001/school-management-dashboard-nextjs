@@ -2,7 +2,16 @@
 import Image from "next/image";
 import { useState } from "react";
 import TeacherForm from "./forms/TeacherForm";
+import StudentForm from "./forms/StudentForm";
+type FormObject = Record<
+  string,
+  (type: "create" | "update", data?: any) => JSX.Element
+>;
 
+const form: FormObject = {
+  teacher: (type, data) => <TeacherForm type={type} data={data} />,
+  student: (type, data) => <StudentForm type={type} data={data} />,
+};
 type FormModalProps = {
   table:
     | "teacher"
@@ -43,8 +52,10 @@ const FormModal = ({ table, type, data, id }: FormModalProps) => {
           Delete
         </button>
       </form>
+    ) : type === "create" || type === "update" ? (
+      form[table](type, data)
     ) : (
-      <TeacherForm type="update" data={data} />
+      "Form not found!"
     );
   };
 
