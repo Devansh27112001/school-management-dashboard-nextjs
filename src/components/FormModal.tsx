@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useState } from "react";
 import LoadingSpinner from "./LoadingSpinner";
+// import ParentForm from "./forms/ParentForm";
 // import TeacherForm from "./forms/TeacherForm";
 // import StudentForm from "./forms/StudentForm";
 
@@ -10,6 +11,10 @@ const TeacherForm = dynamic(() => import("./forms/TeacherForm"), {
   loading: () => <LoadingSpinner />,
 });
 const StudentForm = dynamic(() => import("./forms/StudentForm"), {
+  loading: () => <LoadingSpinner />,
+});
+
+const ParentForm = dynamic(() => import("./forms/ParentForm"), {
   loading: () => <LoadingSpinner />,
 });
 
@@ -21,6 +26,7 @@ type FormObject = Record<
 const form: FormObject = {
   teacher: (type, data) => <TeacherForm type={type} data={data} />,
   student: (type, data) => <StudentForm type={type} data={data} />,
+  parent: (type, data) => <ParentForm type={type} data={data} />,
 };
 type FormModalProps = {
   table:

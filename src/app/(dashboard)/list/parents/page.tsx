@@ -4,7 +4,6 @@ import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import { parentsData, role } from "@/lib/data";
 import Image from "next/image";
-import Link from "next/link";
 
 type Parent = {
   id: number;

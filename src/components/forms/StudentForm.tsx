@@ -16,7 +16,7 @@ const schema = z.object({
     .string()
     .min(8, { message: "Password must be atleast 8 characters long!" }),
   firstName: z.string().min(1, { message: "First name is required" }),
-  lastName: z.string().min(1, { message: "Lasr name is required" }),
+  lastName: z.string().min(1, { message: "Last name is required" }),
   phone: z
     .string()
     .regex(/^\+?[1-9]\d{9,13}$/, { message: "Invalid phone number!" }),
@@ -25,7 +25,7 @@ const schema = z.object({
     .string()
     .regex(/(A|B|AB|O)[+-]/, { message: "Invalid blood type!" }),
 
-  birthday: z.date({ message: "Birth date is required" }),
+  birthday: z.date({ message: "Birthday is required" }),
   sex: z.enum(["male", "female", "other"], {
     message: "Sex is required",
   }),
