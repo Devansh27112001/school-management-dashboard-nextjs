@@ -168,6 +168,9 @@ const ParentForm = ({ type, data }: ParentFormProps) => {
           )}
         </div>
       </div>
+      <button type="submit" className="bg-blue-400 text-white rounded-md p-2">
+        {type === "create" ? "create" : "update"}
+      </button>
     </form>
   );
 };
