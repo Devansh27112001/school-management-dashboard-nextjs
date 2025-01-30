@@ -44,7 +44,7 @@ type FormModalProps = {
     | "announcement";
   type: "create" | "update" | "delete";
   data?: any;
-  id?: number;
+  id?: string;
 };
 const FormModal = ({ table, type, data, id }: FormModalProps) => {
   const [open, setOpen] = useState(false);
