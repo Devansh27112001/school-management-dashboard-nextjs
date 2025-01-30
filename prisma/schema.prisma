@@ -31,8 +31,14 @@ model Student {
   sex       UserSex
   createdAt DateTime @default(now())
   parentId  String
-  // The parent will be a Parent object and the student can have only one parent.
+  // The parent will be a Parent object and the student can have only one parent which will be addressed by parentId which is a foreign key to the Parent object
   parent    Parent   @relation(fields: [parentId], references: [id])
+
+  classId Int
+  Class   Class @relation(fields: [classId], references: [id])
+
+  gradeId Int
+  Grade   Grade @relation(fields: [gradeId], references: [id])
 }
 
 model Teacher {
@@ -48,6 +54,8 @@ model Teacher {
   sex       UserSex
   createdAt DateTime  @default(now())
   subjects  Subject[]
+  lessons   Lesson[]
+  classes   Class[]
 }
 
 model Parent {
@@ -63,17 +71,54 @@ model Parent {
   students  Student[]
 }
 
-// model Grade{}
+model Grade {
+  id    Int    @id @default(autoincrement())
+  level String @unique
 
-// model Class{}
+  students Student[]
+  classes  Class[]
+}
+
+model Class {
+  id           Int     @id @default(autoincrement())
+  name         String  @unique
+  capacity     Int
+  supervisorId String
+  supervisor   Teacher @relation(fields: [supervisorId], references: [id])
+
+  // Each class can have multiple lessons and students
+  lessons  Lesson[]
+  students Student[]
+
+  gradeId Int
+  Grade   Grade @relation(fields: [gradeId], references: [id])
+}
 
 model Subject {
   id       Int       @id @default(autoincrement())
   name     String    @unique
+  // Each subject can have multiple teachers and lessons
   teachers Teacher[]
+  lessons  Lesson[]
 }
 
-// model Lesson{}
+model Lesson {
+  id        Int      @id @default(autoincrement())
+  name      String
+  day       Day
+  startTime DateTime
+  endTime   DateTime
+  subjectId Int
+
+  // However, each lesson belongs to only one subject.
+  Subject Subject @relation(fields: [subjectId], references: [id])
+
+  classId Int
+  class   Class @relation(fields: [classId], references: [id])
+
+  teacherId String
+  teacher   Teacher @relation(fields: [teacherId], references: [id])
+}
 
 // model Exam{}
 
@@ -89,4 +134,12 @@ model Subject {
 enum UserSex {
   MALE
   FEMALE
+}
+
+enum Day {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
 }
