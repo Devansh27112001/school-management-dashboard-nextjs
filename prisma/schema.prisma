@@ -31,7 +31,7 @@ model Student {
   sex       UserSex
   createdAt DateTime @default(now())
   parentId  String
-  // The parent will be a Parent object 
+  // The parent will be a Parent object and the student can have only one parent.
   parent    Parent   @relation(fields: [parentId], references: [id])
 }
 
@@ -68,10 +68,9 @@ model Parent {
 // model Class{}
 
 model Subject {
-  id        Int     @id @default(autoincrement())
-  name      String  @unique
-  teacherId String
-  teacher   Teacher @relation(fields: [teacherId], references: [id])
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  teachers Teacher[]
 }
 
 // model Lesson{}
