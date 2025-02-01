@@ -103,11 +103,12 @@ const TeachersListPage = async ({
         subjects: true,
         classes: true,
       },
+      take: ITEMS_PER_PAGE,
+      skip: ITEMS_PER_PAGE * (+page - 1),
     }),
     prisma.teacher.count(),
   ]);
 
-  console.log(count);
   return (
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
       {/* TOP SECTION */}
