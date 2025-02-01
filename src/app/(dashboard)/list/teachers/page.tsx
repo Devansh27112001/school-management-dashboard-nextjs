@@ -1,12 +1,13 @@
+import Image from "next/image";
+import Link from "next/link";
+import prisma from "@/lib/prisma";
+import { Class, Subject, Teacher } from "@prisma/client";
+import { role } from "@/lib/data";
+import { ITEMS_PER_PAGE } from "@/lib/settings";
 import FormModal from "@/components/FormModal";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
-import { role } from "@/lib/data";
-import prisma from "@/lib/prisma";
-import { Class, Subject, Teacher } from "@prisma/client";
-import Image from "next/image";
-import Link from "next/link";
 
 // Here, we need to define specific types for the relations that are present in the Teacher model.
 type TeacherList = Teacher & { subjects: Subject[] } & { classes: Class[] };
@@ -88,14 +89,25 @@ const renderRow = (item: TeacherList) => (
     </td>
   </tr>
 );
-const TeachersListPage = async () => {
-  const teachersData = await prisma.teacher.findMany({
-    include: {
-      subjects: true,
-      classes: true,
-    },
-  });
-  console.log(teachersData);
+const TeachersListPage = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) => {
+  // In NextJs 15, we need to await the searchParams in order to get the query string.
+  const { page = 1, ...queryString } = await searchParams;
+
+  const [data, count] = await prisma.$transaction([
+    prisma.teacher.findMany({
+      include: {
+        subjects: true,
+        classes: true,
+      },
+    }),
+    prisma.teacher.count(),
+  ]);
+
+  console.log(count);
   return (
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
       {/* TOP SECTION */}
@@ -117,9 +129,9 @@ const TeachersListPage = async () => {
         </div>
       </div>
       {/* LIST SECTION */}
-      <Table columns={columns} renderRow={renderRow} data={teachersData} />
+      <Table columns={columns} renderRow={renderRow} data={data} />
       {/* PAGINATION SECTION */}
-      <Pagination />
+      <Pagination page={+page} count={count} />
     </div>
   );
 };
