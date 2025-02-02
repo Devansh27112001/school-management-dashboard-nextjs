@@ -44,7 +44,8 @@ type FormModalProps = {
     | "announcement";
   type: "create" | "update" | "delete";
   data?: any;
-  id?: string;
+  // Remove the number type from the id prop. This is just temporary.
+  id?: string | number;
 };
 const FormModal = ({ table, type, data, id }: FormModalProps) => {
   const [open, setOpen] = useState(false);

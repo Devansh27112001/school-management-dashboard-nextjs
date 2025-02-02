@@ -3,6 +3,8 @@ import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import { role, studentsData } from "@/lib/data";
+import prisma from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -49,44 +51,52 @@ const columns = [
   },
 ];
 
-const StudentListPage = () => {
-  const renderRow = (item: Student) => (
-    <tr
-      key={item.id}
-      className="border-b border-b-200 even:bg-slate-50 text-sm hover:bg-devanshPurpleLight"
-    >
-      <td className="flex items-center gap-4 p-4">
-        <Image
-          src={item.photo}
-          width={40}
-          height={40}
-          alt=""
-          className="md:hidden xl:block size-10 rounded-full object-cover"
-        />
-        <div className="flex flex-col">
-          <h3 className="font-semibold">{item.name}</h3>
-          <p className="text-sm text-gray-500">{item?.class}</p>
-        </div>
-      </td>
-      <td className="hidden md:table-cell">{item.studentId}</td>
-      <td className="hidden md:table-cell">{item.grade}</td>
-      <td className="hidden lg:table-cell">{item.phone}</td>
-      <td className="hidden lg:table-cell">{item.address}</td>
-      <td>
-        <div className="flex gap-2 items-center">
-          <Link href={`/list/students/${item.id}`}>
-            <button className="size-7 flex items-center justify-center bg-devanshSky rounded-full">
-              <Image width={16} height={16} alt="" src={"/view.png"} />
-            </button>
-          </Link>
-          {role === "admin" && (
-            <FormModal table="student" type="delete" id={item.id} />
-          )}
-        </div>
-      </td>
-    </tr>
-  );
+const renderRow = (item: Student) => (
+  <tr
+    key={item.id}
+    className="border-b border-b-200 even:bg-slate-50 text-sm hover:bg-devanshPurpleLight"
+  >
+    <td className="flex items-center gap-4 p-4">
+      <Image
+        src={item.photo}
+        width={40}
+        height={40}
+        alt=""
+        className="md:hidden xl:block size-10 rounded-full object-cover"
+      />
+      <div className="flex flex-col">
+        <h3 className="font-semibold">{item.name}</h3>
+        <p className="text-sm text-gray-500">{item?.class}</p>
+      </div>
+    </td>
+    <td className="hidden md:table-cell">{item.studentId}</td>
+    <td className="hidden md:table-cell">{item.grade}</td>
+    <td className="hidden lg:table-cell">{item.phone}</td>
+    <td className="hidden lg:table-cell">{item.address}</td>
+    <td>
+      <div className="flex gap-2 items-center">
+        <Link href={`/list/students/${item.id}`}>
+          <button className="size-7 flex items-center justify-center bg-devanshSky rounded-full">
+            <Image width={16} height={16} alt="" src={"/view.png"} />
+          </button>
+        </Link>
+        {role === "admin" && (
+          <FormModal table="student" type="delete" id={item.id} />
+        )}
+      </div>
+    </td>
+  </tr>
+);
+const StudentListPage = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) => {
+  const { page = 1, ...queryString } = await searchParams;
 
+  const data = await prisma.student.findMany({
+    include: {},
+  });
   return (
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
       {/* TOP SECTION */}

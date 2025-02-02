@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
-import { Class, Subject, Teacher } from "@prisma/client";
+import { Class, Prisma, Subject, Teacher } from "@prisma/client";
 import { role } from "@/lib/data";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 import FormModal from "@/components/FormModal";
@@ -97,8 +97,31 @@ const TeachersListPage = async ({
   // In NextJs 15, we need to await the searchParams in order to get the query string.
   const { page = 1, ...queryString } = await searchParams;
 
+  const query: Prisma.TeacherWhereInput = {};
+
+  if (queryString) {
+    for (const [key, value] of Object.entries(queryString)) {
+      if (value !== undefined) {
+        switch (key) {
+          case "classId":
+            query.lessons = {
+              some: {
+                classId: parseInt(value),
+              },
+            };
+          case "search":
+            query.name = {
+              contains: value,
+              mode: "insensitive",
+            };
+        }
+      }
+    }
+  }
+
   const [data, count] = await prisma.$transaction([
     prisma.teacher.findMany({
+      where: query,
       include: {
         subjects: true,
         classes: true,
@@ -106,7 +129,9 @@ const TeachersListPage = async ({
       take: ITEMS_PER_PAGE,
       skip: ITEMS_PER_PAGE * (+page - 1),
     }),
-    prisma.teacher.count(),
+    prisma.teacher.count({
+      where: query,
+    }),
   ]);
 
   return (
