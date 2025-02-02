@@ -21,7 +21,7 @@ const Pagination = ({ page, count }: PaginationProps) => {
     <div className="flex items-center justify-between p-4 text-gray-500">
       <button
         disabled={page === 1}
-        className="bg-gray-300 py-2 px-4 rounded-md text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+        className="bg-gray-300 py-2 px-4 rounded-md text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transition-all duration-200 ease-in"
         onClick={() => handlePageChange(page - 1)}
       >
         Prev
@@ -39,7 +39,7 @@ const Pagination = ({ page, count }: PaginationProps) => {
       </div>
       <button
         disabled={page === totalPages}
-        className="bg-gray-300 py-2 px-4 rounded-md text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+        className="bg-gray-300 py-2 px-4 rounded-md text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transition-all duration-200 ease-in"
         onClick={() => handlePageChange(page + 1)}
       >
         Next
