@@ -10,6 +10,7 @@ const TableSearch = () => {
     const value = (e.currentTarget[0] as HTMLInputElement).value;
     const params = new URLSearchParams(window.location.search);
     params.set("search", value);
+    params.set("page", "1");
     router.push(`${window.location.pathname}?${params}`);
   };
   return (
