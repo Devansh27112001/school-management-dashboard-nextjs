@@ -5,6 +5,7 @@ import TableSearch from "@/components/TableSearch";
 import { role } from "@/lib/data";
 import prisma from "@/lib/prisma";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
+import { searchParamsType } from "@/lib/types";
 import { Prisma, Subject, Teacher } from "@prisma/client";
 import Image from "next/image";
 
@@ -52,7 +53,7 @@ const renderRow = (item: SubjectList) => (
 const SubjectListPage = async ({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | undefined };
+  searchParams: searchParamsType;
 }) => {
   const { page = 1, ...queryString } = await searchParams;
 
