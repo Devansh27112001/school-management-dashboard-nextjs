@@ -117,7 +117,7 @@ model Lesson {
   endTime   DateTime
   // However, each lesson belongs to only one subject.
   subjectId Int
-  Subject   Subject  @relation(fields: [subjectId], references: [id])
+  subject   Subject  @relation(fields: [subjectId], references: [id])
 
   classId Int
   class   Class @relation(fields: [classId], references: [id])

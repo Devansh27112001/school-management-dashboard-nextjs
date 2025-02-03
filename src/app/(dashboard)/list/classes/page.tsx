@@ -47,7 +47,9 @@ const renderRow = (item: ClassesList) => (
     </td>
     <td className="hidden md:table-cell">{item.capacity}</td>
     <td className="hidden md:table-cell">{item.name[0]}</td>
-    <td className="hidden lg:table-cell">{item.supervisor.name}</td>
+    <td className="hidden lg:table-cell">
+      {item.supervisor.name + " " + item.supervisor.surname}
+    </td>
 
     <td>
       <div className="flex gap-2 items-center">
@@ -68,6 +70,24 @@ const ClassesListPage = async ({
 }) => {
   const { page = 1, ...queryString } = await searchParams;
   const query: Prisma.ClassWhereInput = {};
+
+  if (queryString) {
+    for (const [key, value] of Object.entries(queryString)) {
+      if (value !== undefined) {
+        switch (key) {
+          case "supervisorId":
+            query.supervisorId = value;
+            break;
+          case "search":
+            query.name = {
+              contains: value,
+              mode: "insensitive",
+            };
+            break;
+        }
+      }
+    }
+  }
 
   const [data, count] = await prisma.$transaction([
     prisma.class.findMany({

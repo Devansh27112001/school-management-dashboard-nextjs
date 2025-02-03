@@ -5,6 +5,7 @@ import TableSearch from "@/components/TableSearch";
 import { role } from "@/lib/data";
 import prisma from "@/lib/prisma";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
+import { searchParamsType } from "@/lib/types";
 import { Parent, Prisma, Student } from "@prisma/client";
 import Image from "next/image";
 
@@ -67,7 +68,7 @@ const renderRow = (item: ParentList) => (
 const ParentListPage = async ({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | undefined };
+  searchParams: searchParamsType;
 }) => {
   const { page = 1, ...queryString } = await searchParams;
   const query: Prisma.ParentWhereInput = {};
