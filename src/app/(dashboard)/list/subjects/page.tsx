@@ -2,15 +2,13 @@ import FormModal from "@/components/FormModal";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
-import { role, subjectsData } from "@/lib/data";
+import { role } from "@/lib/data";
+import prisma from "@/lib/prisma";
+import { ITEMS_PER_PAGE } from "@/lib/settings";
+import { Prisma, Subject, Teacher } from "@prisma/client";
 import Image from "next/image";
-import Link from "next/link";
 
-type Subject = {
-  id: number;
-  name: string;
-  teachers: string[];
-};
+type SubjectList = Subject & { teachers: Teacher[] };
 
 const columns = [
   {
@@ -28,29 +26,64 @@ const columns = [
   },
 ];
 
-const SubjectListPage = () => {
-  const renderRow = (item: Subject) => (
-    <tr
-      key={item.id}
-      className="border-b border-b-200 even:bg-slate-50 text-sm hover:bg-devanshPurpleLight"
-    >
-      <td className="flex items-center gap-4 p-4">
-        <h3 className="font-medium text-sm">{item.name}</h3>
-      </td>
-      <td className="hidden md:table-cell">{item.teachers?.join(", ")}</td>
-      <td>
-        <div className="flex gap-2 items-center">
-          {role === "admin" && (
-            <>
-              <FormModal table="subject" type="update" data={item} />
-              <FormModal table="subject" type="delete" id={item.id} />
-            </>
-          )}
-        </div>
-      </td>
-    </tr>
-  );
+const renderRow = (item: SubjectList) => (
+  <tr
+    key={item.id}
+    className="border-b border-b-200 even:bg-slate-50 text-sm hover:bg-devanshPurpleLight"
+  >
+    <td className="flex items-center gap-4 p-4">
+      <h3 className="font-medium text-sm">{item.name}</h3>
+    </td>
+    <td className="hidden md:table-cell">
+      {item.teachers?.map((teacher) => teacher.name).join(", ")}
+    </td>
+    <td>
+      <div className="flex gap-2 items-center">
+        {role === "admin" && (
+          <>
+            <FormModal table="subject" type="update" data={item} />
+            <FormModal table="subject" type="delete" id={item.id} />
+          </>
+        )}
+      </div>
+    </td>
+  </tr>
+);
+const SubjectListPage = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) => {
+  const { page = 1, ...queryString } = await searchParams;
 
+  const query: Prisma.SubjectWhereInput = {};
+
+  if (queryString.search) {
+    for (const [key, value] of Object.entries(queryString)) {
+      if (value !== undefined) {
+        switch (key) {
+          case "search":
+            query.name = {
+              contains: value,
+              mode: "insensitive",
+            };
+        }
+      }
+    }
+  }
+
+  const [data, count] = await prisma.$transaction([
+    prisma.subject.findMany({
+      where: query,
+      include: {
+        teachers: true,
+      },
+      take: ITEMS_PER_PAGE,
+      skip: (+page - 1) * ITEMS_PER_PAGE,
+    }),
+    prisma.subject.count({ where: query }),
+  ]);
+  console.log(count);
   return (
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
       {/* TOP SECTION */}
@@ -76,10 +109,10 @@ const SubjectListPage = () => {
       </div>
 
       {/* LIST SECTION */}
-      <Table columns={columns} renderRow={renderRow} data={subjectsData} />
+      <Table columns={columns} renderRow={renderRow} data={data} />
 
       {/* PAGINATION SECTION */}
-      <Pagination />
+      <Pagination page={+page} count={count} />
     </div>
   );
 };

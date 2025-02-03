@@ -2,7 +2,7 @@ import FormModal from "@/components/FormModal";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
-import { parentsData, role } from "@/lib/data";
+import { role } from "@/lib/data";
 import prisma from "@/lib/prisma";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 import { Parent, Prisma, Student } from "@prisma/client";
@@ -71,6 +71,21 @@ const ParentListPage = async ({
 }) => {
   const { page = 1, ...queryString } = await searchParams;
   const query: Prisma.ParentWhereInput = {};
+
+  if (queryString) {
+    for (const [key, value] of Object.entries(queryString)) {
+      if (value !== undefined) {
+        switch (key) {
+          case "search":
+            query.name = {
+              contains: value,
+              mode: "insensitive",
+            };
+            break;
+        }
+      }
+    }
+  }
 
   const [data, count] = await prisma.$transaction([
     prisma.parent.findMany({
