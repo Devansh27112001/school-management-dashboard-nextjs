@@ -43,7 +43,9 @@ const renderRow = (item: LessonsList) => (
       <h3 className="font-medium text-sm">{item.subject.name}</h3>
     </td>
     <td className="">{item.class.name}</td>
-    <td className="hidden md:table-cell">{item.teacher.name}</td>
+    <td className="hidden md:table-cell">
+      {item.teacher.name + " " + item.teacher.surname}
+    </td>
 
     <td>
       <div className="flex gap-2 items-center">
@@ -87,7 +89,11 @@ const LessonListPage = async ({
   const [data, count] = await prisma.$transaction([
     prisma.lesson.findMany({
       where: query,
-      include: { class: true, teacher: true, subject: true },
+      include: {
+        class: { select: { name: true } },
+        teacher: { select: { name: true, surname: true } },
+        subject: { select: { name: true } },
+      },
       take: ITEMS_PER_PAGE,
       skip: (+page - 1) * ITEMS_PER_PAGE,
     }),
