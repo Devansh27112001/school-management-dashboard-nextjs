@@ -66,6 +66,24 @@ const LessonListPage = async ({
   const { page = 1, ...queryString } = await searchParams;
   const query: Prisma.LessonWhereInput = {};
 
+  if (queryString) {
+    for (const [key, value] of Object.entries(queryString)) {
+      if (value !== undefined) {
+        switch (key) {
+          case "teacherId":
+            query.teacherId = value;
+            break;
+          case "search":
+            query.subject = {
+              name: {
+                contains: value,
+                mode: "insensitive",
+              },
+            };
+        }
+      }
+    }
+  }
   const [data, count] = await prisma.$transaction([
     prisma.lesson.findMany({
       where: query,
@@ -75,7 +93,6 @@ const LessonListPage = async ({
     }),
     prisma.lesson.count({ where: query }),
   ]);
-  console.log(data);
   return (
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
       {/* TOP SECTION */}
