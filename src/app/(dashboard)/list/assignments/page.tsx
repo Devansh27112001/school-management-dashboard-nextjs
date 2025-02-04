@@ -76,6 +76,40 @@ const AssignmentListPage = async ({
   const { page = 1, ...queryParams } = await searchParams;
   const query: Prisma.AssignmentWhereInput = {};
 
+  if (queryParams) {
+    for (const [key, value] of Object.entries(queryParams)) {
+      if (value !== undefined) {
+        switch (key) {
+          case "classId":
+            query.lesson = {
+              classId: {
+                equals: parseInt(value),
+              },
+            };
+
+            break;
+          case "teacherId":
+            query.lesson = {
+              teacherId: {
+                equals: value,
+              },
+            };
+
+            break;
+          case "search":
+            query.lesson = {
+              subject: {
+                name: {
+                  contains: value,
+                  mode: "insensitive",
+                },
+              },
+            };
+            break;
+        }
+      }
+    }
+  }
   const [data, count] = await prisma.$transaction([
     prisma.assignment.findMany({
       where: query,
