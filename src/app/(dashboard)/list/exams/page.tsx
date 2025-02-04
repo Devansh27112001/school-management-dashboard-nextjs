@@ -3,15 +3,18 @@ import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import { examsData, role } from "@/lib/data";
+import prisma from "@/lib/prisma";
+import { ITEMS_PER_PAGE } from "@/lib/settings";
+import { searchParamsType } from "@/lib/types";
+import { Class, Exam, Prisma, Subject, Teacher } from "@prisma/client";
 import Image from "next/image";
-import Link from "next/link";
 
-type Exams = {
-  id: number;
-  subject: string;
-  class: string;
-  teacher: string;
-  date: string;
+type ExamsList = Exam & {
+  lesson: {
+    subject: Subject;
+    teacher: Teacher;
+    class: Class;
+  };
 };
 
 const columns = [
@@ -38,33 +41,96 @@ const columns = [
     accessor: "actions",
   },
 ];
+const renderRow = (item: ExamsList) => (
+  <tr
+    key={item.id}
+    className="border-b border-b-200 even:bg-slate-50 text-sm hover:bg-devanshPurpleLight"
+  >
+    <td className="flex items-center gap-4 p-4">
+      <h3 className="font-medium text-sm">{item.lesson?.subject?.name}</h3>
+    </td>
+    <td className="">{item.lesson?.class.name}</td>
+    <td className="hidden md:table-cell">
+      {item.lesson?.teacher?.name + " " + item.lesson?.teacher.surname}
+    </td>
+    <td className="hidden md:table-cell">
+      {new Intl.DateTimeFormat("en-US").format(item.startTime)}
+    </td>
 
-const ExamListPage = () => {
-  const renderRow = (item: Exams) => (
-    <tr
-      key={item.id}
-      className="border-b border-b-200 even:bg-slate-50 text-sm hover:bg-devanshPurpleLight"
-    >
-      <td className="flex items-center gap-4 p-4">
-        <h3 className="font-medium text-sm">{item.subject}</h3>
-      </td>
-      <td className="">{item.class}</td>
-      <td className="hidden md:table-cell">{item.teacher}</td>
-      <td className="hidden md:table-cell">{item.date}</td>
-
-      <td>
-        <div className="flex gap-2 items-center">
-          {role === "admin" && (
+    <td>
+      <div className="flex gap-2 items-center">
+        {role === "admin" ||
+          (role === "teacher" && (
             <>
               <FormModal data={item} type="update" table="exam" />
               <FormModal id={item.id} type="delete" table="exam" />
             </>
-          )}
-        </div>
-      </td>
-    </tr>
-  );
+          ))}
+      </div>
+    </td>
+  </tr>
+);
 
+const ExamListPage = async ({
+  searchParams,
+}: {
+  searchParams: searchParamsType;
+}) => {
+  const { page = 1, ...queryParams } = await searchParams;
+  const query: Prisma.ExamWhereInput = {};
+
+  if (queryParams) {
+    for (const [key, value] of Object.entries(queryParams)) {
+      if (value !== undefined) {
+        switch (key) {
+          case "classId":
+            query.lesson = {
+              classId: {
+                equals: parseInt(value),
+              },
+            };
+
+            break;
+          case "teacherId":
+            query.lesson = {
+              teacherId: {
+                equals: value,
+              },
+            };
+
+            break;
+          case "search":
+            query.lesson = {
+              subject: {
+                name: {
+                  contains: value,
+                  mode: "insensitive",
+                },
+              },
+            };
+            break;
+        }
+      }
+    }
+  }
+
+  const [data, count] = await prisma.$transaction([
+    prisma.exam.findMany({
+      where: query,
+      include: {
+        lesson: {
+          select: {
+            subject: { select: { name: true } },
+            teacher: { select: { name: true, surname: true } },
+            class: { select: { name: true } },
+          },
+        },
+      },
+      take: ITEMS_PER_PAGE,
+      skip: ITEMS_PER_PAGE * (+page - 1),
+    }),
+    prisma.exam.count({ where: query }),
+  ]);
   return (
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
       {/* TOP SECTION */}
@@ -90,10 +156,10 @@ const ExamListPage = () => {
       </div>
 
       {/* LIST SECTION */}
-      <Table columns={columns} renderRow={renderRow} data={examsData} />
+      <Table columns={columns} renderRow={renderRow} data={data} />
 
       {/* PAGINATION SECTION */}
-      <Pagination />
+      <Pagination page={+page} count={count} />
     </div>
   );
 };
