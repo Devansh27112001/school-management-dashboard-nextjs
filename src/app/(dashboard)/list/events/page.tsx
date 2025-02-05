@@ -6,17 +6,10 @@ import { eventsData, role } from "@/lib/data";
 import prisma from "@/lib/prisma";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 import { searchParamsType } from "@/lib/types";
-import { Prisma } from "@prisma/client";
+import { Class, Event, Prisma } from "@prisma/client";
 import Image from "next/image";
 
-type Event = {
-  id: number;
-  title: string;
-  class: string;
-  date: string;
-  startTime: string;
-  endTime: string;
-};
+type EventListType = Event & { class: Class };
 
 const columns = [
   {
@@ -49,7 +42,7 @@ const columns = [
   },
 ];
 
-const renderRow = (item: Event) => (
+const renderRow = (item: EventListType) => (
   <tr
     key={item.id}
     className="border-b border-b-200 even:bg-slate-50 text-sm hover:bg-devanshPurpleLight"
@@ -58,14 +51,28 @@ const renderRow = (item: Event) => (
       <h3 className="font-medium text-sm">{item.title}</h3>
     </td>
     <td className="relative">
-      {item.class}{" "}
+      {item.class.name}{" "}
       {/* <span className="text-[10px]  bg-devanshYellow px-[0.1rem] rounded-lg absolute -left-3 -top-1">
         {item.type}
       </span> */}
     </td>
-    <td className="hidden md:table-cell">{item.date}</td>
-    <td className="hidden md:table-cell">{item.startTime}</td>
-    <td className="hidden md:table-cell">{item.endTime}</td>
+    <td className="hidden md:table-cell">
+      {new Intl.DateTimeFormat("en-US").format(item.startTime)}
+    </td>
+    <td className="hidden md:table-cell">
+      {item.startTime.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      })}
+    </td>
+    <td className="hidden md:table-cell">
+      {item.endTime.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      })}
+    </td>
     <td>
       <div className="flex gap-2 items-center">
         {role === "admin" && (
@@ -87,18 +94,32 @@ const EventListPage = async ({
 
   const query: Prisma.EventWhereInput = {};
 
+  if (queryParams) {
+    for (const [key, value] of Object.entries(queryParams)) {
+      if (value !== undefined) {
+        switch (key) {
+          case "classId":
+          case "search":
+            query.title = { contains: value, mode: "insensitive" };
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  }
+
   const [data, count] = await prisma.$transaction([
     prisma.event.findMany({
       where: query,
       include: {
-        class: { select: { name: true } },
+        class: true,
       },
       take: ITEMS_PER_PAGE,
       skip: (+page - 1) * ITEMS_PER_PAGE,
     }),
     prisma.event.count({ where: query }),
   ]);
-
   return (
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
       {/* TOP SECTION */}
@@ -124,10 +145,10 @@ const EventListPage = async ({
       </div>
 
       {/* LIST SECTION */}
-      <Table columns={columns} renderRow={renderRow} data={eventsData} />
+      <Table columns={columns} renderRow={renderRow} data={data} />
 
       {/* PAGINATION SECTION */}
-      <Pagination />
+      <Pagination page={+page} count={count} />
     </div>
   );
 };
