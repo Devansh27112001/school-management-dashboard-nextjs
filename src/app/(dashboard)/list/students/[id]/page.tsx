@@ -125,7 +125,7 @@ const SingleStudentPage = () => {
           <div className="mt-4 flex flex-wrap gap-4 text-xs text-gray-400">
             <Link
               className="p-2 rounded-md bg-devanshSkyLight"
-              href={`/list/results?classId=${2}`}
+              href={`/list/results?studentId=${"student2"}`}
             >
               Student&apos;s Results
             </Link>

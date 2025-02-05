@@ -86,8 +86,8 @@ const AssignmentListPage = async ({
                 equals: parseInt(value),
               },
             };
-
             break;
+
           case "teacherId":
             query.lesson = {
               teacherId: {
@@ -105,6 +105,9 @@ const AssignmentListPage = async ({
                 },
               },
             };
+            break;
+
+          default:
             break;
         }
       }

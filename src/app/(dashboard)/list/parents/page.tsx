@@ -83,6 +83,9 @@ const ParentListPage = async ({
               mode: "insensitive",
             };
             break;
+
+          default:
+            break;
         }
       }
     }

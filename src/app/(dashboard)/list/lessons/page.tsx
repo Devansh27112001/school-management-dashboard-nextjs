@@ -89,6 +89,9 @@ const LessonListPage = async ({
               },
             ];
             break;
+
+          default:
+            break;
         }
       }
     }

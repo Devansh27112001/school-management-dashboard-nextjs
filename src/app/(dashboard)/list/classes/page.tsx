@@ -84,6 +84,9 @@ const ClassesListPage = async ({
               mode: "insensitive",
             };
             break;
+
+          default:
+            break;
         }
       }
     }

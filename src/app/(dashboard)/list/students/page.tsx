@@ -106,6 +106,9 @@ const StudentListPage = async ({
               contains: value,
               mode: "insensitive",
             };
+
+          default:
+            break;
         }
       }
     }
