@@ -1,5 +1,6 @@
 import FormModal from "@/components/FormModal";
 import Pagination from "@/components/Pagination";
+import { renderExamsRow } from "@/components/Render";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import { role } from "@/lib/data";
@@ -159,7 +160,11 @@ const ExamListPage = async ({
       </div>
 
       {/* LIST SECTION */}
-      <Table columns={columns} renderRow={renderRow} data={data} />
+      <Table
+        columns={columns}
+        renderRow={(item) => renderExamsRow(item, role)}
+        data={data}
+      />
 
       {/* PAGINATION SECTION */}
       <Pagination page={+page} count={count} />

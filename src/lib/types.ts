@@ -8,6 +8,7 @@ import {
   Student,
   Subject,
   Teacher,
+  Event,
 } from "@prisma/client";
 
 export type searchParamsType = Promise<{

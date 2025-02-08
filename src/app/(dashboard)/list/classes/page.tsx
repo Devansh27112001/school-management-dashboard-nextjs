@@ -1,5 +1,6 @@
 import FormModal from "@/components/FormModal";
 import Pagination from "@/components/Pagination";
+import { renderClassesRow } from "@/components/Render";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import { role } from "@/lib/data";
@@ -37,32 +38,6 @@ const columns = [
   },
 ];
 
-const renderRow = (item: ClassesList) => (
-  <tr
-    key={item.id}
-    className="border-b border-b-200 even:bg-slate-50 text-sm hover:bg-devanshPurpleLight"
-  >
-    <td className="flex items-center gap-4 p-4">
-      <h3 className="font-medium text-sm">{item.name}</h3>
-    </td>
-    <td className="hidden md:table-cell">{item.capacity}</td>
-    <td className="hidden md:table-cell">{item.name[0]}</td>
-    <td className="hidden lg:table-cell">
-      {item.supervisor.name + " " + item.supervisor.surname}
-    </td>
-
-    <td>
-      <div className="flex gap-2 items-center">
-        {role === "admin" && (
-          <>
-            <FormModal table="class" type="update" data={item} />
-            <FormModal table="class" type="delete" id={item.id} />
-          </>
-        )}
-      </div>
-    </td>
-  </tr>
-);
 const ClassesListPage = async ({
   searchParams,
 }: {
@@ -128,7 +103,11 @@ const ClassesListPage = async ({
       </div>
 
       {/* LIST SECTION */}
-      <Table columns={columns} renderRow={renderRow} data={data} />
+      <Table
+        columns={columns}
+        renderRow={(item) => renderClassesRow(item, role)}
+        data={data}
+      />
 
       {/* PAGINATION SECTION */}
       <Pagination page={+page} count={count} />

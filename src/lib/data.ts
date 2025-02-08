@@ -114,7 +114,7 @@ export const menuItems = [
   },
 ];
 
-export const role: "admin" | "teacher" | "student" = "student";
+export const role: "admin" | "teacher" | "student" = "admin";
 
 export const teachersData = [
   {

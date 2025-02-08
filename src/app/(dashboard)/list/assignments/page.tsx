@@ -8,6 +8,7 @@ import { ITEMS_PER_PAGE } from "@/lib/settings";
 import { searchParamsType } from "@/lib/types";
 import { Assignment, Class, Prisma, Subject, Teacher } from "@prisma/client";
 import { auth } from "@clerk/nextjs/server";
+import { renderAssignmentsRow } from "@/components/Render";
 
 const { sessionClaims } = await auth();
 const role = (sessionClaims?.metadata as { role: string })?.role;
@@ -44,32 +45,6 @@ const columns = [
   },
 ];
 
-const renderRow = (item: AssignmentsList) => (
-  <tr
-    key={item.id}
-    className="border-b border-b-200 even:bg-slate-50 text-sm hover:bg-devanshPurpleLight"
-  >
-    <td className="flex items-center gap-4 p-4">
-      <h3 className="font-medium text-sm">{item.lesson.subject.name}</h3>
-    </td>
-    <td className="">{item.lesson.class.name}</td>
-    <td className="hidden md:table-cell">{item.lesson.teacher.name}</td>
-    <td className="hidden md:table-cell">
-      {new Intl.DateTimeFormat("en-US").format(item.dueDate)}
-    </td>
-
-    <td>
-      <div className="flex gap-2 items-center">
-        {role === "admin" && (
-          <>
-            <FormModal data={item} type="update" table="assignment" />
-            <FormModal id={item.id} type="delete" table="assignment" />
-          </>
-        )}
-      </div>
-    </td>
-  </tr>
-);
 const AssignmentListPage = async ({
   searchParams,
 }: {
@@ -159,7 +134,11 @@ const AssignmentListPage = async ({
       </div>
 
       {/* LIST SECTION */}
-      <Table columns={columns} renderRow={renderRow} data={data} />
+      <Table
+        columns={columns}
+        renderRow={(item) => renderAssignmentsRow(item, role)}
+        data={data}
+      />
 
       {/* PAGINATION SECTION */}
       <Pagination page={+page} count={count} />
