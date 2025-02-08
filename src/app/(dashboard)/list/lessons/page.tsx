@@ -1,19 +1,14 @@
 import FormModal from "@/components/FormModal";
 import Pagination from "@/components/Pagination";
+import { renderLessonsRow } from "@/components/Render";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import { role } from "@/lib/data";
 import prisma from "@/lib/prisma";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 import { searchParamsType } from "@/lib/types";
-import { Class, Lesson, Prisma, Subject, Teacher } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import Image from "next/image";
-
-type LessonsList = Lesson & {
-  class: Class;
-  teacher: Teacher;
-  subject: Subject;
-};
 
 const columns = [
   {
@@ -34,31 +29,6 @@ const columns = [
     accessor: "actions",
   },
 ];
-const renderRow = (item: LessonsList) => (
-  <tr
-    key={item.id}
-    className="border-b border-b-200 even:bg-slate-50 text-sm hover:bg-devanshPurpleLight"
-  >
-    <td className="flex items-center gap-4 p-4">
-      <h3 className="font-medium text-sm">{item.subject.name}</h3>
-    </td>
-    <td className="">{item.class.name}</td>
-    <td className="hidden md:table-cell">
-      {item.teacher.name + " " + item.teacher.surname}
-    </td>
-
-    <td>
-      <div className="flex gap-2 items-center">
-        {role === "admin" && (
-          <>
-            <FormModal table="lesson" type="update" data={item} />
-            <FormModal table="lesson" type="delete" id={item.id} />
-          </>
-        )}
-      </div>
-    </td>
-  </tr>
-);
 
 const LessonListPage = async ({
   searchParams,
@@ -134,7 +104,11 @@ const LessonListPage = async ({
       </div>
 
       {/* LIST SECTION */}
-      <Table columns={columns} renderRow={renderRow} data={data} />
+      <Table
+        columns={columns}
+        renderRow={(item) => renderLessonsRow(item, role)}
+        data={data}
+      />
 
       {/* PAGINATION SECTION */}
       <Pagination page={+page} count={count} />

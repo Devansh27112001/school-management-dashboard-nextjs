@@ -6,19 +6,12 @@ import TableSearch from "@/components/TableSearch";
 import prisma from "@/lib/prisma";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 import { searchParamsType } from "@/lib/types";
-import { Assignment, Class, Prisma, Subject, Teacher } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { auth } from "@clerk/nextjs/server";
 import { renderAssignmentsRow } from "@/components/Render";
 
 const { sessionClaims } = await auth();
 const role = (sessionClaims?.metadata as { role: string })?.role;
-type AssignmentsList = Assignment & {
-  lesson: {
-    subject: Subject;
-    teacher: Teacher;
-    class: Class;
-  };
-};
 
 const columns = [
   {

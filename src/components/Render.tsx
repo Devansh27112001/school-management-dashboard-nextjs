@@ -4,6 +4,8 @@ import {
   ClassesList,
   EventsList,
   ExamsList,
+  LessonsList,
+  SubjectsList,
 } from "@/lib/types";
 import FormModal from "./FormModal";
 
@@ -177,7 +179,61 @@ export const renderExamsRow = (item: ExamsList, role: string) => {
             </>
           )}
         </div>
-        z
+      </td>
+    </tr>
+  );
+};
+
+// LESSONS
+export const renderLessonsRow = (item: LessonsList, role: string) => {
+  return (
+    <tr
+      key={item.id}
+      className="border-b border-b-200 even:bg-slate-50 text-sm hover:bg-devanshPurpleLight"
+    >
+      <td className="flex items-center gap-4 p-4">
+        <h3 className="font-medium text-sm">{item.subject.name}</h3>
+      </td>
+      <td className="">{item.class.name}</td>
+      <td className="hidden md:table-cell">
+        {item.teacher.name + " " + item.teacher.surname}
+      </td>
+
+      <td>
+        <div className="flex gap-2 items-center">
+          {role === "admin" && (
+            <>
+              <FormModal table="lesson" type="update" data={item} />
+              <FormModal table="lesson" type="delete" id={item.id} />
+            </>
+          )}
+        </div>
+      </td>
+    </tr>
+  );
+};
+
+export const renderSubjectsRow = (item: SubjectsList, role: string) => {
+  return (
+    <tr
+      key={item.id}
+      className="border-b border-b-200 even:bg-slate-50 text-sm hover:bg-devanshPurpleLight"
+    >
+      <td className="flex items-center gap-4 p-4">
+        <h3 className="font-medium text-sm">{item.name}</h3>
+      </td>
+      <td className="hidden md:table-cell">
+        {item.teachers?.map((teacher) => teacher.name).join(", ")}
+      </td>
+      <td>
+        <div className="flex gap-2 items-center">
+          {role === "admin" && (
+            <>
+              <FormModal table="subject" type="update" data={item} />
+              <FormModal table="subject" type="delete" id={item.id} />
+            </>
+          )}
+        </div>
       </td>
     </tr>
   );

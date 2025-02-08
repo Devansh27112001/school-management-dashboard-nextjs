@@ -7,16 +7,8 @@ import { role } from "@/lib/data";
 import prisma from "@/lib/prisma";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 import { searchParamsType } from "@/lib/types";
-import { Class, Exam, Prisma, Subject, Teacher } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import Image from "next/image";
-
-type ExamsList = Exam & {
-  lesson: {
-    subject: Subject;
-    teacher: Teacher;
-    class: Class;
-  };
-};
 
 const columns = [
   {
@@ -42,35 +34,6 @@ const columns = [
     accessor: "actions",
   },
 ];
-const renderRow = (item: ExamsList) => (
-  <tr
-    key={item.id}
-    className="border-b border-b-200 even:bg-slate-50 text-sm hover:bg-devanshPurpleLight"
-  >
-    <td className="flex items-center gap-4 p-4">
-      <h3 className="font-medium text-sm">{item.lesson?.subject?.name}</h3>
-    </td>
-    <td className="">{item.lesson?.class.name}</td>
-    <td className="hidden md:table-cell">
-      {item.lesson?.teacher?.name + " " + item.lesson?.teacher.surname}
-    </td>
-    <td className="hidden md:table-cell">
-      {new Intl.DateTimeFormat("en-US").format(item.startTime)}
-    </td>
-
-    <td>
-      <div className="flex gap-2 items-center">
-        {role === "admin" ||
-          (role === "teacher" && (
-            <>
-              <FormModal data={item} type="update" table="exam" />
-              <FormModal id={item.id} type="delete" table="exam" />
-            </>
-          ))}
-      </div>
-    </td>
-  </tr>
-);
 
 const ExamListPage = async ({
   searchParams,

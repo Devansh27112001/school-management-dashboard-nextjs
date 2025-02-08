@@ -7,10 +7,8 @@ import { role } from "@/lib/data";
 import prisma from "@/lib/prisma";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 import { searchParamsType } from "@/lib/types";
-import { Class, Prisma, Teacher } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import Image from "next/image";
-
-type ClassesList = Class & { supervisor: Teacher };
 
 const columns = [
   {

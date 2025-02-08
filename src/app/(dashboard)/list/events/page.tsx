@@ -7,10 +7,8 @@ import { role } from "@/lib/data";
 import prisma from "@/lib/prisma";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 import { searchParamsType } from "@/lib/types";
-import { Class, Event, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import Image from "next/image";
-
-type EventListType = Event & { class: Class };
 
 const columns = [
   {
@@ -43,49 +41,6 @@ const columns = [
   },
 ];
 
-const renderRow = (item: EventListType) => (
-  <tr
-    key={item.id}
-    className="border-b border-b-200 even:bg-slate-50 text-sm hover:bg-devanshPurpleLight"
-  >
-    <td className="flex items-center gap-4 p-4">
-      <h3 className="font-medium text-sm">{item.title}</h3>
-    </td>
-    <td className="relative">
-      {item.class.name}{" "}
-      {/* <span className="text-[10px]  bg-devanshYellow px-[0.1rem] rounded-lg absolute -left-3 -top-1">
-        {item.type}
-      </span> */}
-    </td>
-    <td className="hidden md:table-cell">
-      {new Intl.DateTimeFormat("en-US").format(item.startTime)}
-    </td>
-    <td className="hidden md:table-cell">
-      {item.startTime.toLocaleTimeString("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false,
-      })}
-    </td>
-    <td className="hidden md:table-cell">
-      {item.endTime.toLocaleTimeString("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false,
-      })}
-    </td>
-    <td>
-      <div className="flex gap-2 items-center">
-        {role === "admin" && (
-          <>
-            <FormModal data={item} type="update" table="event" />
-            <FormModal id={item.id} type="delete" table="event" />
-          </>
-        )}
-      </div>
-    </td>
-  </tr>
-);
 const EventListPage = async ({
   searchParams,
 }: {

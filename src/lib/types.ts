@@ -45,5 +45,5 @@ export type ResultsList = {
 };
 
 export type StudentsList = Student & { Class: Class };
-export type SubjectsList = Subject & { teacher: Teacher[] };
+export type SubjectsList = Subject & { teachers: Teacher[] };
 export type TeachersList = Teacher & { subjects: Subject[]; classes: Class[] };
