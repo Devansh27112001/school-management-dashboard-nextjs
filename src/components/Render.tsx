@@ -339,9 +339,6 @@ export const renderResultsRow = (item: ResultsList, role: string) => {
       </td>
       <td className="relative">
         {item.studentName + " " + item.studentSurname}{" "}
-        {/* <span className="text-[10px]  bg-devanshYellow px-[0.1rem] rounded-lg absolute -left-3 -top-1">
-      {item.type}
-    </span> */}
       </td>
       <td>{item.score}</td>
       <td className="hidden md:table-cell">
