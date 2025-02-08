@@ -1,16 +1,15 @@
 import Image from "next/image";
-import Link from "next/link";
 import prisma from "@/lib/prisma";
-import { Class, Prisma, Subject, Teacher } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { role } from "@/lib/data";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 import FormModal from "@/components/FormModal";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
+import { renderTeachersRow } from "@/components/Render";
 
 // Here, we need to define specific types for the relations that are present in the Teacher model.
-type TeacherList = Teacher & { subjects: Subject[] } & { classes: Class[] };
 
 const columns = [
   {
@@ -48,47 +47,6 @@ const columns = [
   },
 ];
 
-const renderRow = (item: TeacherList) => (
-  <tr
-    key={item.id}
-    className="border-b border-b-200 even:bg-slate-50 text-sm hover:bg-devanshPurpleLight"
-  >
-    <td className="flex items-center gap-4 p-4">
-      <Image
-        src={item.img || "/noAvatar.png"}
-        width={40}
-        height={40}
-        alt=""
-        className="md:hidden xl:block size-10 rounded-full object-cover"
-      />
-      <div className="flex flex-col">
-        <h3 className="font-semibold">{item.name}</h3>
-        <p className="text-sm text-gray-500">{item?.email}</p>
-      </div>
-    </td>
-    <td className="hidden md:table-cell">{item.username}</td>
-    <td className="hidden md:table-cell">
-      {item.subjects?.map((subject) => subject.name).join(",")}
-    </td>
-    <td className="hidden md:table-cell">
-      {item.classes?.map((cls) => cls.name).join(",")}
-    </td>
-    <td className="hidden lg:table-cell">{item.phone}</td>
-    <td className="hidden lg:table-cell">{item.address}</td>
-    <td>
-      <div className="flex gap-2 items-center">
-        <Link href={`/list/teachers/${item.id}`}>
-          <button className="size-7 flex items-center justify-center bg-devanshSky rounded-full">
-            <Image width={16} height={16} alt="" src={"/view.png"} />
-          </button>
-        </Link>
-        {role === "admin" && (
-          <FormModal table="teacher" type="delete" id={item.id} />
-        )}
-      </div>
-    </td>
-  </tr>
-);
 const TeachersListPage = async ({
   searchParams,
 }: {
@@ -160,7 +118,11 @@ const TeachersListPage = async ({
         </div>
       </div>
       {/* LIST SECTION */}
-      <Table columns={columns} renderRow={renderRow} data={data} />
+      <Table
+        columns={columns}
+        renderRow={(item) => renderTeachersRow(item, role)}
+        data={data}
+      />
       {/* PAGINATION SECTION */}
       <Pagination page={+page} count={count} />
     </div>

@@ -9,6 +9,7 @@ import {
   ResultsList,
   StudentsList,
   SubjectsList,
+  TeachersList,
 } from "@/lib/types";
 import FormModal from "./FormModal";
 import Image from "next/image";
@@ -358,6 +359,52 @@ export const renderResultsRow = (item: ResultsList, role: string) => {
               <FormModal data={item} type="update" table="result" />
               <FormModal id={item.id} type="delete" table="result" />
             </>
+          )}
+        </div>
+      </td>
+    </tr>
+  );
+};
+
+// -------------------------------------------
+// TEACHERS
+export const renderTeachersRow = (item: TeachersList, role: string) => {
+  return (
+    <tr
+      key={item.id}
+      className="border-b border-b-200 even:bg-slate-50 text-sm hover:bg-devanshPurpleLight"
+    >
+      <td className="flex items-center gap-4 p-4">
+        <Image
+          src={item.img || "/noAvatar.png"}
+          width={40}
+          height={40}
+          alt=""
+          className="md:hidden xl:block size-10 rounded-full object-cover"
+        />
+        <div className="flex flex-col">
+          <h3 className="font-semibold">{item.name}</h3>
+          <p className="text-sm text-gray-500">{item?.email}</p>
+        </div>
+      </td>
+      <td className="hidden md:table-cell">{item.username}</td>
+      <td className="hidden md:table-cell">
+        {item.subjects?.map((subject) => subject.name).join(",")}
+      </td>
+      <td className="hidden md:table-cell">
+        {item.classes?.map((cls) => cls.name).join(",")}
+      </td>
+      <td className="hidden lg:table-cell">{item.phone}</td>
+      <td className="hidden lg:table-cell">{item.address}</td>
+      <td>
+        <div className="flex gap-2 items-center">
+          <Link href={`/list/teachers/${item.id}`}>
+            <button className="size-7 flex items-center justify-center bg-devanshSky rounded-full">
+              <Image width={16} height={16} alt="" src={"/view.png"} />
+            </button>
+          </Link>
+          {role === "admin" && (
+            <FormModal table="teacher" type="delete" id={item.id} />
           )}
         </div>
       </td>
