@@ -9,7 +9,7 @@ import { searchParamsType } from "@/lib/types";
 import { Prisma } from "@prisma/client";
 import { renderAssignmentsRow } from "@/components/Render";
 import { AssignmentsColumns } from "@/lib/columnsData";
-import { role } from "@/lib/utils";
+import { currentUserId, role } from "@/lib/utils";
 
 const AssignmentListPage = async ({
   searchParams,
@@ -19,35 +19,24 @@ const AssignmentListPage = async ({
   const { page = 1, ...queryParams } = await searchParams;
   const query: Prisma.AssignmentWhereInput = {};
   const columns = AssignmentsColumns(role);
-
+  query.lesson = {};
   // PARAMS CONDITIONS
   if (queryParams) {
     for (const [key, value] of Object.entries(queryParams)) {
       if (value !== undefined) {
         switch (key) {
           case "classId":
-            query.lesson = {
-              classId: {
-                equals: parseInt(value),
-              },
-            };
+            query.lesson.classId = parseInt(value);
             break;
 
           case "teacherId":
-            query.lesson = {
-              teacherId: {
-                equals: value,
-              },
-            };
-
+            query.lesson.teacherId = value;
             break;
           case "search":
-            query.lesson = {
-              subject: {
-                name: {
-                  contains: value,
-                  mode: "insensitive",
-                },
+            query.lesson.subject = {
+              name: {
+                contains: value,
+                mode: "insensitive",
               },
             };
             break;
@@ -60,6 +49,33 @@ const AssignmentListPage = async ({
   }
 
   // ROLES CONDITIONS
+  switch (role) {
+    case "admin":
+      break;
+    case "teacher":
+      query.lesson.teacherId = currentUserId!;
+      break;
+    case "student":
+      query.lesson.class = {
+        students: {
+          some: {
+            id: currentUserId!,
+          },
+        },
+      };
+      break;
+    case "parent":
+      query.lesson.class = {
+        students: {
+          some: {
+            parentId: currentUserId!,
+          },
+        },
+      };
+      break;
+    default:
+      break;
+  }
   const [data, count] = await prisma.$transaction([
     prisma.assignment.findMany({
       where: query,

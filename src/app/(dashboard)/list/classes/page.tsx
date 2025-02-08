@@ -3,38 +3,13 @@ import Pagination from "@/components/Pagination";
 import { renderClassesRow } from "@/components/Render";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
-import { role } from "@/lib/data";
+import { ClassesColumns } from "@/lib/columnsData";
 import prisma from "@/lib/prisma";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 import { searchParamsType } from "@/lib/types";
+import { role } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
-
-const columns = [
-  {
-    header: "Class Name",
-    accessor: "className",
-  },
-  {
-    header: "Capacity",
-    accessor: "capacity",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Grade",
-    accessor: "grade",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Supervisor",
-    accessor: "supervisor",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Actions",
-    accessor: "actions",
-  },
-];
 
 const ClassesListPage = async ({
   searchParams,
@@ -43,6 +18,7 @@ const ClassesListPage = async ({
 }) => {
   const { page = 1, ...queryString } = await searchParams;
   const query: Prisma.ClassWhereInput = {};
+  const columns = ClassesColumns(role);
 
   if (queryString) {
     for (const [key, value] of Object.entries(queryString)) {
@@ -51,6 +27,7 @@ const ClassesListPage = async ({
           case "supervisorId":
             query.supervisorId = value;
             break;
+
           case "search":
             query.name = {
               contains: value,

@@ -9,8 +9,6 @@ import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import { renderTeachersRow } from "@/components/Render";
 
-// Here, we need to define specific types for the relations that are present in the Teacher model.
-
 const columns = [
   {
     header: "Info",

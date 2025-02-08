@@ -3,43 +3,13 @@ import Pagination from "@/components/Pagination";
 import { renderEventsRow } from "@/components/Render";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
-import { role } from "@/lib/data";
+import { EventsColumns } from "@/lib/columnsData";
 import prisma from "@/lib/prisma";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 import { searchParamsType } from "@/lib/types";
+import { currentUserId, role } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
-
-const columns = [
-  {
-    header: "Title",
-    accessor: "title",
-  },
-  {
-    header: "Class",
-    accessor: "class",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Date",
-    accessor: "date",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Start Time",
-    accessor: "startTime",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "End Time",
-    accessor: "endTime",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Actions",
-    accessor: "actions",
-  },
-];
 
 const EventListPage = async ({
   searchParams,
@@ -47,8 +17,8 @@ const EventListPage = async ({
   searchParams: searchParamsType;
 }) => {
   const { page = 1, ...queryParams } = await searchParams;
-
   const query: Prisma.EventWhereInput = {};
+  const columns = EventsColumns(role);
 
   if (queryParams) {
     for (const [key, value] of Object.entries(queryParams)) {
@@ -64,6 +34,17 @@ const EventListPage = async ({
     }
   }
 
+  // ROLE CONDITIONS
+  const roleConditions = {
+    teacher: { lessons: { some: { teacherId: currentUserId! } } },
+    student: { students: { some: { id: currentUserId! } } },
+    parent: { students: { some: { parentId: currentUserId! } } },
+  };
+
+  query.OR = [
+    { classId: null },
+    { class: roleConditions[role as keyof typeof roleConditions] || {} },
+  ];
   const [data, count] = await prisma.$transaction([
     prisma.event.findMany({
       where: query,

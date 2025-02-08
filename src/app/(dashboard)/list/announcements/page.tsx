@@ -7,7 +7,7 @@ import { AnnouncementColumns } from "@/lib/columnsData";
 import prisma from "@/lib/prisma";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 import { searchParamsType } from "@/lib/types";
-import { role } from "@/lib/utils";
+import { currentUserId, role } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
 
@@ -34,6 +34,16 @@ const AnnouncementListPage = async ({
       }
     }
   }
+  const roleConditions = {
+    teacher: { lessons: { some: { teacherId: currentUserId! } } },
+    student: { students: { some: { id: currentUserId! } } },
+    parent: { students: { some: { parentId: currentUserId! } } },
+  };
+
+  query.OR = [
+    { classId: null },
+    { class: roleConditions[role as keyof typeof roleConditions] || {} },
+  ];
 
   const [data, count] = await prisma.$transaction([
     prisma.announcement.findMany({

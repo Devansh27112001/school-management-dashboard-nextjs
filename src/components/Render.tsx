@@ -30,7 +30,7 @@ export const renderAnnouncementsRow = (
         <h3 className="font-medium text-sm">{item.title}</h3>
       </td>
       <td className="relative hidden md:table-cell">
-        {item.class.name}{" "}
+        {item.class?.name || "-"}{" "}
         {/* <span className="text-[10px]  bg-devanshYellow px-[0.1rem] rounded-lg absolute -left-3 -top-1">
       {item.type}
     </span> */}
@@ -125,7 +125,7 @@ export const renderEventsRow = (item: EventsList, role: string) => {
         <h3 className="font-medium text-sm">{item.title}</h3>
       </td>
       <td className="relative">
-        {item.class.name}{" "}
+        {item.class?.name || "-"}{" "}
         {/* <span className="text-[10px]  bg-devanshYellow px-[0.1rem] rounded-lg absolute -left-3 -top-1">
       {item.type}
     </span> */}

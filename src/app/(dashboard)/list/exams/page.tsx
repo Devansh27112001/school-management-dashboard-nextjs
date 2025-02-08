@@ -3,37 +3,13 @@ import Pagination from "@/components/Pagination";
 import { renderExamsRow } from "@/components/Render";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
-import { role } from "@/lib/data";
+import { ExamsColumns } from "@/lib/columnsData";
 import prisma from "@/lib/prisma";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 import { searchParamsType } from "@/lib/types";
+import { role } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
-
-const columns = [
-  {
-    header: "Subject Name",
-    accessor: "subjectName",
-  },
-  {
-    header: "Class",
-    accessor: "class",
-  },
-  {
-    header: "Teacher",
-    accessor: "teacher",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Date",
-    accessor: "date",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Actions",
-    accessor: "actions",
-  },
-];
 
 const ExamListPage = async ({
   searchParams,
@@ -42,6 +18,7 @@ const ExamListPage = async ({
 }) => {
   const { page = 1, ...queryParams } = await searchParams;
   const query: Prisma.ExamWhereInput = {};
+  const columns = ExamsColumns(role);
 
   if (queryParams) {
     for (const [key, value] of Object.entries(queryParams)) {

@@ -79,10 +79,14 @@ export const ClassesColumns = (role: string) => {
       accessor: "supervisor",
       className: "hidden md:table-cell",
     },
-    {
-      header: "Actions",
-      accessor: "actions",
-    },
+    ...(role === "admin"
+      ? [
+          {
+            header: "Actions",
+            accessor: "actions",
+          },
+        ]
+      : []),
   ];
 };
 
@@ -112,10 +116,14 @@ export const EventsColumns = (role: string) => {
       accessor: "endTime",
       className: "hidden md:table-cell",
     },
-    {
-      header: "Actions",
-      accessor: "actions",
-    },
+    ...(role === "admin"
+      ? [
+          {
+            header: "Actions",
+            accessor: "actions",
+          },
+        ]
+      : []),
   ];
 };
 
@@ -139,10 +147,14 @@ export const ExamsColumns = (role: string) => {
       accessor: "date",
       className: "hidden md:table-cell",
     },
-    {
-      header: "Actions",
-      accessor: "actions",
-    },
+    ...(role === "admin" || role === "teacher"
+      ? [
+          {
+            header: "Actions",
+            accessor: "actions",
+          },
+        ]
+      : []),
   ];
 };
 export const LessonsColumns = (role: string) => {
