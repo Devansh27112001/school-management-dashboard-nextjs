@@ -1,14 +1,16 @@
+import Image from "next/image";
 import FormModal from "@/components/FormModal";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
-import { role } from "@/lib/data";
 import prisma from "@/lib/prisma";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 import { searchParamsType } from "@/lib/types";
 import { Assignment, Class, Prisma, Subject, Teacher } from "@prisma/client";
-import Image from "next/image";
+import { auth } from "@clerk/nextjs/server";
 
+const { sessionClaims } = await auth();
+const role = (sessionClaims?.metadata as { role: string })?.role;
 type AssignmentsList = Assignment & {
   lesson: {
     subject: Subject;
