@@ -1,5 +1,6 @@
 import FormModal from "@/components/FormModal";
 import Pagination from "@/components/Pagination";
+import { renderStudentsRow } from "@/components/Render";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import { role } from "@/lib/data";
@@ -8,18 +9,6 @@ import { ITEMS_PER_PAGE } from "@/lib/settings";
 import { searchParamsType } from "@/lib/types";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
-
-type ResultsList = {
-  id: number;
-  title: string;
-  studentName: string;
-  studentSurname: string;
-  teacherName: string;
-  teacherSurname: string;
-  score: number;
-  className: string;
-  startTime: Date;
-};
 
 const columns = [
   {
@@ -54,41 +43,6 @@ const columns = [
     accessor: "actions",
   },
 ];
-const renderRow = (item: ResultsList) => (
-  <tr
-    key={item.id}
-    className="border-b border-b-200 even:bg-slate-50 text-sm hover:bg-devanshPurpleLight"
-  >
-    <td className="flex items-center gap-4 p-4">
-      <h3 className="font-medium text-sm">{item.title}</h3>
-    </td>
-    <td className="relative">
-      {item.studentName + " " + item.studentSurname}{" "}
-      {/* <span className="text-[10px]  bg-devanshYellow px-[0.1rem] rounded-lg absolute -left-3 -top-1">
-        {item.type}
-      </span> */}
-    </td>
-    <td>{item.score}</td>
-    <td className="hidden md:table-cell">
-      {item.teacherName + " " + item.teacherSurname}
-    </td>
-    <td className="hidden md:table-cell">{item.className}</td>
-    <td className="hidden md:table-cell">
-      {new Intl.DateTimeFormat("en-US").format(item.startTime)}
-    </td>
-
-    <td>
-      <div className="flex gap-2 items-center">
-        {role === "admin" && (
-          <>
-            <FormModal data={item} type="update" table="result" />
-            <FormModal id={item.id} type="delete" table="result" />
-          </>
-        )}
-      </div>
-    </td>
-  </tr>
-);
 
 const ResultListPage = async ({
   searchParams,
@@ -195,7 +149,11 @@ const ResultListPage = async ({
       </div>
 
       {/* LIST SECTION */}
-      <Table columns={columns} renderRow={renderRow} data={data} />
+      <Table
+        columns={columns}
+        renderRow={(item) => renderStudentsRow(item, role)}
+        data={data}
+      />
 
       {/* PAGINATION SECTION */}
       <Pagination page={+page} count={count} />

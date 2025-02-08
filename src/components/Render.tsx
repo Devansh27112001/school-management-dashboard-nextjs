@@ -5,10 +5,16 @@ import {
   EventsList,
   ExamsList,
   LessonsList,
+  ParentsList,
+  ResultsList,
+  StudentsList,
   SubjectsList,
 } from "@/lib/types";
 import FormModal from "./FormModal";
+import Image from "next/image";
+import Link from "next/link";
 
+// ------------------------------------------------------------
 // ANNOUNCEMENTS
 export const renderAnnouncementsRow = (
   item: AnnouncementList,
@@ -44,7 +50,7 @@ export const renderAnnouncementsRow = (
     </tr>
   );
 };
-
+// ------------------------------------------------------------
 // ASSIGNMENTS
 export const renderAssignmentsRow = (item: AssignmentsList, role: string) => {
   return (
@@ -75,6 +81,7 @@ export const renderAssignmentsRow = (item: AssignmentsList, role: string) => {
   );
 };
 
+// ------------------------------------------------------------
 // CLASSES
 export const renderClassesRow = (item: ClassesList, role: string) => {
   return (
@@ -105,6 +112,7 @@ export const renderClassesRow = (item: ClassesList, role: string) => {
   );
 };
 
+// ------------------------------------------------------------
 // EVENTS
 export const renderEventsRow = (item: EventsList, role: string) => {
   return (
@@ -152,6 +160,7 @@ export const renderEventsRow = (item: EventsList, role: string) => {
   );
 };
 
+// ------------------------------------------------------------
 // EXAMS
 export const renderExamsRow = (item: ExamsList, role: string) => {
   return (
@@ -184,6 +193,7 @@ export const renderExamsRow = (item: ExamsList, role: string) => {
   );
 };
 
+// ------------------------------------------------------------
 // LESSONS
 export const renderLessonsRow = (item: LessonsList, role: string) => {
   return (
@@ -213,6 +223,8 @@ export const renderLessonsRow = (item: LessonsList, role: string) => {
   );
 };
 
+// ------------------------------------------------------------
+// SUBJECTS
 export const renderSubjectsRow = (item: SubjectsList, role: string) => {
   return (
     <tr
@@ -231,6 +243,120 @@ export const renderSubjectsRow = (item: SubjectsList, role: string) => {
             <>
               <FormModal table="subject" type="update" data={item} />
               <FormModal table="subject" type="delete" id={item.id} />
+            </>
+          )}
+        </div>
+      </td>
+    </tr>
+  );
+};
+
+// ------------------------------------------------------------
+// PARENTS
+export const renderParentsRow = (item: ParentsList, role: string) => {
+  return (
+    <tr
+      key={item.id}
+      className="border-b border-b-200 even:bg-slate-50 text-sm hover:bg-devanshPurpleLight"
+    >
+      <td className="flex items-center gap-4 p-4">
+        <div className="flex flex-col">
+          <h3 className="font-semibold">{item.name}</h3>
+          <p className="text-sm text-gray-500">{item?.email}</p>
+        </div>
+      </td>
+      <td className="hidden md:table-cell">
+        {item.students?.map((student) => student.name).join(" ,")}
+      </td>
+      <td className="hidden lg:table-cell">{item.phone}</td>
+      <td className="hidden lg:table-cell">{item.address}</td>
+      <td>
+        <div className="flex gap-2 items-center">
+          {role === "admin" && (
+            <>
+              <FormModal table="parent" type="update" data={item} />
+              <FormModal table="parent" type="delete" id={item.id} />
+            </>
+          )}
+        </div>
+      </td>
+    </tr>
+  );
+};
+
+// ------------------------------------------------------------
+// STUDENTS
+export const renderStudentsRow = (item: StudentsList, role: string) => {
+  return (
+    <tr
+      key={item.id}
+      className="border-b border-b-200 even:bg-slate-50 text-sm hover:bg-devanshPurpleLight"
+    >
+      <td className="flex items-center gap-4 p-4">
+        <Image
+          src={item.image || "/noAvatar.png"}
+          width={40}
+          height={40}
+          alt=""
+          className="md:hidden xl:block size-10 rounded-full object-cover"
+        />
+        <div className="flex flex-col">
+          <h3 className="font-semibold">{item.name}</h3>
+          <p className="text-sm text-gray-500">{item?.Class.name}</p>
+        </div>
+      </td>
+      <td className="hidden md:table-cell">{item.username}</td>
+      <td className="hidden md:table-cell">{item.Class.name[0]}</td>
+      <td className="hidden lg:table-cell">{item.phone}</td>
+      <td className="hidden lg:table-cell">{item.address}</td>
+      <td>
+        <div className="flex gap-2 items-center">
+          <Link href={`/list/students/${item.id}`}>
+            <button className="size-7 flex items-center justify-center bg-devanshSky rounded-full">
+              <Image width={16} height={16} alt="" src={"/view.png"} />
+            </button>
+          </Link>
+          {role === "admin" && (
+            <FormModal table="student" type="delete" id={item.id} />
+          )}
+        </div>
+      </td>
+    </tr>
+  );
+};
+
+// ------------------------------------------------------
+// RESULTS
+export const renderResultsRow = (item: ResultsList, role: string) => {
+  return (
+    <tr
+      key={item.id}
+      className="border-b border-b-200 even:bg-slate-50 text-sm hover:bg-devanshPurpleLight"
+    >
+      <td className="flex items-center gap-4 p-4">
+        <h3 className="font-medium text-sm">{item.title}</h3>
+      </td>
+      <td className="relative">
+        {item.studentName + " " + item.studentSurname}{" "}
+        {/* <span className="text-[10px]  bg-devanshYellow px-[0.1rem] rounded-lg absolute -left-3 -top-1">
+      {item.type}
+    </span> */}
+      </td>
+      <td>{item.score}</td>
+      <td className="hidden md:table-cell">
+        {item.teacherName + " " + item.teacherSurname}
+      </td>
+      <td className="hidden md:table-cell">{item.className}</td>
+      <td className="hidden md:table-cell">
+        {new Intl.DateTimeFormat("en-US").format(item.startTime)}
+      </td>
+
+      <td>
+        <div className="flex gap-2 items-center">
+          {role === "admin" && (
+            <>
+              <FormModal data={item} type="update" table="result" />
+              <FormModal id={item.id} type="delete" table="result" />
             </>
           )}
         </div>
