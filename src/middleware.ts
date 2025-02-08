@@ -6,8 +6,6 @@ const matchers = Object.keys(routeAccessMap).map((route) => ({
   matcher: createRouteMatcher([route]),
   allowedRoles: routeAccessMap[route],
 }));
-// const isProtected = createRouteMatcher(["/admin", "/teacher"]);
-console.log(matchers);
 
 export default clerkMiddleware(async (auth, req) => {
   // if (isProtected(req)) await auth.protect();
@@ -15,9 +13,10 @@ export default clerkMiddleware(async (auth, req) => {
   const role = (sessionClaims?.metadata as { role?: string })?.role;
   for (const { matcher, allowedRoles } of matchers) {
     if (matcher(req) && !allowedRoles.includes(role!)) {
-      return NextResponse.redirect(new URL(`/${role}`, req.url));
+      return (await auth()).redirectToSignIn();
     }
   }
+  return NextResponse.next();
 });
 export const config = {
   matcher: [

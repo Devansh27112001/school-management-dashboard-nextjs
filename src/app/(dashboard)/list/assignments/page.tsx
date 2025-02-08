@@ -7,36 +7,9 @@ import prisma from "@/lib/prisma";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 import { searchParamsType } from "@/lib/types";
 import { Prisma } from "@prisma/client";
-import { auth } from "@clerk/nextjs/server";
 import { renderAssignmentsRow } from "@/components/Render";
-
-const { sessionClaims } = await auth();
-const role = (sessionClaims?.metadata as { role: string })?.role;
-
-const columns = [
-  {
-    header: "Subject Name",
-    accessor: "subjectName",
-  },
-  {
-    header: "Class",
-    accessor: "class",
-  },
-  {
-    header: "Teacher",
-    accessor: "teacher",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Due Date",
-    accessor: "dueDate",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Actions",
-    accessor: "actions",
-  },
-];
+import { AssignmentsColumns } from "@/lib/columnsData";
+import { role } from "@/lib/utils";
 
 const AssignmentListPage = async ({
   searchParams,
@@ -45,6 +18,7 @@ const AssignmentListPage = async ({
 }) => {
   const { page = 1, ...queryParams } = await searchParams;
   const query: Prisma.AssignmentWhereInput = {};
+  const columns = AssignmentsColumns(role);
 
   if (queryParams) {
     for (const [key, value] of Object.entries(queryParams)) {

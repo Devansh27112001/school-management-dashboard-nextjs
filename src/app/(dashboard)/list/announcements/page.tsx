@@ -7,7 +7,7 @@ import { AnnouncementColumns } from "@/lib/columnsData";
 import prisma from "@/lib/prisma";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 import { searchParamsType } from "@/lib/types";
-import { auth } from "@clerk/nextjs/server";
+import { role } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
 
@@ -16,8 +16,6 @@ const AnnouncementListPage = async ({
 }: {
   searchParams: searchParamsType;
 }) => {
-  const { sessionClaims } = await auth();
-  const role = (sessionClaims?.metadata as { role: string })?.role;
   const columns = AnnouncementColumns(role);
 
   const { page = 1, ...queryParams } = await searchParams;
