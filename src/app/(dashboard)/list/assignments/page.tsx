@@ -20,6 +20,7 @@ const AssignmentListPage = async ({
   const query: Prisma.AssignmentWhereInput = {};
   const columns = AssignmentsColumns(role);
 
+  // PARAMS CONDITIONS
   if (queryParams) {
     for (const [key, value] of Object.entries(queryParams)) {
       if (value !== undefined) {
@@ -57,6 +58,8 @@ const AssignmentListPage = async ({
       }
     }
   }
+
+  // ROLES CONDITIONS
   const [data, count] = await prisma.$transaction([
     prisma.assignment.findMany({
       where: query,
