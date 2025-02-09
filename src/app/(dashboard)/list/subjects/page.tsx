@@ -3,28 +3,13 @@ import Pagination from "@/components/Pagination";
 import { renderSubjectsRow } from "@/components/Render";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
-import { role } from "@/lib/data";
+import { role } from "@/lib/utils";
 import prisma from "@/lib/prisma";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 import { searchParamsType } from "@/lib/types";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
-
-const columns = [
-  {
-    header: "Subject Name",
-    accessor: "subjectName",
-  },
-  {
-    header: "Teachers",
-    accessor: "teachers",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Actions",
-    accessor: "actions",
-  },
-];
+import { SubjectsColumns } from "@/lib/columnsData";
 
 const SubjectListPage = async ({
   searchParams,
@@ -32,8 +17,8 @@ const SubjectListPage = async ({
   searchParams: searchParamsType;
 }) => {
   const { page = 1, ...queryString } = await searchParams;
-
   const query: Prisma.SubjectWhereInput = {};
+  const columns = SubjectsColumns(role);
 
   if (queryString.search) {
     for (const [key, value] of Object.entries(queryString)) {

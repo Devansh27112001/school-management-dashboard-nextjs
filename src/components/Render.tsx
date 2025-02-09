@@ -351,7 +351,7 @@ export const renderResultsRow = (item: ResultsList, role: string) => {
 
       <td>
         <div className="flex gap-2 items-center">
-          {role === "admin" && (
+          {(role === "admin" || role === "teacher") && (
             <>
               <FormModal data={item} type="update" table="result" />
               <FormModal id={item.id} type="delete" table="result" />

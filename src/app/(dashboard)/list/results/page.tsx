@@ -1,48 +1,15 @@
 import FormModal from "@/components/FormModal";
 import Pagination from "@/components/Pagination";
-import { renderStudentsRow } from "@/components/Render";
+import { renderResultsRow } from "@/components/Render";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
-import { role } from "@/lib/data";
+import { currentUserId, role } from "@/lib/utils";
 import prisma from "@/lib/prisma";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 import { searchParamsType } from "@/lib/types";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
-
-const columns = [
-  {
-    header: "Title",
-    accessor: "title",
-  },
-  {
-    header: "Student",
-    accessor: "student",
-  },
-  {
-    header: "Score",
-    accessor: "score",
-  },
-  {
-    header: "Teacher",
-    accessor: "teacher",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Class",
-    accessor: "class",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Date",
-    accessor: "date",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Actions",
-    accessor: "actions",
-  },
-];
+import { ResultsColumns } from "@/lib/columnsData";
 
 const ResultListPage = async ({
   searchParams,
@@ -51,6 +18,7 @@ const ResultListPage = async ({
 }) => {
   const { page = 1, ...queryParams } = await searchParams;
   const query: Prisma.ResultWhereInput = {};
+  const columns = ResultsColumns(role);
 
   if (queryParams) {
     for (const [key, value] of Object.entries(queryParams)) {
@@ -72,6 +40,25 @@ const ResultListPage = async ({
         }
       }
     }
+  }
+
+  // ROLES CONDITION
+  switch (role) {
+    case "admin":
+      break;
+    case "teacher":
+      query.OR = [
+        { exam: { lesson: { teacherId: currentUserId! } } },
+        { assignment: { lesson: { teacherId: currentUserId! } } },
+      ];
+      break;
+    case "student":
+      query.studentId = currentUserId!;
+      break;
+    case "parent":
+      query.student = { parentId: currentUserId! };
+    default:
+      break;
   }
 
   const [dataRes, count] = await prisma.$transaction([
@@ -143,7 +130,9 @@ const ResultListPage = async ({
               <Image src={"/sort.png"} width={14} height={14} alt={""} />
             </button>
 
-            {role === "admin" && <FormModal table="result" type="create" />}
+            {(role === "admin" || role === "teacher") && (
+              <FormModal table="result" type="create" />
+            )}
           </div>
         </div>
       </div>
@@ -151,7 +140,7 @@ const ResultListPage = async ({
       {/* LIST SECTION */}
       <Table
         columns={columns}
-        renderRow={(item) => renderStudentsRow(item, role)}
+        renderRow={(item) => renderResultsRow(item, role)}
         data={data}
       />
 

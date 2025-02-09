@@ -172,10 +172,14 @@ export const LessonsColumns = (role: string) => {
       accessor: "teacher",
       className: "hidden md:table-cell",
     },
-    {
-      header: "Actions",
-      accessor: "actions",
-    },
+    ...(role === "admin"
+      ? [
+          {
+            header: "Actions",
+            accessor: "actions",
+          },
+        ]
+      : []),
   ];
 };
 
@@ -200,10 +204,14 @@ export const ParentsColumns = (role: string) => {
       accessor: "address",
       className: "hidden lg:table-cell",
     },
-    {
-      header: "Actions",
-      accessor: "actions",
-    },
+    ...(role === "admin"
+      ? [
+          {
+            header: "Actions",
+            accessor: "actions",
+          },
+        ]
+      : []),
   ];
 };
 export const ResultsColumns = (role: string) => {
@@ -235,10 +243,14 @@ export const ResultsColumns = (role: string) => {
       accessor: "date",
       className: "hidden md:table-cell",
     },
-    {
-      header: "Actions",
-      accessor: "actions",
-    },
+    ...(role === "admin" || role === "teacher"
+      ? [
+          {
+            header: "Actions",
+            accessor: "actions",
+          },
+        ]
+      : []),
   ];
 };
 export const StudentsColumns = (role: string) => {
@@ -267,10 +279,14 @@ export const StudentsColumns = (role: string) => {
       accessor: "address",
       className: "hidden lg:table-cell",
     },
-    {
-      header: "Actions",
-      accessor: "actions",
-    },
+    ...(role === "admin"
+      ? [
+          {
+            header: "Actions",
+            accessor: "actions",
+          },
+        ]
+      : []),
   ];
 };
 
@@ -322,9 +338,13 @@ export const TeachersColumns = (role: string) => {
       accessor: "address",
       className: "hidden lg:table-cell",
     },
-    {
-      header: "Actions",
-      accessor: "actions",
-    },
+    ...(role === "admin"
+      ? [
+          {
+            header: "Actions",
+            accessor: "actions",
+          },
+        ]
+      : []),
   ];
 };

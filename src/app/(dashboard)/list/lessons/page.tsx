@@ -3,32 +3,13 @@ import Pagination from "@/components/Pagination";
 import { renderLessonsRow } from "@/components/Render";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
-import { role } from "@/lib/data";
+import { LessonsColumns } from "@/lib/columnsData";
+import { role } from "@/lib/utils";
 import prisma from "@/lib/prisma";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 import { searchParamsType } from "@/lib/types";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
-
-const columns = [
-  {
-    header: "Subject Name",
-    accessor: "subjectName",
-  },
-  {
-    header: "Class",
-    accessor: "class",
-  },
-  {
-    header: "Teacher",
-    accessor: "teacher",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Actions",
-    accessor: "actions",
-  },
-];
 
 const LessonListPage = async ({
   searchParams,
@@ -37,6 +18,7 @@ const LessonListPage = async ({
 }) => {
   const { page = 1, ...queryString } = await searchParams;
   const query: Prisma.LessonWhereInput = {};
+  const columns = LessonsColumns(role);
 
   if (queryString) {
     for (const [key, value] of Object.entries(queryString)) {

@@ -3,38 +3,13 @@ import Pagination from "@/components/Pagination";
 import { renderParentsRow } from "@/components/Render";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
-import { role } from "@/lib/data";
+import { ParentsColumns } from "@/lib/columnsData";
+import { role } from "@/lib/utils";
 import prisma from "@/lib/prisma";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 import { searchParamsType } from "@/lib/types";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
-
-const columns = [
-  {
-    header: "Info",
-    accessor: "info",
-  },
-  {
-    header: "Student Names",
-    accessor: "studentName",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Phone",
-    accessor: "phone",
-    className: "hidden lg:table-cell",
-  },
-  {
-    header: "Address",
-    accessor: "address",
-    className: "hidden lg:table-cell",
-  },
-  {
-    header: "Actions",
-    accessor: "actions",
-  },
-];
 
 const ParentListPage = async ({
   searchParams,
@@ -43,6 +18,7 @@ const ParentListPage = async ({
 }) => {
   const { page = 1, ...queryString } = await searchParams;
   const query: Prisma.ParentWhereInput = {};
+  const columns = ParentsColumns(role);
 
   if (queryString) {
     for (const [key, value] of Object.entries(queryString)) {

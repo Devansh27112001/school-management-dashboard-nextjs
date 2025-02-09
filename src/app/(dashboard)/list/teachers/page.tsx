@@ -1,59 +1,25 @@
 import Image from "next/image";
 import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
-import { role } from "@/lib/data";
+import { role } from "@/lib/utils";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 import FormModal from "@/components/FormModal";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import { renderTeachersRow } from "@/components/Render";
-
-const columns = [
-  {
-    header: "Info",
-    accessor: "info",
-  },
-  {
-    header: "Teacher ID",
-    accessor: "teacherId",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Subjects",
-    accessor: "subjects",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Classes",
-    accessor: "classes",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Phone",
-    accessor: "phone",
-    className: "hidden lg:table-cell",
-  },
-  {
-    header: "Address",
-    accessor: "address",
-    className: "hidden lg:table-cell",
-  },
-  {
-    header: "Actions",
-    accessor: "actions",
-  },
-];
+import { TeachersColumns } from "@/lib/columnsData";
+import { searchParamsType } from "@/lib/types";
 
 const TeachersListPage = async ({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | undefined };
+  searchParams: searchParamsType;
 }) => {
   // In NextJs 15, we need to await the searchParams in order to get the query string.
   const { page = 1, ...queryString } = await searchParams;
-
   const query: Prisma.TeacherWhereInput = {};
+  const columns = TeachersColumns(role);
 
   if (queryString) {
     for (const [key, value] of Object.entries(queryString)) {

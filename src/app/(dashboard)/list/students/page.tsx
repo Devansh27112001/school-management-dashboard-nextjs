@@ -3,43 +3,13 @@ import Pagination from "@/components/Pagination";
 import { renderStudentsRow } from "@/components/Render";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
-import { role } from "@/lib/data";
+import { StudentsColumns } from "@/lib/columnsData";
+import { role } from "@/lib/utils";
 import prisma from "@/lib/prisma";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 import { searchParamsType } from "@/lib/types";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
-
-const columns = [
-  {
-    header: "Info",
-    accessor: "info",
-  },
-  {
-    header: "Student ID",
-    accessor: "studentId",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Grade",
-    accessor: "grade",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Phone",
-    accessor: "phone",
-    className: "hidden lg:table-cell",
-  },
-  {
-    header: "Address",
-    accessor: "address",
-    className: "hidden lg:table-cell",
-  },
-  {
-    header: "Actions",
-    accessor: "actions",
-  },
-];
 
 const StudentListPage = async ({
   searchParams,
@@ -47,8 +17,9 @@ const StudentListPage = async ({
   searchParams: searchParamsType;
 }) => {
   const { page = 1, ...queryString } = await searchParams;
-
   const query: Prisma.StudentWhereInput = {};
+
+  const columns = StudentsColumns(role);
 
   if (queryString) {
     for (const [key, value] of Object.entries(queryString)) {
