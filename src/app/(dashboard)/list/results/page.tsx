@@ -52,11 +52,16 @@ const ResultListPage = async ({
         { assignment: { lesson: { teacherId: currentUserId! } } },
       ];
       break;
+
     case "student":
       query.studentId = currentUserId!;
       break;
+
     case "parent":
-      query.student = { parentId: currentUserId! };
+      query.student = {
+        parentId: currentUserId!,
+      };
+      break;
     default:
       break;
   }
@@ -97,6 +102,7 @@ const ResultListPage = async ({
     const assessment = item.exam || item.assignment;
 
     if (!assessment) return null;
+
     const isExam = "startTime" in assessment;
 
     return {

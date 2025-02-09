@@ -38,7 +38,7 @@ const Pagination = ({ page, count }: PaginationProps) => {
         ))}
       </div>
       <button
-        disabled={page === totalPages}
+        disabled={page === totalPages || totalPages === 0}
         className="bg-gray-300 py-2 px-4 rounded-md text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed  hover:scale-105 transition-all duration-200 ease-in"
         onClick={() => handlePageChange(page + 1)}
       >
