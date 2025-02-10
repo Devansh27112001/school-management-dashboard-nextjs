@@ -1,28 +1,18 @@
-// TEMPERORY DATA
-const events = [
-  {
-    id: 1,
-    title: "Lake Trip",
-    time: "12:00 PM to 2:00 PM",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-  },
-  {
-    id: 2,
-    title: "Picnic",
-    time: "2:00 PM to 4:00 PM",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-  },
-  {
-    id: 3,
-    title: "Beach Trip",
-    time: "4:00 PM to 6:00 PM",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-  },
-];
-const EventList = () => {
+import prisma from "@/lib/prisma";
+
+const EventList = async ({ dateParam }: { dateParam: string | undefined }) => {
+  const date = dateParam ? new Date(dateParam) : new Date();
+  const data = await prisma.event.findMany({
+    where: {
+      startTime: {
+        gte: new Date(date.setHours(0, 0, 0, 0)),
+        lte: new Date(date.setHours(23, 59, 59, 999)),
+      },
+    },
+  });
   return (
     <>
-      {events.map((event) => (
+      {data.map((event) => (
         <div
           key={event.id}
           className="p-3 rounded-md border border-gray-100 border-t-4 odd:border-t-devanshSky even:border-t-devanshPurple"
@@ -31,12 +21,17 @@ const EventList = () => {
             <h1 className="text-md text-gray-600 font-semibold">
               {event.title}
             </h1>
-            <span className="text-xs text-gray-300">{event.time}</span>
+            <span className="text-xs text-gray-300">
+              {event.startTime.toLocaleTimeString("en-US", {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false,
+              })}
+            </span>
           </div>
           <p className="text-sm mt-2 text-gray-400">{event.description}</p>
         </div>
       ))}
-      ;
     </>
   );
 };

@@ -1,3 +1,5 @@
+import prisma from "@/lib/prisma";
+
 const announcements = [
   {
     id: 1,
@@ -22,7 +24,8 @@ const announcements = [
   },
 ];
 
-const Announcements = () => {
+const Announcements = async () => {
+  const data = await prisma.announcement.findMany({});
   return (
     <div className="p-4 bg-white rounded-md">
       <div className="flex items-center justify-between">
