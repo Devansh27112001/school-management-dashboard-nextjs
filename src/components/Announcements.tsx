@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { auth } from "@clerk/nextjs/server";
 
 const announcements = [
   {
@@ -25,7 +26,25 @@ const announcements = [
 ];
 
 const Announcements = async () => {
-  const data = await prisma.announcement.findMany({});
+  const { userId, sessionClaims } = await auth();
+  const role = (sessionClaims?.metadata as { role?: string })?.role;
+
+  const roleConditions = {
+    admin: {},
+    teacher: { lessons: { some: { teacherId: userId! } } },
+    student: { students: { some: { id: userId! } } },
+    parent: { students: { some: { parentId: userId! } } },
+  };
+  const data = await prisma.announcement.findMany({
+    take: 3,
+    orderBy: { date: "desc" },
+    where: {
+      OR: [
+        { classId: null },
+        { class: roleConditions[role as keyof typeof roleConditions] || {} },
+      ],
+    },
+  });
   return (
     <div className="p-4 bg-white rounded-md">
       <div className="flex items-center justify-between">
