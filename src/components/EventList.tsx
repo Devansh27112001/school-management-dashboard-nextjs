@@ -10,28 +10,35 @@ const EventList = async ({ dateParam }: { dateParam: string | undefined }) => {
       },
     },
   });
+  console.log(data);
   return (
     <>
-      {data.map((event) => (
-        <div
-          key={event.id}
-          className="p-3 rounded-md border border-gray-100 border-t-4 odd:border-t-devanshSky even:border-t-devanshPurple"
-        >
-          <div className="flex items-center justify-between">
-            <h1 className="text-md text-gray-600 font-semibold">
-              {event.title}
-            </h1>
-            <span className="text-xs text-gray-300">
-              {event.startTime.toLocaleTimeString("en-US", {
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: false,
-              })}
-            </span>
+      {data.length ? (
+        data.map((event) => (
+          <div
+            key={event.id}
+            className="p-3 rounded-md border border-gray-100 border-t-4 odd:border-t-devanshSky even:border-t-devanshPurple"
+          >
+            <div className="flex items-center justify-between">
+              <h1 className="text-md text-gray-600 font-semibold">
+                {event.title}
+              </h1>
+              <span className="text-xs text-gray-300">
+                {event.startTime.toLocaleTimeString("en-US", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: false,
+                })}
+              </span>
+            </div>
+            <p className="text-sm mt-2 text-gray-400">{event.description}</p>
           </div>
-          <p className="text-sm mt-2 text-gray-400">{event.description}</p>
+        ))
+      ) : (
+        <div className="p-3 self-center text-sm text-gray-500">
+          No events for this date
         </div>
-      ))}
+      )}
     </>
   );
 };
