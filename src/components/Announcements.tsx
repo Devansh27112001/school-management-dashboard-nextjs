@@ -48,24 +48,23 @@ const Announcements = async () => {
   return (
     <div className="p-4 bg-white rounded-md">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold">Announcements</h1>
-        <span className="text-xs text-gray-400">View all</span>
-      </div>
-      <div className="space-y-4 mt-2">
-        {announcements.map((announcement) => (
-          <div
-            key={announcement.id}
-            className="odd:bg-devanshSky rounded-md p-4 even:bg-devanshYellow"
-          >
-            <div className="flex items-center justify-between">
-              <h2 className="font-medium">{announcement.title}</h2>
-              <span className="text-xs text-gray-400 bg-white rounded-md p-1">
-                {announcement.date}
-              </span>
+        <h1 className="text-xl font-semibold">Announcemments</h1>
+        <span className="tet-xs text-gray-400">View all</span>
+        <div className="flex flex-col gap-4 mt-4">
+          {data[0] && (
+            <div className="bg-devanshSkyLight rounded-md p-4">
+              <div className="flex items-center justify-between">
+                <h2 className="font-medium">{data[0].title}</h2>
+                <span className="text-xs text-gray-400 bg-white rounded-md p-1">
+                  {new Intl.DateTimeFormat("en-GB").format(data[0].date)}
+                </span>
+              </div>
+              <p className="text-sm text-gray-400 mt-1">
+                {data[0].description}
+              </p>
             </div>
-            <p className="text-sm text-gray-400">{announcement.description}</p>
-          </div>
-        ))}
+          )}
+        </div>
       </div>
     </div>
   );

@@ -10,7 +10,6 @@ const EventList = async ({ dateParam }: { dateParam: string | undefined }) => {
       },
     },
   });
-  console.log(data);
   return (
     <>
       {data.length ? (
