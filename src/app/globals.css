@@ -103,9 +103,10 @@
 .rbc-event {
   border: none !important;
   color: black !important;
-  padding: 10px !important;
-  margin: 10px !important;
-  width: 99% !important;
+  padding: 0.4rem !important;
+  margin-left: 0.4rem !important;
+  width: 100% !important;
+  min-height: fit-content !important;
 }
 
 .rbc-event:nth-child(1) {

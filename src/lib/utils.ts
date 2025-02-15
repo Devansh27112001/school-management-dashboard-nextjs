@@ -37,7 +37,7 @@ export const adjustScheduleToCurrentWeek = (
     start: Date;
     end: Date;
   }[]
-): { title: string; start: Date; end: Date } => {
+): { title: string; start: Date; end: Date }[] => {
   const { startOfweek, endOfWeek } = currentWorkWeek();
   return lessons.map((lesson) => {
     const lessonDayOfWeek = lesson.start.getDay();

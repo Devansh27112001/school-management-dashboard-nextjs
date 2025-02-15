@@ -18,17 +18,19 @@ const BigCalenderContainer = async ({
   const data = dataRes.map((item) => {
     return {
       title: item.name,
-      start: moment.utc(item.startTime).local().toDate(),
-      end: moment.utc(item.startTime).local().toDate(),
-      allDay: false,
+      // Format: YYYY-MM-DD
+      start: new Date(item.startTime),
+      end: new Date(item.endTime),
     };
   });
+
+  console.log(data);
 
   const schedule = adjustScheduleToCurrentWeek(data);
 
   return (
     <div>
-      <BigCalender data={schedule} />
+      <BigCalender data={data} />
     </div>
   );
 };
