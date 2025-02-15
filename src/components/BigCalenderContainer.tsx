@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import BigCalender from "./BigCalender";
 import moment from "moment";
+import { adjustScheduleToCurrentWeek } from "@/lib/utils";
 
 const BigCalenderContainer = async ({
   type,
@@ -22,9 +23,12 @@ const BigCalenderContainer = async ({
       allDay: false,
     };
   });
+
+  const schedule = adjustScheduleToCurrentWeek(data);
+
   return (
     <div>
-      <BigCalender data={data} />
+      <BigCalender data={schedule} />
     </div>
   );
 };
