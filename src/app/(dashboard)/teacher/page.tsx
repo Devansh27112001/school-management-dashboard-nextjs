@@ -3,8 +3,8 @@ import BigCalenderContainer from "@/components/BigCalenderContainer";
 import { auth } from "@clerk/nextjs/server";
 
 const TeacherPage = async () => {
-  const { userId, sessionClaims } = await auth();
-  const role = (sessionClaims?.metadata as { role: string })?.role;
+  const { userId } = await auth();
+
   return (
     <div className="p-4 gap-4 flex flex-col xl:flex-row flex-1">
       {/* LEFT */}
