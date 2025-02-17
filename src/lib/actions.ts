@@ -45,3 +45,22 @@ export const updateSubject = async (
   }
   // return { success: true, error: false };
 };
+
+export const deleteSubject = async (
+  currentState: currentStateType,
+  data: FormData
+) => {
+  const id = data.get("id") as string;
+  try {
+    await prisma.subject.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error(error);
+    return { success: false, error: true };
+  }
+};

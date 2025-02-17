@@ -28,6 +28,16 @@ type ActiontoCallType = (
   error: boolean;
 }>;
 
+const defaultValue = async (
+  currentState: {
+    success: boolean;
+    error: boolean;
+  },
+  data: SubjectSchema
+): Promise<{ success: boolean; error: boolean }> => {
+  return currentState;
+};
+
 const SubjectForm = ({ type, setOpen, data }: SubjectFormProps) => {
   const {
     register,
@@ -35,15 +45,7 @@ const SubjectForm = ({ type, setOpen, data }: SubjectFormProps) => {
     formState: { errors },
   } = useForm<SubjectSchema>({ resolver: zodResolver(subjectSchema) });
 
-  let actionToCall: ActiontoCallType = async (
-    currentState: {
-      success: boolean;
-      error: boolean;
-    },
-    data: SubjectSchema
-  ): Promise<{ success: boolean; error: boolean }> => {
-    return currentState;
-  };
+  let actionToCall: ActiontoCallType = defaultValue;
   switch (type) {
     case "create":
       actionToCall = createSubject;
