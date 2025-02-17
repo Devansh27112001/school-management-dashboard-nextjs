@@ -24,3 +24,24 @@ export const createSubject = async (
     return { success: false, error: true };
   }
 };
+
+export const updateSubject = async (
+  currentState: currentStateType,
+  data: SubjectSchema
+) => {
+  try {
+    await prisma.subject.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        name: data.name,
+      },
+    });
+    return { success: true, error: false };
+  } catch (error) {
+    console.error(error);
+    return { success: false, error: true };
+  }
+  // return { success: true, error: false };
+};

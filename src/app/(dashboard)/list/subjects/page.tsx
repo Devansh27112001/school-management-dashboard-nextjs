@@ -53,10 +53,10 @@ const SubjectListPage = async ({
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
       {/* TOP SECTION */}
       <div className="flex items-center justify-between">
-        {/* RIGHT CORNER */}
+        {/* LEFT CORNER */}
         <h1 className="hidden md:block text-lg font-semibold">All Subjects</h1>
 
-        {/* LEFT CORNER */}
+        {/* RIGHT CORNER */}
         <div className="flex flex-col md:flex-row gap-4 items-center w-full md:w-auto">
           <TableSearch />
           <div className="flex items-center gap-4 self-end">

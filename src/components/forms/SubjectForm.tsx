@@ -3,7 +3,7 @@ import { subjectSchema, SubjectSchema } from "@/lib/formValidationSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputField from "../InputField";
-import { createSubject } from "@/lib/actions";
+import { createSubject, updateSubject } from "@/lib/actions";
 import {
   Dispatch,
   SetStateAction,
@@ -20,6 +20,14 @@ type SubjectFormProps = {
   data?: any;
 };
 
+type ActiontoCallType = (
+  currentState: { success: boolean; error: boolean },
+  data: SubjectSchema
+) => Promise<{
+  success: boolean;
+  error: boolean;
+}>;
+
 const SubjectForm = ({ type, setOpen, data }: SubjectFormProps) => {
   const {
     register,
@@ -27,8 +35,28 @@ const SubjectForm = ({ type, setOpen, data }: SubjectFormProps) => {
     formState: { errors },
   } = useForm<SubjectSchema>({ resolver: zodResolver(subjectSchema) });
 
+  let actionToCall: ActiontoCallType = async (
+    currentState: {
+      success: boolean;
+      error: boolean;
+    },
+    data: SubjectSchema
+  ): Promise<{ success: boolean; error: boolean }> => {
+    return currentState;
+  };
+  switch (type) {
+    case "create":
+      actionToCall = createSubject;
+      break;
+    case "update":
+      actionToCall = updateSubject;
+      break;
+    default:
+      break;
+  }
+
   // React-Version in <19, still have to "useActionState" --> Previous "useFormState"
-  const [state, formAction] = useActionState(createSubject, {
+  const [state, formAction] = useActionState(actionToCall, {
     success: false,
     error: false,
   });
@@ -60,6 +88,14 @@ const SubjectForm = ({ type, setOpen, data }: SubjectFormProps) => {
           name="name"
           register={register}
           defaultValue={data?.name}
+        />
+        <InputField
+          label=""
+          name="id"
+          type="hidden"
+          register={register}
+          error={errors?.name}
+          defaultValue={data?.id}
         />
       </div>
       {state.error && (
