@@ -1,7 +1,7 @@
 "use client";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import LoadingSpinner from "./LoadingSpinner";
 
 const TeacherForm = dynamic(() => import("./forms/TeacherForm"), {
@@ -21,7 +21,11 @@ const SubjectForm = dynamic(() => import("./forms/SubjectForm"), {
 
 type FormObject = Record<
   string,
-  (type: "create" | "update", data?: any) => JSX.Element
+  (
+    type: "create" | "update",
+    setOpen: Dispatch<SetStateAction<boolean>>,
+    data?: any
+  ) => JSX.Element
 >;
 
 const form: FormObject = {
@@ -72,7 +76,7 @@ const FormModal = ({ table, type, data, id }: FormModalProps) => {
         </button>
       </form>
     ) : type === "create" || type === "update" ? (
-      form[table](type, data)
+      form[table](type, data, setOpen)
     ) : (
       "Form not found!"
     );

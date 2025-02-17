@@ -4,18 +4,26 @@ import * as Clerk from "@clerk/elements/common";
 import * as SignIn from "@clerk/elements/sign-in";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 const Loginpage = () => {
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
   const router = useRouter();
+  const pathname = usePathname();
   useEffect(() => {
-    const role = user?.publicMetadata.role;
-    if (role) {
-      router.push(`/${role}`);
+    if (isLoaded && pathname === "/") {
+      const role = user?.publicMetadata.role;
+      if (role) {
+        router.push(`/${role}`);
+      }
     }
-  }, [user, router]);
+  }, [user, router, isLoaded, pathname]);
+  useEffect(() => {
+    if (!user && isLoaded && pathname === "/") {
+      router.replace(pathname);
+    }
+  }, [user, isLoaded, pathname, router]);
   return (
     <div className="h-screen flex items-center justify-center bg-devanshSkyLight">
       <SignIn.Root>

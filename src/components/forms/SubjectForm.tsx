@@ -5,7 +5,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputField from "../InputField";
 import { createSubject } from "@/lib/actions";
-import { startTransition, useActionState } from "react";
+import { startTransition, useActionState, useEffect } from "react";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const SubjectForm = ({
   type,
@@ -25,9 +27,18 @@ const SubjectForm = ({
     error: false,
   });
 
-  const onSubmit = (data: any) => {
+  const router = useRouter();
+
+  const onSubmit: any = (data: any) => {
     startTransition(() => formAction(data));
   };
+
+  useEffect(() => {
+    if (state.success) {
+      toast(`Subject has been ${type === "create" ? "created" : "updated"}`);
+      router.refresh();
+    }
+  }, [state, router, type]);
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
       <h1 className="">
