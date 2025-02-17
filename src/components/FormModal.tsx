@@ -29,10 +29,18 @@ type FormObject = Record<
 >;
 
 const form: FormObject = {
-  teacher: (type, data) => <TeacherForm type={type} data={data} />,
-  student: (type, data) => <StudentForm type={type} data={data} />,
-  parent: (type, data) => <ParentForm type={type} data={data} />,
-  subject: (type, data) => <SubjectForm type={type} data={data} />,
+  teacher: (type, setOpen, data) => (
+    <TeacherForm type={type} data={data} setOpen={setOpen} />
+  ),
+  student: (type, setOpen, data) => (
+    <StudentForm type={type} data={data} setOpen={setOpen} />
+  ),
+  parent: (type, setOpen, data) => (
+    <ParentForm type={type} data={data} setOpen={setOpen} />
+  ),
+  subject: (type, setOpen, data) => (
+    <SubjectForm type={type} data={data} setOpen={setOpen} />
+  ),
 };
 type FormModalProps = {
   table:
@@ -76,7 +84,7 @@ const FormModal = ({ table, type, data, id }: FormModalProps) => {
         </button>
       </form>
     ) : type === "create" || type === "update" ? (
-      form[table](type, data, setOpen)
+      form[table](type, setOpen, data)
     ) : (
       "Form not found!"
     );

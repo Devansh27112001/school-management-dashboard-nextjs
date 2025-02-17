@@ -1,27 +1,33 @@
 "use client";
-
 import { subjectSchema, SubjectSchema } from "@/lib/formValidationSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputField from "../InputField";
 import { createSubject } from "@/lib/actions";
-import { startTransition, useActionState, useEffect } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  startTransition,
+  useActionState,
+  useEffect,
+} from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
-const SubjectForm = ({
-  type,
-  data,
-}: {
+type SubjectFormProps = {
   type: "create" | "update";
+  setOpen: Dispatch<SetStateAction<boolean>>;
   data?: any;
-}) => {
+};
+
+const SubjectForm = ({ type, setOpen, data }: SubjectFormProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<SubjectSchema>({ resolver: zodResolver(subjectSchema) });
 
+  // React-Version in <19, still have to "useActionState" --> Previous "useFormState"
   const [state, formAction] = useActionState(createSubject, {
     success: false,
     error: false,
@@ -36,9 +42,10 @@ const SubjectForm = ({
   useEffect(() => {
     if (state.success) {
       toast(`Subject has been ${type === "create" ? "created" : "updated"}`);
+      setOpen(false);
       router.refresh();
     }
-  }, [state, router, type]);
+  }, [state, router, type, setOpen]);
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
       <h1 className="">
