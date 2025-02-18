@@ -31,11 +31,10 @@ const FormContainer = async ({
   if (type !== "delete") {
     switch (table) {
       case "subject":
-        const subjectTeachers = await prisma.subject.findMany({
-          select: {
-            teachers: {},
-          },
+        const subjectsTeachers = await prisma.teacher.findMany({
+          select: { id: true, name: true, surname: true },
         });
+        relatedData = { teachers: subjectsTeachers };
         break;
       default:
         break;
@@ -43,7 +42,13 @@ const FormContainer = async ({
   }
   return (
     <div>
-      <FormModal table={table} type={type} data={data} id={id} />
+      <FormModal
+        table={table}
+        type={type}
+        data={data}
+        id={id}
+        relatedData={relatedData}
+      />
     </div>
   );
 };

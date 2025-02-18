@@ -18,57 +18,38 @@ type SubjectFormProps = {
   type: "create" | "update";
   setOpen: Dispatch<SetStateAction<boolean>>;
   data?: any;
+  relatedData?: any;
 };
 
-type ActiontoCallType = (
-  currentState: { success: boolean; error: boolean },
-  data: SubjectSchema
-) => Promise<{
-  success: boolean;
-  error: boolean;
-}>;
-
-const defaultValue = async (
-  currentState: {
-    success: boolean;
-    error: boolean;
-  },
-  data: SubjectSchema
-): Promise<{ success: boolean; error: boolean }> => {
-  return currentState;
-};
-
-const SubjectForm = ({ type, setOpen, data }: SubjectFormProps) => {
+const SubjectForm = ({
+  type,
+  setOpen,
+  data,
+  relatedData,
+}: SubjectFormProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<SubjectSchema>({ resolver: zodResolver(subjectSchema) });
 
-  let actionToCall: ActiontoCallType = defaultValue;
-  switch (type) {
-    case "create":
-      actionToCall = createSubject;
-      break;
-    case "update":
-      actionToCall = updateSubject;
-      break;
-    default:
-      break;
-  }
-
   // React-Version in <19, still have to "useActionState" --> Previous "useFormState"
-  const [state, formAction] = useActionState(actionToCall, {
-    success: false,
-    error: false,
-  });
+  const [state, formAction] = useActionState(
+    type === "create" ? createSubject : updateSubject,
+    {
+      success: false,
+      error: false,
+    }
+  );
 
   const router = useRouter();
 
+  // Submit function
   const onSubmit: any = (data: any) => {
     startTransition(() => formAction(data));
   };
 
+  // After success on update/create subject.
   useEffect(() => {
     if (state.success) {
       toast(`Subject has been ${type === "create" ? "created" : "updated"}`);
@@ -91,14 +72,16 @@ const SubjectForm = ({ type, setOpen, data }: SubjectFormProps) => {
           register={register}
           defaultValue={data?.name}
         />
-        <InputField
-          label=""
-          name="id"
-          type="hidden"
-          register={register}
-          error={errors?.name}
-          defaultValue={data?.id}
-        />
+        {data && (
+          <InputField
+            label=""
+            name="id"
+            type="hidden"
+            register={register}
+            error={errors?.id}
+            defaultValue={data?.id}
+          />
+        )}
       </div>
       {state.error && (
         <span className="text-red-500 text-s font-semibold self-center">

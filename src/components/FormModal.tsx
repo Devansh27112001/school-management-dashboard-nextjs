@@ -49,7 +49,8 @@ type FormObject = Record<
   (
     type: "create" | "update",
     setOpen: Dispatch<SetStateAction<boolean>>,
-    data?: any
+    data?: any,
+    relatedData?: any
   ) => JSX.Element
 >;
 
@@ -63,12 +64,23 @@ const form: FormObject = {
   parent: (type, setOpen, data) => (
     <ParentForm type={type} data={data} setOpen={setOpen} />
   ),
-  subject: (type, setOpen, data) => (
-    <SubjectForm type={type} data={data} setOpen={setOpen} />
+  subject: (type, setOpen, data, relatedData) => (
+    <SubjectForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
   ),
 };
 
-const FormModal = ({ table, type, data, id }: FormModalContainerProps) => {
+const FormModal = ({
+  table,
+  type,
+  data,
+  id,
+  relatedData,
+}: FormModalContainerProps & { relatedData?: any }) => {
   const [open, setOpen] = useState(false);
 
   const size = type === "create" ? "size-8" : "size-7";
@@ -105,7 +117,7 @@ const FormModal = ({ table, type, data, id }: FormModalContainerProps) => {
         </button>
       </form>
     ) : type === "create" || type === "update" ? (
-      form[table](type, setOpen, data)
+      form[table](type, setOpen, data, relatedData)
     ) : (
       "Form not found!"
     );
