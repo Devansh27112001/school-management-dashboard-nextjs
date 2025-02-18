@@ -12,7 +12,7 @@ import LoadingSpinner from "./LoadingSpinner";
 import { deleteSubject } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import InputField from "./InputField";
+import { FormModalContainerProps } from "./FormContainer";
 
 const deletionMap: any = {
   subject: deleteSubject,
@@ -67,26 +67,8 @@ const form: FormObject = {
     <SubjectForm type={type} data={data} setOpen={setOpen} />
   ),
 };
-type FormModalProps = {
-  table:
-    | "teacher"
-    | "student"
-    | "parent"
-    | "subject"
-    | "class"
-    | "lesson"
-    | "exam"
-    | "assignment"
-    | "result"
-    | "attendance"
-    | "event"
-    | "announcement";
-  type: "create" | "update" | "delete";
-  data?: any;
-  // Remove the number type from the id prop. This is just temporary.
-  id?: string | number;
-};
-const FormModal = ({ table, type, data, id }: FormModalProps) => {
+
+const FormModal = ({ table, type, data, id }: FormModalContainerProps) => {
   const [open, setOpen] = useState(false);
 
   const size = type === "create" ? "size-8" : "size-7";

@@ -14,6 +14,7 @@ import {
 import FormModal from "./FormModal";
 import Image from "next/image";
 import Link from "next/link";
+import FormContainer from "./FormContainer";
 
 // ------------------------------------------------------------
 // ANNOUNCEMENTS
@@ -242,8 +243,8 @@ export const renderSubjectsRow = (item: SubjectsList, role: string) => {
         <div className="flex gap-2 items-center">
           {role === "admin" && (
             <>
-              <FormModal table="subject" type="update" data={item} />
-              <FormModal table="subject" type="delete" id={item.id} />
+              <FormContainer table="subject" type="update" data={item} />
+              <FormContainer table="subject" type="delete" id={item.id} />
             </>
           )}
         </div>
