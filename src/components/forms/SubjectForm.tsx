@@ -33,6 +33,7 @@ const SubjectForm = ({
     formState: { errors },
   } = useForm<SubjectSchema>({ resolver: zodResolver(subjectSchema) });
 
+  const router = useRouter();
   // React-Version in <19, still have to "useActionState" --> Previous "useFormState"
   const [state, formAction] = useActionState(
     type === "create" ? createSubject : updateSubject,
@@ -42,10 +43,9 @@ const SubjectForm = ({
     }
   );
 
-  const router = useRouter();
-
   // Submit function
-  const onSubmit: any = (data: any) => {
+  const onSubmit = (data: any) => {
+    console.log("In the submit handler");
     startTransition(() => formAction(data));
   };
 
@@ -56,7 +56,11 @@ const SubjectForm = ({
       setOpen(false);
       router.refresh();
     }
-  }, [state, router, type, setOpen]);
+  }, [state]);
+
+  const { teachers } = relatedData;
+
+  // ---------------------------
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
       <h1 className="">
@@ -82,6 +86,32 @@ const SubjectForm = ({
             defaultValue={data?.id}
           />
         )}
+        {/* SELECT ELEMENT */}
+        {/* The data that is passsed in the formAction will have the teacherIds of all the selected teachers */}
+        <div className="flex flex-col gap-2 w-full md:w-1/4 group">
+          <label className="text-xs text-gray-500 group-focus-within:font-semibold transition-all duration-300">
+            Select teachers
+          </label>
+          <select
+            multiple
+            {...register("teachers")}
+            className="ring-[1.5px] ring-gray-300 p-2 rounded-md w-full focus:ring-blue-300 outline-none transition-all duration-300 text-sm"
+            defaultValue={data?.teachers}
+          >
+            {teachers?.map(
+              (teacher: { id: string; name: string; surname: string }) => (
+                <option key={teacher.id} value={teacher.id}>
+                  {teacher.name + " " + teacher.surname}
+                </option>
+              )
+            )}
+          </select>
+          {errors?.teachers?.message && (
+            <p className="text-xs text-red-400">
+              {errors?.teachers?.message.toString()}
+            </p>
+          )}
+        </div>
       </div>
       {state.error && (
         <span className="text-red-500 text-s font-semibold self-center">
