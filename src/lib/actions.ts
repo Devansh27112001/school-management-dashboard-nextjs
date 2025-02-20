@@ -1,5 +1,4 @@
 "use server";
-
 import { classSchema, SubjectSchema } from "./formValidationSchemas";
 import prisma from "./prisma";
 
@@ -80,9 +79,9 @@ export const createClass = async (
   data: classSchema
 ) => {
   try {
-    // await prisma.class.create({
-    //   data: {},
-    // });
+    await prisma.class.create({
+      data: {},
+    });
     return { success: true, error: false };
   } catch (error) {
     console.error(error);
@@ -93,4 +92,28 @@ export const createClass = async (
 export const updateClass = async (
   currentState: currentStateType,
   data: classSchema
-) => {};
+) => {
+  try {
+    await prisma.subject.update({
+      where: {
+        id: data.id,
+      },
+      data: {},
+    });
+    return { success: true, error: false };
+  } catch (error) {
+    console.error(error);
+    return { success: false, error: true };
+  }
+};
+
+export const deleteClass = async (
+  currentState: currentStateType,
+  data: FormData
+) => {
+  try {
+  } catch (error) {
+    console.error(error);
+    return { success: false, error: true };
+  }
+};
