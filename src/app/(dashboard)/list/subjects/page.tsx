@@ -51,7 +51,7 @@ const SubjectListPage = async ({
     prisma.subject.count({ where: query }),
   ]);
   return (
-    <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
+    <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0 flex flex-col">
       {/* TOP SECTION */}
       <div className="flex items-center justify-between">
         {/* LEFT CORNER */}

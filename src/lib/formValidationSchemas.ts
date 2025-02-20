@@ -19,4 +19,4 @@ export const classSchema = z.object({
   supervisorId: z.coerce.string().optional(),
 });
 
-export type classSchema = z.infer<typeof classSchema>;
+export type ClassSchema = z.infer<typeof classSchema>;

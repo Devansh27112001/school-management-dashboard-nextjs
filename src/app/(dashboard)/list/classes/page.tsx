@@ -1,4 +1,4 @@
-import FormModal from "@/components/FormModal";
+import FormContainer from "@/components/FormContainer";
 import Pagination from "@/components/Pagination";
 import { renderClassesRow } from "@/components/Render";
 import Table from "@/components/Table";
@@ -72,7 +72,7 @@ const ClassesListPage = async ({
               <Image src={"/sort.png"} width={14} height={14} alt={""} />
             </button>
 
-            {role === "admin" && <FormModal table="class" type="create" />}
+            {role === "admin" && <FormContainer table="class" type="create" />}
           </div>
         </div>
       </div>

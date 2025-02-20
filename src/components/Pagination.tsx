@@ -18,7 +18,7 @@ const Pagination = ({ page, count }: PaginationProps) => {
     router.push(`${window.location.pathname}?${params}`);
   };
   return (
-    <div className="flex items-center justify-between p-4 text-gray-500">
+    <div className="flex items-center justify-between p-4 text-gray-500 mt-auto">
       <button
         disabled={page === 1}
         className="bg-gray-300 py-2 px-4 rounded-md text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transition-all duration-200 ease-in"
