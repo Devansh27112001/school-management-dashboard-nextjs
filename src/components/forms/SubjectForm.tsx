@@ -45,7 +45,6 @@ const SubjectForm = ({
 
   // Submit function
   const onSubmit = (data: any) => {
-    console.log("In the submit handler");
     startTransition(() => formAction(data));
   };
 
@@ -68,7 +67,7 @@ const SubjectForm = ({
           ? "Create a new subject"
           : "Update the subject details"}
       </h1>
-      <div className="flex justify-between flex-wrap gap-4">
+      <div className="flex flex-wrap gap-4">
         <InputField
           label="Subject name"
           error={errors?.name}
@@ -88,7 +87,7 @@ const SubjectForm = ({
         )}
         {/* SELECT ELEMENT */}
         {/* The data that is passsed in the formAction will have the teacherIds of all the selected teachers */}
-        <div className="flex flex-col gap-2 w-full md:w-1/4 group">
+        <div className="flex flex-col gap-2 w-auto md:w-1/4 group">
           <label className="text-xs text-gray-500 group-focus-within:font-semibold transition-all duration-300">
             Select teachers
           </label>

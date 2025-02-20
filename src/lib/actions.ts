@@ -1,6 +1,6 @@
 "use server";
 
-import { SubjectSchema } from "./formValidationSchemas";
+import { classSchema, SubjectSchema } from "./formValidationSchemas";
 import prisma from "./prisma";
 
 type currentStateType = {
@@ -41,6 +41,11 @@ export const updateSubject = async (
       },
       data: {
         name: data.name,
+        teachers: {
+          set: data.teachers.map((teacherId) => ({
+            id: teacherId,
+          })),
+        },
       },
     });
     return { success: true, error: false };
@@ -69,3 +74,23 @@ export const deleteSubject = async (
     return { success: false, error: true };
   }
 };
+
+export const createClass = async (
+  currentState: currentStateType,
+  data: classSchema
+) => {
+  try {
+    // await prisma.class.create({
+    //   data: {},
+    // });
+    return { success: true, error: false };
+  } catch (error) {
+    console.error(error);
+    return { success: false, error: true };
+  }
+};
+
+export const updateClass = async (
+  currentState: currentStateType,
+  data: classSchema
+) => {};
