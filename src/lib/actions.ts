@@ -1,9 +1,5 @@
 "use server";
-import {
-  ClassSchema,
-  classSchema,
-  SubjectSchema,
-} from "./formValidationSchemas";
+import { ClassSchema, SubjectSchema } from "./formValidationSchemas";
 import prisma from "./prisma";
 
 type currentStateType = {
