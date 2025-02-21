@@ -10,6 +10,7 @@ import {
   Teacher,
   Event,
 } from "@prisma/client";
+import { Dispatch, SetStateAction } from "react";
 
 export type searchParamsType = Promise<{
   [key: string]: string | undefined;
@@ -47,3 +48,10 @@ export type ResultsList = {
 export type StudentsList = Student & { Class: Class };
 export type SubjectsList = Subject & { teachers: Teacher[] };
 export type TeachersList = Teacher & { subjects: Subject[]; classes: Class[] };
+
+export type FormProps = {
+  type: "create" | "update";
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  data?: any;
+  relatedData?: any;
+};

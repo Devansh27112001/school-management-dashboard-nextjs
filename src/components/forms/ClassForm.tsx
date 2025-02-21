@@ -6,6 +6,7 @@ import { Dispatch, SetStateAction, useActionState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import InputField from "../InputField";
+import { FormProps } from "@/lib/types";
 
 type ClassFormProps = {
   type: "create" | "update";
@@ -14,7 +15,7 @@ type ClassFormProps = {
   relatedData?: any;
 };
 
-const ClassForm = ({ type, setOpen, data, relatedData }: ClassFormProps) => {
+const ClassForm = ({ type, setOpen, data, relatedData }: FormProps) => {
   const router = useRouter();
   const {
     register,
@@ -102,12 +103,17 @@ const ClassForm = ({ type, setOpen, data, relatedData }: ClassFormProps) => {
             className="ring-[1.5px] ring-gray-300 p-2 rounded-md w-full focus:ring-blue-300 outline-none transition-all duration-300 text-sm"
             defaultValue={data?.gradeId}
           >
-            {grades?.map((grade: { id: number; level: string }) => (
+            {grades?.map((grade: { id: number; level: number }) => (
               <option key={grade.id} value={grade.id}>
                 {grade.level}
               </option>
             ))}
           </select>
+          {errors?.gradeId?.message && (
+            <p className="text-sm text-red-400">
+              {errors?.gradeId?.message?.toString()}
+            </p>
+          )}
         </div>
       </div>
       <button type="submit" className="bg-blue-400 text-white rounded-md p-2">

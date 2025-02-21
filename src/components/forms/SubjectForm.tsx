@@ -4,29 +4,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputField from "../InputField";
 import { createSubject, updateSubject } from "@/lib/actions";
-import {
-  Dispatch,
-  SetStateAction,
-  startTransition,
-  useActionState,
-  useEffect,
-} from "react";
+import { startTransition, useActionState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { FormProps } from "@/lib/types";
 
-type SubjectFormProps = {
-  type: "create" | "update";
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  data?: any;
-  relatedData?: any;
-};
-
-const SubjectForm = ({
-  type,
-  setOpen,
-  data,
-  relatedData,
-}: SubjectFormProps) => {
+const SubjectForm = ({ type, setOpen, data, relatedData }: FormProps) => {
   const {
     register,
     handleSubmit,
@@ -43,6 +26,8 @@ const SubjectForm = ({
     }
   );
 
+  const { teachers } = relatedData;
+  const defaultValues = data?.teachers?.map((teacher: any) => teacher.id);
   // Submit function
   const onSubmit = (data: any) => {
     startTransition(() => formAction(data));
@@ -56,8 +41,6 @@ const SubjectForm = ({
       router.refresh();
     }
   }, [state]);
-
-  const { teachers } = relatedData;
 
   // ---------------------------
   return (
@@ -95,7 +78,7 @@ const SubjectForm = ({
             multiple
             {...register("teachers")}
             className="ring-[1.5px] ring-gray-300 p-2 rounded-md w-full focus:ring-blue-300 outline-none transition-all duration-300 text-sm"
-            defaultValue={data?.teachers}
+            defaultValue={defaultValues}
           >
             {teachers?.map(
               (teacher: { id: string; name: string; surname: string }) => (
