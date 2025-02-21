@@ -1,57 +1,39 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import InputField from "../InputField";
 import Image from "next/image";
-import { Dispatch, SetStateAction } from "react";
+import { teacherSchema, TeacherSchema } from "@/lib/formValidationSchemas";
+import { FormProps } from "@/lib/types";
+import { useRouter } from "next/navigation";
+import { createTeacher, updateTeacher } from "@/lib/actions";
+import { startTransition, useActionState, useEffect } from "react";
+import { toast } from "react-toastify";
 
-const schema = z.object({
-  username: z
-    .string()
-    .min(3, { message: "Username must be at least 3 characters long!" })
-    .max(20, { message: "Username must be at most 20 characters long!" }),
-  email: z.string().email({ message: "Invalid email address!" }),
-  password: z
-    .string()
-    .min(8, { message: "Password must be at least 8 characters long!" }),
-  firstName: z.string().min(1, { message: "First name is required" }),
-  lastName: z.string().min(1, { message: "Last name is required" }),
-  phone: z
-    .string()
-    .regex(/^\+?[1-9]\d{9,13}$/, { message: "Invalid phone number!" }),
-  address: z.string().min(1, { message: "Address is required" }),
-  bloodType: z
-    .string()
-    .regex(/(A|B|AB|O)[+-]/, { message: "Invalid blood type!" }),
-
-  birthday: z.date({ message: "Birth date is required" }),
-  sex: z.enum(["male", "female", "other"], {
-    message: "Sex is required",
-  }),
-  img: z.instanceof(File, {
-    message: "Image is required",
-  }),
-});
-
-type Inputs = z.infer<typeof schema>;
-
-type TeacherFormProps = {
-  type: "create" | "update";
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  data?: any;
-};
-
-const TeacherForm = ({ type, setOpen, data }: TeacherFormProps) => {
+const TeacherForm = ({ type, setOpen, data }: FormProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>({ resolver: zodResolver(schema) });
+  } = useForm<TeacherSchema>({ resolver: zodResolver(teacherSchema) });
 
+  const router = useRouter();
+
+  const [state, formAction] = useActionState(
+    type === "create" ? createTeacher : updateTeacher,
+    { success: false, error: false }
+  );
   const onSubmit = (data: any) => {
     console.log(data);
   };
+
+  useEffect(() => {
+    if (state.success) {
+      toast(`The teacher has been ${type}d successfully`);
+      setOpen(false);
+      router.refresh();
+    }
+  });
 
   return (
     <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit)}>
@@ -90,17 +72,17 @@ const TeacherForm = ({ type, setOpen, data }: TeacherFormProps) => {
       <div className="flex justify-between flex-wrap gap-4">
         <InputField
           label="First name"
-          error={errors?.firstName}
+          error={errors?.name}
           register={register}
           name="firstName"
-          defaultValue={data?.firstName}
+          defaultValue={data?.name}
         />
         <InputField
           label="Last name"
-          error={errors?.lastName}
+          error={errors?.surname}
           register={register}
           name="lastName"
-          defaultValue={data?.lastName}
+          defaultValue={data?.surname}
         />
         <InputField
           label="Phone"

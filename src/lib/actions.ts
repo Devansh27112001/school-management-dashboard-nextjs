@@ -1,5 +1,9 @@
 "use server";
-import { ClassSchema, SubjectSchema } from "./formValidationSchemas";
+import {
+  ClassSchema,
+  SubjectSchema,
+  TeacherSchema,
+} from "./formValidationSchemas";
 import prisma from "./prisma";
 
 type currentStateType = {
@@ -120,6 +124,40 @@ export const deleteClass = async (
       where: {
         id: parseInt(id),
       },
+    });
+    return { success: true, error: false };
+  } catch (error) {
+    console.error(error);
+    return { success: false, error: true };
+  }
+};
+
+// ----------------------Teacher actions------------------------------
+export const createTeacher = async (
+  currentState: currentStateType,
+  data: TeacherSchema
+) => {
+  try {
+    await prisma.teacher.create({
+      data,
+    });
+    return { success: true, error: false };
+  } catch (error) {
+    console.error(error);
+    return { success: false, error: true };
+  }
+};
+
+export const updateTeacher = async (
+  currentState: currentStateType,
+  data: TeacherSchema
+) => {
+  try {
+    await prisma.teacher.update({
+      where: {
+        id: data.id,
+      },
+      data,
     });
     return { success: true, error: false };
   } catch (error) {
