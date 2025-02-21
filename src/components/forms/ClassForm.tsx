@@ -2,18 +2,11 @@ import { createClass, updateClass } from "@/lib/actions";
 import { classSchema, ClassSchema } from "@/lib/formValidationSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useActionState, useEffect } from "react";
+import { startTransition, useActionState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import InputField from "../InputField";
 import { FormProps } from "@/lib/types";
-
-type ClassFormProps = {
-  type: "create" | "update";
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  data?: any;
-  relatedData?: any;
-};
 
 const ClassForm = ({ type, setOpen, data, relatedData }: FormProps) => {
   const router = useRouter();
@@ -29,14 +22,13 @@ const ClassForm = ({ type, setOpen, data, relatedData }: FormProps) => {
   );
 
   const { teachers, grades } = relatedData;
-  console.log(teachers, grades);
 
   const onSubmit = (data: any) => {
-    console.log(data);
+    startTransition(() => formAction(data));
   };
   useEffect(() => {
     if (state.success) {
-      toast(`Class has been ${type}ed`);
+      toast(`Class has been ${type}d`);
       setOpen(false);
       router.refresh();
     }
@@ -46,7 +38,7 @@ const ClassForm = ({ type, setOpen, data, relatedData }: FormProps) => {
       <h1 className="">
         {type === "create" ? "Create a new class" : "Update the class details"}
       </h1>
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-4 justify-between">
         <InputField
           label="Class name"
           error={errors?.name}
@@ -65,20 +57,20 @@ const ClassForm = ({ type, setOpen, data, relatedData }: FormProps) => {
           <InputField
             label=""
             name="id"
-            type="hidden"
             register={register}
             error={errors?.id}
             defaultValue={data?.id}
+            hidden
           />
         )}
-        <div className="flex flex-col gap-2 w-auto md:w-1/4 group">
+        <div className="flex flex-col gap-2 w-full md:w-1/4 group">
           <label className="text-xs text-gray-500 group-focus-within:font-semibold transition-all duration-300">
             Select supervisor
           </label>
           <select
             className="ring-[1.5px] ring-gray-300 p-2 rounded-md w-full focus:ring-blue-300 outline-none transition-all duration-300 text-sm"
             {...register("supervisorId")}
-            defaultValue={data?.teachers}
+            defaultValue={data?.supervisorId}
           >
             {teachers?.map(
               (teacher: { id: string; name: string; surname: string }) => (
@@ -94,7 +86,7 @@ const ClassForm = ({ type, setOpen, data, relatedData }: FormProps) => {
             </p>
           )}
         </div>
-        <div className="flex flex-col w-full md:w-1/4">
+        <div className="flex flex-col w-full md:w-1/4 gap-2 group">
           <label className="text-xs text-gray-500 group-focus-within:font-semibold transition-all duration-300">
             Select grade
           </label>

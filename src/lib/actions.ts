@@ -97,11 +97,11 @@ export const updateClass = async (
   data: ClassSchema
 ) => {
   try {
-    await prisma.subject.update({
+    await prisma.class.update({
       where: {
         id: data.id,
       },
-      data: {},
+      data,
     });
     return { success: true, error: false };
   } catch (error) {
@@ -121,6 +121,7 @@ export const deleteClass = async (
         id: parseInt(id),
       },
     });
+    return { success: true, error: false };
   } catch (error) {
     console.error(error);
     return { success: false, error: true };
