@@ -9,7 +9,7 @@ import {
   useState,
 } from "react";
 import LoadingSpinner from "./LoadingSpinner";
-import { deleteClass, deleteSubject } from "@/lib/actions";
+import { deleteClass, deleteSubject, deleteTeacher } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { FormModalContainerProps } from "./FormContainer";
@@ -17,7 +17,7 @@ import { FormModalContainerProps } from "./FormContainer";
 const deletionMap: any = {
   subject: deleteSubject,
   class: deleteClass,
-  // teacher: deleteTeacher,
+  teacher: deleteTeacher,
   // parent: deleteClass,
   // student: deleteClass,
   // announcement: deleteClass,
@@ -29,9 +29,9 @@ const deletionMap: any = {
   // attendance: deleteClass,
 };
 
-// const TeacherForm = dynamic(() => import("./forms/TeacherForm"), {
-//   loading: () => <LoadingSpinner />,
-// });
+const TeacherForm = dynamic(() => import("./forms/TeacherForm"), {
+  loading: () => <LoadingSpinner />,
+});
 // const StudentForm = dynamic(() => import("./forms/StudentForm"), {
 //   loading: () => <LoadingSpinner />,
 // });
@@ -58,9 +58,14 @@ type FormObject = Record<
 >;
 
 const form: FormObject = {
-  // teacher: (type, setOpen, data) => (
-  //   <TeacherForm type={type} data={data} setOpen={setOpen} />
-  // ),
+  teacher: (type, setOpen, data, relatedData) => (
+    <TeacherForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
   // student: (type, setOpen, data) => (
   //   <StudentForm type={type} data={data} setOpen={setOpen} />
   // ),
@@ -108,14 +113,6 @@ const FormModal = ({
       error: false,
     });
 
-    const router = useRouter();
-    useEffect(() => {
-      if (state.success) {
-        toast("The subject has been deleted successfully");
-        setOpen(false);
-        router.refresh();
-      }
-    }, [state, router]);
     return type === "delete" && id ? (
       <form action={formAction} className="p-4 flex flex-col gap-4">
         <input type="text | number" name="id" hidden defaultValue={id} />

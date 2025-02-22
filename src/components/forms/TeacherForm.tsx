@@ -10,13 +10,14 @@ import { createTeacher, updateTeacher } from "@/lib/actions";
 import { startTransition, useActionState, useEffect } from "react";
 import { toast } from "react-toastify";
 
-const TeacherForm = ({ type, setOpen, data }: FormProps) => {
+const TeacherForm = ({ type, setOpen, data, relatedData }: FormProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<TeacherSchema>({ resolver: zodResolver(teacherSchema) });
 
+  const { subjects, lessons, classes } = relatedData;
   const router = useRouter();
 
   const [state, formAction] = useActionState(
@@ -26,7 +27,6 @@ const TeacherForm = ({ type, setOpen, data }: FormProps) => {
   const onSubmit = (data: any) => {
     console.log(data);
   };
-
   useEffect(() => {
     if (state.success) {
       toast(`The teacher has been ${type}d successfully`);
@@ -36,9 +36,9 @@ const TeacherForm = ({ type, setOpen, data }: FormProps) => {
   });
 
   return (
-    <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit)}>
+    <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
       <h1 className="text-xl font-semibold">Create a new Teacher</h1>
-      <span className="text-xs text-gray-400 font-medium">
+      <span className="text-xs text-gray-400 font-bold">
         Authentication information
       </span>
       <div className="flex justify-between flex-wrap gap-4">
@@ -66,22 +66,22 @@ const TeacherForm = ({ type, setOpen, data }: FormProps) => {
           defaultValue={data?.password}
         />
       </div>
-      <span className="text-xs text-gray-400 font-medium">
+      <span className="text-xs text-gray-400 font-bold">
         Personal information
       </span>
-      <div className="flex justify-between flex-wrap gap-4">
+      <div className="flex justify-between flex-wrap gap-3">
         <InputField
           label="First name"
           error={errors?.name}
           register={register}
-          name="firstName"
+          name="name"
           defaultValue={data?.name}
         />
         <InputField
           label="Last name"
           error={errors?.surname}
           register={register}
-          name="lastName"
+          name="surname"
           defaultValue={data?.surname}
         />
         <InputField
@@ -113,7 +113,7 @@ const TeacherForm = ({ type, setOpen, data }: FormProps) => {
           defaultValue={data?.birthday}
           type="date"
         />
-        {/* SELECT ELEMENT */}
+        {/* SELECT ELEMENT - GENDER */}
         <div className="flex flex-col gap-2 w-full md:w-1/4 group">
           <label className="text-xs text-gray-500 group-focus-within:font-semibold transition-all duration-300">
             Sex
@@ -134,8 +134,79 @@ const TeacherForm = ({ type, setOpen, data }: FormProps) => {
           )}
         </div>
 
+        {/* SELECT ELEMENT - Subjects */}
+        <div className="flex flex-col gap-2 w-full md:w-1/4 group">
+          <label className="text-xs text-gray-500 group-focus-within:font-semibold transition-all duration-300">
+            Select Subjects
+          </label>
+          <select
+            multiple
+            {...register("subjects")}
+            defaultValue={data?.subjects}
+            className="ring-[1.5px] ring-gray-300 p-2 rounded-md w-full focus:ring-blue-300 outline-none transition-all duration-300 text-sm h-16"
+          >
+            {subjects.map((subject: { id: number; name: string }) => (
+              <option key={subject.id} value={subject.id}>
+                {subject.name}
+              </option>
+            ))}
+          </select>
+          {errors?.subjects?.message && (
+            <p className="text-xs text-red-400">
+              {errors?.subjects?.message.toString()}
+            </p>
+          )}
+        </div>
+
+        {/* SELECT ELEMENT - Lessons */}
+        <div className="flex flex-col gap-2 w-full md:w-1/4 group">
+          <label className="text-xs text-gray-500 group-focus-within:font-semibold transition-all duration-300">
+            Select Lessons
+          </label>
+          <select
+            multiple
+            {...register("lessons")}
+            defaultValue={data?.lessons}
+            className="ring-[1.5px] ring-gray-300 p-2 rounded-md w-full focus:ring-blue-300 outline-none transition-all duration-300 text-sm h-16"
+          >
+            {lessons.map((lesson: { id: number; name: string }) => (
+              <option key={lesson.id} value={lesson.id}>
+                {lesson.name}
+              </option>
+            ))}
+          </select>
+          {errors?.lessons?.message && (
+            <p className="text-xs text-red-400">
+              {errors?.lessons?.message.toString()}
+            </p>
+          )}
+        </div>
+        {/* SELECT ELEMENT - Classes */}
+        <div className="flex flex-col gap-2 w-full md:w-1/4 group">
+          <label className="text-xs text-gray-500 group-focus-within:font-semibold transition-all duration-300">
+            Select Classes
+          </label>
+          <select
+            multiple
+            {...register("classes")}
+            defaultValue={data?.classes}
+            className="ring-[1.5px] ring-gray-300 p-2 rounded-md w-full focus:ring-blue-300 outline-none transition-all duration-300 text-sm h-16"
+          >
+            {classes.map((singleClass: { id: number; name: string }) => (
+              <option key={singleClass.id} value={singleClass.id}>
+                {singleClass.name}
+              </option>
+            ))}
+          </select>
+          {errors?.classes?.message && (
+            <p className="text-xs text-red-400">
+              {errors?.classes?.message.toString()}
+            </p>
+          )}
+        </div>
+
         {/* UPLOAD PHOTO */}
-        <div className="flex flex-col gap-2 w-full md:w-[63%] md:mt-5 self-center justify-start">
+        <div className="flex flex-col gap-2 w-full md:w-1/4 self-center">
           <label
             className="text-xs text-gray-500 flex items-center gap-2 cursor-pointer font-semibold"
             htmlFor="image"

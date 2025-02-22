@@ -165,3 +165,24 @@ export const updateTeacher = async (
     return { success: false, error: true };
   }
 };
+
+export const deleteTeacher = async (
+  currentState: currentStateType,
+  data: FormData
+) => {
+  const id = data.get("id") as string;
+  try {
+    await prisma.teacher.delete({
+      where: {
+        id,
+      },
+    });
+    return {
+      success: true,
+      error: false,
+    };
+  } catch (error) {
+    console.error(error);
+    return { success: false, error: true };
+  }
+};

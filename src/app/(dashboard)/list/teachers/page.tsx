@@ -10,6 +10,7 @@ import TableSearch from "@/components/TableSearch";
 import { renderTeachersRow } from "@/components/Render";
 import { TeachersColumns } from "@/lib/columnsData";
 import { searchParamsType } from "@/lib/types";
+import FormContainer from "@/components/FormContainer";
 
 const TeachersListPage = async ({
   searchParams,
@@ -77,7 +78,9 @@ const TeachersListPage = async ({
               <Image src={"/sort.png"} width={14} height={14} alt={""} />
             </button>
 
-            {role === "admin" && <FormModal table="teacher" type="create" />}
+            {role === "admin" && (
+              <FormContainer table="teacher" type="create" />
+            )}
           </div>
         </div>
       </div>

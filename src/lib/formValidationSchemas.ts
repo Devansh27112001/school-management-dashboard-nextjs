@@ -53,6 +53,8 @@ export const teacherSchema = z.object({
   }),
   img: z.string().optional(),
   subjects: z.array(z.string()).optional(), // Subject ids
+  lessons: z.array(z.string()).optional(),
+  classes: z.array(z.string()).optional(),
 });
 
 export type TeacherSchema = z.infer<typeof teacherSchema>;

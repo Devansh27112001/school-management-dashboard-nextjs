@@ -402,7 +402,7 @@ export const renderTeachersRow = (item: TeachersList, role: string) => {
             </button>
           </Link>
           {role === "admin" && (
-            <FormModal table="teacher" type="delete" id={item.id} />
+            <FormContainer table="teacher" type="delete" id={item.id} />
           )}
         </div>
       </td>
