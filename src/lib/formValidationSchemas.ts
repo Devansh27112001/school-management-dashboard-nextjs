@@ -42,19 +42,28 @@ export const teacherSchema = z.object({
     .regex(/^\+?[1-9]\d{9,13}$/, { message: "Invalid phone number!" })
     .optional()
     .or(z.literal("")),
-  address: z.string().optional(),
+  address: z.string(),
   bloodType: z
     .string()
     .regex(/(A|B|AB|O)[+-]/, { message: "Invalid blood type!" }),
 
   birthday: z.coerce.date({ message: "Birth date is required" }),
-  sex: z.enum(["MALE", "FEMALE", "OTHER"], {
+  sex: z.enum(["MALE", "FEMALE"], {
     message: "Sex is required",
   }),
   img: z.string().optional(),
-  subjects: z.array(z.string()).optional(), // Subject ids
-  lessons: z.array(z.string()).optional(),
-  classes: z.array(z.string()).optional(),
+  subjects: z
+    .array(z.string())
+    .max(3, {
+      message: "A teacher can have at most 3 subjects",
+    })
+    .optional(), // Subject ids
+  classes: z
+    .array(z.string())
+    .max(3, {
+      message: "A teacher can have at most 3 classes",
+    })
+    .optional(),
 });
 
 export type TeacherSchema = z.infer<typeof teacherSchema>;

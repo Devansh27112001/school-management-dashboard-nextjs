@@ -1,10 +1,12 @@
 "use server";
+import { clerkClient } from "@clerk/nextjs/server";
 import {
   ClassSchema,
   SubjectSchema,
   TeacherSchema,
 } from "./formValidationSchemas";
 import prisma from "./prisma";
+import { role } from "./data";
 
 type currentStateType = {
   success: boolean;
@@ -138,8 +140,38 @@ export const createTeacher = async (
   data: TeacherSchema
 ) => {
   try {
+    const client = await clerkClient();
+    const user = await client.users.createUser({
+      username: data.username,
+      password: data.password,
+      firstName: data.name,
+      lastName: data.surname,
+      publicMetadata: { role: "teacher" },
+    });
     await prisma.teacher.create({
-      data,
+      data: {
+        id: user.id,
+        username: data.username,
+        name: data.name,
+        surname: data.surname,
+        email: data.email,
+        sex: data.sex,
+        bloodType: data.bloodType,
+        phone: data.phone,
+        address: data.address,
+        img: data.img,
+        birthday: data.birthday,
+        subjects: {
+          connect: data.subjects?.map((subjectId: string) => ({
+            id: parseInt(subjectId),
+          })),
+        },
+        classes: {
+          connect: data.classes?.map((classId: string) => ({
+            id: parseInt(classId),
+          })),
+        },
+      },
     });
     return { success: true, error: false };
   } catch (error) {

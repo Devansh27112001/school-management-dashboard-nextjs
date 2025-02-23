@@ -1,4 +1,5 @@
 "use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputField from "../InputField";
@@ -28,17 +29,16 @@ const TeacherForm = ({ type, setOpen, data, relatedData }: FormProps) => {
   );
   const onSubmit = (data: any) => {
     console.log(data);
+    startTransition(() => formAction(data));
   };
-  useEffect(() => {
-    console.log(img);
-  }, [img]);
+
   useEffect(() => {
     if (state.success) {
       toast(`The teacher has been ${type}d successfully`);
       setOpen(false);
       router.refresh();
     }
-  });
+  }, [state]);
 
   return (
     <form
@@ -133,7 +133,6 @@ const TeacherForm = ({ type, setOpen, data, relatedData }: FormProps) => {
           >
             <option value="MALE">Male</option>
             <option value="FEMALE">Female</option>
-            <option value="OTHER">Other</option>
           </select>
           {errors?.sex?.message && (
             <p className="text-xs text-red-400">
@@ -217,6 +216,9 @@ const TeacherForm = ({ type, setOpen, data, relatedData }: FormProps) => {
           }}
         </CldUploadWidget>
       </div>
+      {state.error && (
+        <span className="text-sm text-red-500">Something went wrong!</span>
+      )}
       <button type="submit" className="bg-blue-400 text-white rounded-md p-2">
         {type === "create" ? "create" : "update"}
       </button>

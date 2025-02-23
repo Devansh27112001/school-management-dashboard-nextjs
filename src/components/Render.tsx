@@ -386,14 +386,14 @@ export const renderTeachersRow = (item: TeachersList, role: string) => {
         </div>
       </td>
       <td className="hidden md:table-cell">{item.username}</td>
-      <td className="hidden md:table-cell">
-        {item.subjects?.map((subject) => subject.name).join(",")}
+      <td className="hidden md:table-cell max-w-20">
+        {item.subjects?.map((subject) => subject.name).join(", ")}
       </td>
       <td className="hidden md:table-cell">
-        {item.classes?.map((cls) => cls.name).join(",")}
+        {item.classes?.map((cls) => cls.name).join(", ")}
       </td>
       <td className="hidden lg:table-cell">{item.phone}</td>
-      <td className="hidden lg:table-cell">{item.address}</td>
+      <td className="hidden lg:table-cell max-w-44">{item.address}</td>
       <td>
         <div className="flex gap-2 items-center">
           <Link href={`/list/teachers/${item.id}`}>
