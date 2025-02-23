@@ -3,7 +3,6 @@ import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { role } from "@/lib/utils";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
-import FormModal from "@/components/FormModal";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";

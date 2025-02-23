@@ -2,13 +2,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputField from "../InputField";
-import Image from "next/image";
 import { teacherSchema, TeacherSchema } from "@/lib/formValidationSchemas";
 import { FormProps } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { createTeacher, updateTeacher } from "@/lib/actions";
-import { startTransition, useActionState, useEffect } from "react";
+import { startTransition, useActionState, useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { CldUploadWidget } from "next-cloudinary";
+import Image from "next/image";
 
 const TeacherForm = ({ type, setOpen, data, relatedData }: FormProps) => {
   const {
@@ -17,8 +18,9 @@ const TeacherForm = ({ type, setOpen, data, relatedData }: FormProps) => {
     formState: { errors },
   } = useForm<TeacherSchema>({ resolver: zodResolver(teacherSchema) });
 
-  const { subjects, lessons, classes } = relatedData;
+  const { subjects, classes } = relatedData;
   const router = useRouter();
+  const [img, setImg] = useState<any>();
 
   const [state, formAction] = useActionState(
     type === "create" ? createTeacher : updateTeacher,
@@ -28,6 +30,9 @@ const TeacherForm = ({ type, setOpen, data, relatedData }: FormProps) => {
     console.log(data);
   };
   useEffect(() => {
+    console.log(img);
+  }, [img]);
+  useEffect(() => {
     if (state.success) {
       toast(`The teacher has been ${type}d successfully`);
       setOpen(false);
@@ -36,12 +41,15 @@ const TeacherForm = ({ type, setOpen, data, relatedData }: FormProps) => {
   });
 
   return (
-    <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className="flex flex-col gap-8 md:gap-4"
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <h1 className="text-xl font-semibold">Create a new Teacher</h1>
       <span className="text-xs text-gray-400 font-bold">
         Authentication information
       </span>
-      <div className="flex justify-between flex-wrap gap-4">
+      <div className="flex justify-between flex-wrap gap-4 md:gap-2">
         <InputField
           label="Username"
           error={errors?.username}
@@ -123,9 +131,9 @@ const TeacherForm = ({ type, setOpen, data, relatedData }: FormProps) => {
             defaultValue={data?.sex}
             className="ring-[1.5px] ring-gray-300 p-2 rounded-md w-full focus:ring-blue-300 outline-none transition-all duration-300 text-sm"
           >
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
+            <option value="MALE">Male</option>
+            <option value="FEMALE">Female</option>
+            <option value="OTHER">Other</option>
           </select>
           {errors?.sex?.message && (
             <p className="text-xs text-red-400">
@@ -158,29 +166,6 @@ const TeacherForm = ({ type, setOpen, data, relatedData }: FormProps) => {
           )}
         </div>
 
-        {/* SELECT ELEMENT - Lessons */}
-        <div className="flex flex-col gap-2 w-full md:w-1/4 group">
-          <label className="text-xs text-gray-500 group-focus-within:font-semibold transition-all duration-300">
-            Select Lessons
-          </label>
-          <select
-            multiple
-            {...register("lessons")}
-            defaultValue={data?.lessons}
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md w-full focus:ring-blue-300 outline-none transition-all duration-300 text-sm h-16"
-          >
-            {lessons.map((lesson: { id: number; name: string }) => (
-              <option key={lesson.id} value={lesson.id}>
-                {lesson.name}
-              </option>
-            ))}
-          </select>
-          {errors?.lessons?.message && (
-            <p className="text-xs text-red-400">
-              {errors?.lessons?.message.toString()}
-            </p>
-          )}
-        </div>
         {/* SELECT ELEMENT - Classes */}
         <div className="flex flex-col gap-2 w-full md:w-1/4 group">
           <label className="text-xs text-gray-500 group-focus-within:font-semibold transition-all duration-300">
@@ -204,26 +189,33 @@ const TeacherForm = ({ type, setOpen, data, relatedData }: FormProps) => {
             </p>
           )}
         </div>
-
-        {/* UPLOAD PHOTO */}
-        <div className="flex flex-col gap-2 w-full md:w-1/4 self-center">
-          <label
-            className="text-xs text-gray-500 flex items-center gap-2 cursor-pointer font-semibold"
-            htmlFor="image"
-          >
-            <Image src={"/upload.png"} width={24} height={24} alt="" />
-            <span>Upload photo</span>
-          </label>
-          <input
-            type="file"
-            {...register("img")}
-            className="hidden"
-            id="image"
-          />
-          {errors?.img?.message && (
-            <p className="text-xs text-red-400">{errors.img.message}</p>
-          )}
-        </div>
+        <CldUploadWidget
+          uploadPreset="school_management"
+          onSuccess={(result, { widget }) => {
+            setImg(result.info);
+            widget.close();
+          }}
+        >
+          {({ open }) => {
+            return (
+              <div
+                className="text-xs text-gray-400 flex items-center w-full md:w-1/4 gap-2 cursor-pointer"
+                onClick={() => open()}
+              >
+                <Image src={"/upload.png"} alt="" width={28} height={28} />
+                <span>Upload a photo</span>
+                {img && (
+                  <Image
+                    src={img.secure_url}
+                    alt="Image uploaded"
+                    width={48}
+                    height={48}
+                  />
+                )}
+              </div>
+            );
+          }}
+        </CldUploadWidget>
       </div>
       <button type="submit" className="bg-blue-400 text-white rounded-md p-2">
         {type === "create" ? "create" : "update"}
