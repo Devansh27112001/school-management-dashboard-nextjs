@@ -8,19 +8,31 @@ import prisma from "@/lib/prisma";
 import { Teacher } from "@prisma/client";
 import { notFound } from "next/navigation";
 import FormContainer from "@/components/FormContainer";
-import { auth } from "@clerk/nextjs/server";
+import { getDetails } from "@/lib/clerkUtils";
 
 const SingleTeacherPage = async ({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) => {
-  const { sessionClaims } = await auth();
-  const role = (sessionClaims?.metadata as { role: string })?.role;
+  const { role } = await getDetails();
   const { id } = await params;
-  const teacher: Teacher | null = await prisma.teacher.findUnique({
+  const teacher:
+    | (Teacher & {
+        _count: { subjects: number; lessons: number; classes: number };
+      })
+    | null = await prisma.teacher.findUnique({
     where: {
       id,
+    },
+    include: {
+      _count: {
+        select: {
+          subjects: true,
+          lessons: true,
+          classes: true,
+        },
+      },
     },
   });
   if (!teacher) return notFound();
@@ -66,7 +78,7 @@ const SingleTeacherPage = async ({
                 </div>
                 <div className="w-full md:w-1/2 lg:w-full xl:w-1/2 flex items-center gap-2">
                   <Image src={"/mail.png"} alt="" height={14} width={14} />
-                  <span>{teacher.email || "NA"}</span>
+                  <span>{teacher.email || "-"}</span>
                 </div>
                 <div className="w-full md:w-1/2 lg:w-full xl:w-1/2 flex items-center gap-2">
                   <Image src={"/phone.png"} alt="" height={14} width={14} />
@@ -101,7 +113,9 @@ const SingleTeacherPage = async ({
                 className="size-6"
               />
               <div>
-                <h1 className="text-xl font-semibold">2</h1>
+                <h1 className="text-xl font-semibold">
+                  {teacher._count.subjects}
+                </h1>
                 <span className="text-sm text-gray-400">Branches</span>
               </div>
             </div>
@@ -114,7 +128,9 @@ const SingleTeacherPage = async ({
                 className="size-6"
               />
               <div>
-                <h1 className="text-xl font-semibold">6</h1>
+                <h1 className="text-xl font-semibold">
+                  {teacher._count.lessons}
+                </h1>
                 <span className="text-sm text-gray-400">Lessons</span>
               </div>
             </div>
@@ -127,7 +143,9 @@ const SingleTeacherPage = async ({
                 className="size-6"
               />
               <div>
-                <h1 className="text-xl font-semibold">6</h1>
+                <h1 className="text-xl font-semibold">
+                  {teacher._count.classes}
+                </h1>
                 <span className="text-sm text-gray-400">Classes</span>
               </div>
             </div>
