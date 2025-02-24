@@ -6,7 +6,6 @@ import {
   TeacherSchema,
 } from "./formValidationSchemas";
 import prisma from "./prisma";
-import { role } from "./data";
 
 type currentStateType = {
   success: boolean;
@@ -140,6 +139,7 @@ export const createTeacher = async (
   data: TeacherSchema
 ) => {
   try {
+    // creating user with role="teacher" in clerk.
     const client = await clerkClient();
     const user = await client.users.createUser({
       username: data.username,
@@ -148,6 +148,8 @@ export const createTeacher = async (
       lastName: data.surname,
       publicMetadata: { role: "teacher" },
     });
+
+    // creating teacher in database
     await prisma.teacher.create({
       data: {
         id: user.id,
@@ -204,6 +206,12 @@ export const deleteTeacher = async (
 ) => {
   const id = data.get("id") as string;
   try {
+    // Deleting user from clerk
+    const client = await clerkClient();
+    await client.users.deleteUser(id);
+
+    // Deleting teacher from database
+
     await prisma.teacher.delete({
       where: {
         id,

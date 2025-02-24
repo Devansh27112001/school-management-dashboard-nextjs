@@ -29,7 +29,7 @@ const TeacherForm = ({ type, setOpen, data, relatedData }: FormProps) => {
   );
   const onSubmit = (data: any) => {
     console.log(data);
-    startTransition(() => formAction(data));
+    startTransition(() => formAction({ ...data, img: img?.secure_url }));
   };
 
   useEffect(() => {
