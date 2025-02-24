@@ -149,7 +149,9 @@ const TeacherForm = ({ type, setOpen, data, relatedData }: FormProps) => {
           <select
             multiple
             {...register("subjects")}
-            defaultValue={data?.subjects}
+            defaultValue={data?.subjects.map(
+              (subjectId: { id: number }) => subjectId.id
+            )}
             className="ring-[1.5px] ring-gray-300 p-2 rounded-md w-full focus:ring-blue-300 outline-none transition-all duration-300 text-sm h-16"
           >
             {subjects.map((subject: { id: number; name: string }) => (

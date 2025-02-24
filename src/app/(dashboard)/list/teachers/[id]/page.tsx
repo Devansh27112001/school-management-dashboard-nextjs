@@ -26,6 +26,13 @@ const SingleTeacherPage = async ({
       id,
     },
     include: {
+      subjects: {
+        select: { id: true },
+      },
+      classes: {
+        select: { id: true },
+      },
+
       _count: {
         select: {
           subjects: true,
@@ -155,7 +162,7 @@ const SingleTeacherPage = async ({
         {/* LEFT SIDE: Bottom section */}
         <div className="mt-4 bg-white rounded-md p-4 h-[800px]">
           <h1>Teacher&apos;s Schedule</h1>
-          {/* <BigCalender /> */}
+          <BigCalender />
         </div>
       </div>
 
