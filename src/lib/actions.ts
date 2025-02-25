@@ -186,12 +186,25 @@ export const updateTeacher = async (
   currentState: currentStateType,
   data: TeacherSchema
 ) => {
+  console.log(data);
   try {
     await prisma.teacher.update({
       where: {
         id: data.id,
       },
-      data,
+      data: {
+        ...data,
+        subjects: {
+          connect: data.subjects?.map((subjectId: string) => ({
+            id: parseInt(subjectId),
+          })),
+        },
+        classes: {
+          connect: data.classes?.map((classId: string) => ({
+            id: parseInt(classId),
+          })),
+        },
+      },
     });
     return { success: true, error: false };
   } catch (error) {

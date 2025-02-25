@@ -36,7 +36,9 @@ export const teacherSchema = z.object({
     .or(z.literal("")),
   password: z
     .string()
-    .min(8, { message: "Password must be at least 8 characters long!" }),
+    .min(8, { message: "Password must be at least 8 characters long!" })
+    .optional()
+    .or(z.literal("")),
   phone: z
     .string()
     .regex(/^\+?[1-9]\d{9,13}$/, { message: "Invalid phone number!" })
@@ -65,5 +67,33 @@ export const teacherSchema = z.object({
     })
     .optional(),
 });
-
 export type TeacherSchema = z.infer<typeof teacherSchema>;
+
+// Student schema
+export const studentSchema = z.object({
+  id: z.number().optional(),
+  username: z
+    .string()
+    .min(3, { message: "Username must be atleast 3 characters long!" })
+    .max(20, { message: "Username mist be at most 20 characters long!" }),
+  email: z.string().email({ message: "Invalid email address!" }),
+  password: z
+    .string()
+    .min(8, { message: "Password must be atleast 8 characters long!" }),
+  name: z.string().min(1, { message: "First name is required" }),
+  surname: z.string().min(1, { message: "Last name is required" }),
+  phone: z
+    .string()
+    .regex(/^\+?[1-9]\d{9,13}$/, { message: "Invalid phone number!" }),
+  address: z.string().min(1, { message: "Address is required" }),
+  bloodType: z
+    .string()
+    .regex(/(A|B|AB|O)[+-]/, { message: "Invalid blood type!" }),
+  birthday: z.date({ message: "Birthday is required" }),
+  sex: z.enum(["MALE", "FEMALE"], {
+    message: "Sex is required",
+  }),
+  img: z.string().optional(),
+});
+
+export type StudentSchema = z.infer<typeof studentSchema>;

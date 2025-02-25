@@ -28,7 +28,6 @@ const TeacherForm = ({ type, setOpen, data, relatedData }: FormProps) => {
     { success: false, error: false }
   );
   const onSubmit = (data: any) => {
-    console.log(data);
     startTransition(() => formAction({ ...data, img: img?.secure_url }));
   };
 
@@ -50,6 +49,16 @@ const TeacherForm = ({ type, setOpen, data, relatedData }: FormProps) => {
         Authentication information
       </span>
       <div className="flex justify-between flex-wrap gap-4 md:gap-2">
+        {data && (
+          <InputField
+            error={errors?.id}
+            hidden
+            label=""
+            name="id"
+            register={register}
+            defaultValue={data?.id}
+          />
+        )}
         <InputField
           label="Username"
           error={errors?.username}
@@ -118,7 +127,7 @@ const TeacherForm = ({ type, setOpen, data, relatedData }: FormProps) => {
           error={errors?.birthday}
           register={register}
           name="birthday"
-          defaultValue={data?.birthday}
+          defaultValue={data?.birthday.toISOString().split("T")[0]}
           type="date"
         />
         {/* SELECT ELEMENT - GENDER */}
@@ -149,7 +158,7 @@ const TeacherForm = ({ type, setOpen, data, relatedData }: FormProps) => {
           <select
             multiple
             {...register("subjects")}
-            defaultValue={data?.subjects.map(
+            defaultValue={data?.subjects?.map(
               (subjectId: { id: number }) => subjectId.id
             )}
             className="ring-[1.5px] ring-gray-300 p-2 rounded-md w-full focus:ring-blue-300 outline-none transition-all duration-300 text-sm h-16"
@@ -175,7 +184,9 @@ const TeacherForm = ({ type, setOpen, data, relatedData }: FormProps) => {
           <select
             multiple
             {...register("classes")}
-            defaultValue={data?.classes}
+            defaultValue={data?.classes?.map(
+              (singleClass: { id: number }) => singleClass.id
+            )}
             className="ring-[1.5px] ring-gray-300 p-2 rounded-md w-full focus:ring-blue-300 outline-none transition-all duration-300 text-sm h-16"
           >
             {classes.map((singleClass: { id: number; name: string }) => (

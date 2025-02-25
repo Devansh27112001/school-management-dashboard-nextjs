@@ -2,40 +2,10 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import InputField from "../InputField";
 import Image from "next/image";
 import { Dispatch, SetStateAction } from "react";
-
-const schema = z.object({
-  username: z
-    .string()
-    .min(3, { message: "Username must be atleast 3 characters long!" })
-    .max(20, { message: "Username mist be at most 20 characters long!" }),
-  email: z.string().email({ message: "Invalid email address!" }),
-  password: z
-    .string()
-    .min(8, { message: "Password must be atleast 8 characters long!" }),
-  firstName: z.string().min(1, { message: "First name is required" }),
-  lastName: z.string().min(1, { message: "Last name is required" }),
-  phone: z
-    .string()
-    .regex(/^\+?[1-9]\d{9,13}$/, { message: "Invalid phone number!" }),
-  address: z.string().min(1, { message: "Address is required" }),
-  bloodType: z
-    .string()
-    .regex(/(A|B|AB|O)[+-]/, { message: "Invalid blood type!" }),
-
-  birthday: z.date({ message: "Birthday is required" }),
-  sex: z.enum(["male", "female", "other"], {
-    message: "Sex is required",
-  }),
-  img: z.instanceof(File, {
-    message: "Image is required",
-  }),
-});
-
-type Inputs = z.infer<typeof schema>;
+import { studentSchema, StudentSchema } from "@/lib/formValidationSchemas";
 
 type StudentFormProps = {
   type: "create" | "update";
@@ -48,11 +18,12 @@ const StudentForm = ({ type, setOpen, data }: StudentFormProps) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>({ resolver: zodResolver(schema) });
+  } = useForm<StudentSchema>({ resolver: zodResolver(studentSchema) });
 
   const onSubmit = (data: any) => {
     console.log(data);
   };
+
   return (
     <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit)}>
       <h1 className="">Create a new Student</h1>
@@ -90,17 +61,17 @@ const StudentForm = ({ type, setOpen, data }: StudentFormProps) => {
       <div className="flex justify-between flex-wrap gap-4">
         <InputField
           label="First name"
-          error={errors?.firstName}
+          error={errors?.name}
           register={register}
-          name="firstName"
-          defaultValue={data?.firstName}
+          name="name"
+          defaultValue={data?.name}
         />
         <InputField
           label="Last name"
-          error={errors?.lastName}
+          error={errors?.surname}
           register={register}
-          name="lastName"
-          defaultValue={data?.lastName}
+          name="surname"
+          defaultValue={data?.surname}
         />
         <InputField
           label="Phone"
