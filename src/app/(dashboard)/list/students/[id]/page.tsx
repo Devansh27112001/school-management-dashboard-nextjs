@@ -43,26 +43,30 @@ const SingleStudentPage = async ({
               />
             </div>
             <div className="w-2/3 flex flex-col justify-between gap-4">
-              <h1 className="text-xl font-semibold">Meghana Kansara</h1>
+              <h1 className="text-xl font-semibold">
+                {student.name + " " + student.surname}
+              </h1>
               <p className="text-sm text-gray-500">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
               </p>
               <div className="flex items-center justify-between gap-2 flex-wrap text-xs font-medium xl:gap-1">
-                <div className="w-full md:w-1/3 lg:w-full xl:w-[48%] flex items-center gap-2">
+                <div className="w-full md:w-1/2 lg:w-full xl:w-1/2 flex items-center gap-2">
                   <Image src={"/blood.png"} alt="" height={14} width={14} />
-                  <span>A+</span>
+                  <span>{student.bloodType}</span>
                 </div>
-                <div className="w-full md:w-1/3 lg:w-full xl:w-[48%] flex items-center gap-2">
+                <div className="w-full md:w-1/2 lg:w-full xl:w-1/2 flex items-center gap-2">
                   <Image src={"/date.png"} alt="" height={14} width={14} />
-                  <span>November 2024</span>
+                  <span>
+                    {new Intl.DateTimeFormat("en-US").format(student.birthday)}
+                  </span>
                 </div>
-                <div className="w-full md:w-1/3 lg:w-full xl:w-[48%] flex items-center gap-2">
+                <div className="w-full md:w-1/2 lg:w-full xl:w-1/2 flex items-center gap-2">
                   <Image src={"/mail.png"} alt="" height={14} width={14} />
-                  <span>user@gmail.com</span>
+                  <span>{student.email || "-"}</span>
                 </div>
-                <div className="w-full md:w-1/3 lg:w-full xl:w-[48%] flex items-center gap-2">
+                <div className="w-full md:w-1/2 lg:w-full xl:w-1/2 flex items-center gap-2">
                   <Image src={"/phone.png"} alt="" height={14} width={14} />
-                  <span>+1 234 567 8900</span>
+                  <span>+1 {student.phone}</span>
                 </div>
               </div>
             </div>
@@ -129,7 +133,7 @@ const SingleStudentPage = async ({
         {/* LEFT SIDE: Bottom section */}
         <div className="mt-4 bg-white rounded-md p-4 h-[800px]">
           <h1>Student&apos;s Schedule</h1>
-          <BigCalenderContainer />
+          <BigCalenderContainer type="classId" id={student.Class.id} />
         </div>
       </div>
 

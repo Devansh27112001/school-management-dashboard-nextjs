@@ -27,7 +27,7 @@ const StudentForm = ({ type, setOpen, data, relatedData }: FormProps) => {
   const [img, setImg] = useState<any>();
   const onSubmit = (data: any) => {
     console.log(data);
-    startTransition(() => formAction(data));
+    startTransition(() => formAction({ ...data, image: img }));
   };
 
   useEffect(() => {
