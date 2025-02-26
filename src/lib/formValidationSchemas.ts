@@ -79,7 +79,9 @@ export const studentSchema = z.object({
   email: z.string().email({ message: "Invalid email address!" }),
   password: z
     .string()
-    .min(8, { message: "Password must be atleast 8 characters long!" }),
+    .min(8, { message: "Password must be atleast 8 characters long!" })
+    .optional()
+    .or(z.literal("")),
   name: z.string().min(1, { message: "First name is required" }),
   surname: z.string().min(1, { message: "Last name is required" }),
   phone: z
@@ -94,6 +96,12 @@ export const studentSchema = z.object({
     message: "Sex is required",
   }),
   img: z.string().optional(),
+  grades: z
+    .array(z.string())
+    .max(3, {
+      message: "A teacher can have at most 3 grades",
+    })
+    .optional(),
 });
 
 export type StudentSchema = z.infer<typeof studentSchema>;

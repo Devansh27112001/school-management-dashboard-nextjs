@@ -5,14 +5,23 @@ import InputField from "../InputField";
 import Image from "next/image";
 import { studentSchema, StudentSchema } from "@/lib/formValidationSchemas";
 import { FormProps } from "@/lib/types";
+import { useActionState, useState } from "react";
+import { createStudent, updateStudent } from "@/lib/actions";
+import { CldUploadWidget } from "next-cloudinary";
 
 const StudentForm = ({ type, setOpen, data, relatedData }: FormProps) => {
+  const { grades } = relatedData;
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<StudentSchema>({ resolver: zodResolver(studentSchema) });
 
+  const [state, formAction] = useActionState(
+    type === "create" ? createStudent : updateStudent,
+    { success: false, error: false }
+  );
+  const [img, setImg] = useState<any>();
   const onSubmit = (data: any) => {
     console.log(data);
   };
@@ -95,7 +104,7 @@ const StudentForm = ({ type, setOpen, data, relatedData }: FormProps) => {
           defaultValue={data?.birthday}
           type="date"
         />
-        {/* SELECT ELEMENT */}
+        {/* SELECT ELEMENT - Sex*/}
         <div className="flex flex-col gap-2 w-full md:w-1/4 group">
           <label className="text-xs text-gray-500 group-focus-within:font-semibold transition-all duration-300">
             Sex
@@ -105,9 +114,33 @@ const StudentForm = ({ type, setOpen, data, relatedData }: FormProps) => {
             defaultValue={data?.sex}
             className="ring-[1.5px] ring-gray-300 p-2 rounded-md w-full focus:ring-blue-300 outline-none transition-all duration-300 text-sm"
           >
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
+            <option value="MALE">Male</option>
+            <option value="FEMALE">Female</option>
+          </select>
+          {errors?.sex?.message && (
+            <p className="text-xs text-red-400">
+              {errors?.sex?.message.toString()}
+            </p>
+          )}
+        </div>
+
+        {/* SELECT ELEMENT - GRADES */}
+        <div className="flex flex-col gap-2 w-full md:w-1/4 group">
+          <label className="text-xs text-gray-500 group-focus-within:font-semibold transition-all duration-300">
+            Select grades
+          </label>
+          <select
+            {...register("grades")}
+            defaultValue={data?.grades?.map(
+              (grade: { id: number }) => grade.id
+            )}
+            className="ring-[1.5px] ring-gray-300 p-2 rounded-md w-full focus:ring-blue-300 outline-none transition-all duration-300 text-sm"
+          >
+            {grades?.map((grade: { id: number; level: string }) => (
+              <option key={grade.id} value={grade.level}>
+                {grade.level}
+              </option>
+            ))}
           </select>
           {errors?.sex?.message && (
             <p className="text-xs text-red-400">
@@ -117,25 +150,37 @@ const StudentForm = ({ type, setOpen, data, relatedData }: FormProps) => {
         </div>
 
         {/* UPLOAD PHOTO */}
-        <div className="flex flex-col gap-2 w-full md:w-[63%] md:mt-5 self-center justify-start">
-          <label
-            className="text-xs text-gray-500 flex items-center gap-2 cursor-pointer font-semibold"
-            htmlFor="image"
-          >
-            <Image src={"/upload.png"} width={24} height={24} alt="" />
-            <span>Upload photo</span>
-          </label>
-          <input
-            type="file"
-            {...register("img")}
-            className="hidden"
-            id="image"
-          />
-          {errors?.img?.message && (
-            <p className="text-xs text-red-400">{errors.img.message}</p>
-          )}
-        </div>
+        <CldUploadWidget
+          uploadPreset="school_management"
+          onSuccess={(result, { widget }) => {
+            setImg(result.info);
+            widget.close();
+          }}
+        >
+          {({ open }) => {
+            return (
+              <div
+                className="text-xs text-gray-400 flex items-center w-full md:w-1/4 gap-2 cursor-pointer"
+                onClick={() => open()}
+              >
+                <Image src={"/upload.png"} alt="" width={28} height={28} />
+                <span>Upload a photo</span>
+                {img && (
+                  <Image
+                    src={img.secure_url}
+                    alt="Image uploaded"
+                    width={48}
+                    height={48}
+                  />
+                )}
+              </div>
+            );
+          }}
+        </CldUploadWidget>
       </div>
+      {state?.error && (
+        <span className="text-sm text-red-500">Soemthing went wrong!</span>
+      )}
       <button type="submit" className="bg-blue-400 text-white rounded-md p-2">
         {type === "create" ? "create" : "update"}
       </button>

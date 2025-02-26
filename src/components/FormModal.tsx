@@ -9,7 +9,12 @@ import {
   useState,
 } from "react";
 import LoadingSpinner from "./LoadingSpinner";
-import { deleteClass, deleteSubject, deleteTeacher } from "@/lib/actions";
+import {
+  deleteClass,
+  deleteStudent,
+  deleteSubject,
+  deleteTeacher,
+} from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { FormModalContainerProps } from "./FormContainer";
@@ -19,7 +24,7 @@ const deletionMap: any = {
   class: deleteClass,
   teacher: deleteTeacher,
   // parent: deleteClass,
-  // student: deleteClass,
+  student: deleteStudent,
   // announcement: deleteClass,
   // event: deleteClass,
   // lesson: deleteClass,
@@ -32,9 +37,9 @@ const deletionMap: any = {
 const TeacherForm = dynamic(() => import("./forms/TeacherForm"), {
   loading: () => <LoadingSpinner />,
 });
-// const StudentForm = dynamic(() => import("./forms/StudentForm"), {
-//   loading: () => <LoadingSpinner />,
-// });
+const StudentForm = dynamic(() => import("./forms/StudentForm"), {
+  loading: () => <LoadingSpinner />,
+});
 
 // const ParentForm = dynamic(() => import("./forms/ParentForm"), {
 //   loading: () => <LoadingSpinner />,
@@ -66,9 +71,14 @@ const form: FormObject = {
       relatedData={relatedData}
     />
   ),
-  // student: (type, setOpen, data) => (
-  //   <StudentForm type={type} data={data} setOpen={setOpen} />
-  // ),
+  student: (type, setOpen, data, relatedData) => (
+    <StudentForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
   // parent: (type, setOpen, data) => (
   //   <ParentForm type={type} data={data} setOpen={setOpen} />
   // ),

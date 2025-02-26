@@ -2,6 +2,7 @@
 import { clerkClient } from "@clerk/nextjs/server";
 import {
   ClassSchema,
+  StudentSchema,
   SubjectSchema,
   TeacherSchema,
 } from "./formValidationSchemas";
@@ -249,6 +250,41 @@ export const deleteTeacher = async (
       success: true,
       error: false,
     };
+  } catch (error) {
+    console.error(error);
+    return { success: false, error: true };
+  }
+};
+
+// -----------------------Student actions--------------------
+export const createStudent = async (
+  currentState: currentStateType,
+  data: StudentSchema
+) => {
+  try {
+    return { success: true, error: false };
+  } catch (error) {
+    console.error(error);
+    return { success: false, error: true };
+  }
+};
+export const updateStudent = async (
+  currentState: currentStateType,
+  data: StudentSchema
+) => {
+  try {
+    return { success: true, error: false };
+  } catch (error) {
+    console.error(error);
+    return { success: false, error: true };
+  }
+};
+export const deleteStudent = async (
+  currentState: currentStateType,
+  data: FormData
+) => {
+  try {
+    return { success: true, error: false };
   } catch (error) {
     console.error(error);
     return { success: false, error: true };

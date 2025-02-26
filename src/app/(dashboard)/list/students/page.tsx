@@ -10,6 +10,7 @@ import { ITEMS_PER_PAGE } from "@/lib/settings";
 import { searchParamsType } from "@/lib/types";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
+import FormContainer from "@/components/FormContainer";
 
 const StudentListPage = async ({
   searchParams,
@@ -75,7 +76,9 @@ const StudentListPage = async ({
               <Image src={"/sort.png"} width={14} height={14} alt={""} />
             </button>
 
-            {role === "admin" && <FormModal table="student" type="create" />}
+            {role === "admin" && (
+              <FormContainer table="student" type="create" />
+            )}
           </div>
         </div>
       </div>
