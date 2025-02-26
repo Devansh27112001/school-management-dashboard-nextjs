@@ -1,19 +1,12 @@
 "use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputField from "../InputField";
 import Image from "next/image";
-import { Dispatch, SetStateAction } from "react";
 import { studentSchema, StudentSchema } from "@/lib/formValidationSchemas";
+import { FormProps } from "@/lib/types";
 
-type StudentFormProps = {
-  type: "create" | "update";
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  data?: any;
-};
-
-const StudentForm = ({ type, setOpen, data }: StudentFormProps) => {
+const StudentForm = ({ type, setOpen, data, relatedData }: FormProps) => {
   const {
     register,
     handleSubmit,

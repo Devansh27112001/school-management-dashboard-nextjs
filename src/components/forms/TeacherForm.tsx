@@ -229,7 +229,7 @@ const TeacherForm = ({ type, setOpen, data, relatedData }: FormProps) => {
           }}
         </CldUploadWidget>
       </div>
-      {state.error && (
+      {state?.error && (
         <span className="text-sm text-red-500">Something went wrong!</span>
       )}
       <button type="submit" className="bg-blue-400 text-white rounded-md p-2">

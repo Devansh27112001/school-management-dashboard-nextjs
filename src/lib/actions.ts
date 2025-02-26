@@ -189,12 +189,11 @@ export const updateTeacher = async (
   if (!data.id) return { success: false, error: true };
   try {
     const client = await clerkClient();
-    await client.users.updateUser(data.id, {
+    const user = await client.users.updateUser(data.id, {
       username: data.username,
-      password: data.password,
+      ...(data.password !== "" && { password: data.password }),
       firstName: data.name,
       lastName: data.surname,
-      publicMetadata: { role: "teacher" },
     });
     await prisma.teacher.update({
       where: {
@@ -212,12 +211,12 @@ export const updateTeacher = async (
         img: data.img,
         birthday: data.birthday,
         subjects: {
-          connect: data.subjects?.map((subjectId: string) => ({
+          set: data.subjects?.map((subjectId: string) => ({
             id: parseInt(subjectId),
           })),
         },
         classes: {
-          connect: data.classes?.map((classId: string) => ({
+          set: data.classes?.map((classId: string) => ({
             id: parseInt(classId),
           })),
         },
@@ -241,7 +240,6 @@ export const deleteTeacher = async (
     await client.users.deleteUser(id);
 
     // Deleting teacher from database
-
     await prisma.teacher.delete({
       where: {
         id,

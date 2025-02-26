@@ -1,5 +1,4 @@
 import Image from "next/image";
-import BigCalender from "@/components/BigCalender";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import Announcements from "@/components/Announcements";
 import Link from "next/link";
@@ -9,6 +8,7 @@ import { Teacher } from "@prisma/client";
 import { notFound } from "next/navigation";
 import FormContainer from "@/components/FormContainer";
 import { getDetails } from "@/lib/clerkUtils";
+import BigCalenderContainer from "@/components/BigCalenderContainer";
 
 const SingleTeacherPage = async ({
   params,
@@ -162,7 +162,7 @@ const SingleTeacherPage = async ({
         {/* LEFT SIDE: Bottom section */}
         <div className="mt-4 bg-white rounded-md p-4 h-[800px]">
           <h1>Teacher&apos;s Schedule</h1>
-          <BigCalender />
+          <BigCalenderContainer type="teacherId" id={teacher.id} />
         </div>
       </div>
 

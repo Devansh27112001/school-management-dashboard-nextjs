@@ -1,12 +1,18 @@
-"use client";
 import Image from "next/image";
-import BigCalender from "@/components/BigCalender";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import Announcements from "@/components/Announcements";
 import Link from "next/link";
 import PerformancePieChart from "@/components/PerformancePieChart";
+import BigCalenderContainer from "@/components/BigCalenderContainer";
+import { getDetails } from "@/lib/clerkUtils";
 
-const SingleStudentPage = () => {
+const SingleStudentPage = async ({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) => {
+  const { role } = await getDetails();
+  const { id } = await params;
   return (
     <div className="flex-1 p-4 px-2 flex flex-col xl:flex-row gap-4">
       {/* LEFT */}
@@ -113,7 +119,7 @@ const SingleStudentPage = () => {
         {/* LEFT SIDE: Bottom section */}
         <div className="mt-4 bg-white rounded-md p-4 h-[800px]">
           <h1>Student&apos;s Schedule</h1>
-          <BigCalender />
+          {/* <BigCalenderContainer /> */}
         </div>
       </div>
 

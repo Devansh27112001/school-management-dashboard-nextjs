@@ -37,6 +37,7 @@ export const teacherSchema = z.object({
   password: z
     .string()
     .min(8, { message: "Password must be at least 8 characters long!" })
+    .optional()
     .or(z.literal("")),
   phone: z
     .string()
