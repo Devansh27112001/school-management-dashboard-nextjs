@@ -4,15 +4,27 @@ import Announcements from "@/components/Announcements";
 import Link from "next/link";
 import PerformancePieChart from "@/components/PerformancePieChart";
 import BigCalenderContainer from "@/components/BigCalenderContainer";
-import { getDetails } from "@/lib/clerkUtils";
+import prisma from "@/lib/prisma";
+import { Class, Student } from "@prisma/client";
+import { notFound } from "next/navigation";
+import { auth } from "@clerk/nextjs/server";
 
 const SingleStudentPage = async ({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) => {
-  const { role } = await getDetails();
+  const { sessionClaims } = await auth();
+  const role = (sessionClaims?.metadata as { role: string })?.role;
+
   const { id } = await params;
+  const student: (Student & { Class: Class }) | null =
+    await prisma.student.findUnique({
+      where: { id },
+      include: { Class: true },
+    });
+  console.log(student);
+  if (!student) return notFound();
   return (
     <div className="flex-1 p-4 px-2 flex flex-col xl:flex-row gap-4">
       {/* LEFT */}
@@ -23,9 +35,7 @@ const SingleStudentPage = async ({
           <div className="bg-devanshSky px-4 py-6 rounded-md flex-1 flex gap-4">
             <div className="w-1/3">
               <Image
-                src={
-                  "https://images.pexels.com/photos/5414817/pexels-photo-5414817.jpeg?auto=compress&cs=tinysrgb&w=1200"
-                }
+                src={student.image || "/noAvatar.png"}
                 alt=""
                 width={144}
                 height={144}
@@ -119,7 +129,7 @@ const SingleStudentPage = async ({
         {/* LEFT SIDE: Bottom section */}
         <div className="mt-4 bg-white rounded-md p-4 h-[800px]">
           <h1>Student&apos;s Schedule</h1>
-          {/* <BigCalenderContainer /> */}
+          <BigCalenderContainer />
         </div>
       </div>
 

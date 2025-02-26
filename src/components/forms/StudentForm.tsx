@@ -5,12 +5,15 @@ import InputField from "../InputField";
 import Image from "next/image";
 import { studentSchema, StudentSchema } from "@/lib/formValidationSchemas";
 import { FormProps } from "@/lib/types";
-import { useActionState, useState } from "react";
+import { startTransition, useActionState, useEffect, useState } from "react";
 import { createStudent, updateStudent } from "@/lib/actions";
 import { CldUploadWidget } from "next-cloudinary";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const StudentForm = ({ type, setOpen, data, relatedData }: FormProps) => {
   const { grades } = relatedData;
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -24,8 +27,16 @@ const StudentForm = ({ type, setOpen, data, relatedData }: FormProps) => {
   const [img, setImg] = useState<any>();
   const onSubmit = (data: any) => {
     console.log(data);
+    startTransition(() => formAction(data));
   };
 
+  useEffect(() => {
+    if (state.success) {
+      toast(`The student has been ${type}d successfully.`);
+      setOpen(false);
+      router.refresh();
+    }
+  }, [state]);
   return (
     <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit)}>
       <h1 className="">Create a new Student</h1>

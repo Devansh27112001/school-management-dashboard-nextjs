@@ -7,16 +7,17 @@ import prisma from "@/lib/prisma";
 import { Teacher } from "@prisma/client";
 import { notFound } from "next/navigation";
 import FormContainer from "@/components/FormContainer";
-import { getDetails } from "@/lib/clerkUtils";
 import BigCalenderContainer from "@/components/BigCalenderContainer";
+import { auth } from "@clerk/nextjs/server";
 
 const SingleTeacherPage = async ({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) => {
-  const { role } = await getDetails();
   const { id } = await params;
+  const { sessionClaims } = await auth();
+  const role = (sessionClaims?.metadata as { role: string })?.role;
   const teacher:
     | (Teacher & {
         _count: { subjects: number; lessons: number; classes: number };

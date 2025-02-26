@@ -262,6 +262,7 @@ export const createStudent = async (
   data: StudentSchema
 ) => {
   try {
+    console.log(data);
     return { success: true, error: false };
   } catch (error) {
     console.error(error);
