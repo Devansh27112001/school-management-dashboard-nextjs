@@ -151,21 +151,20 @@ const StudentForm = ({ type, setOpen, data, relatedData }: FormProps) => {
             Select grade
           </label>
           <select
-            {...register("grades")}
-            defaultValue={data?.grades?.map(
-              (grade: { id: number }) => grade.id
-            )}
+            {...register("grade")}
+            defaultValue={data?.grades?.[0]?.id || -1}
             className="ring-[1.5px] ring-gray-300 p-2 rounded-md w-full focus:ring-blue-300 outline-none transition-all duration-300 text-sm"
           >
+            <option value={-1}>--Select a grade--</option>
             {grades?.map((grade: { id: number; level: string }) => (
-              <option key={grade.id} value={grade.level}>
+              <option key={grade.id} value={grade.id}>
                 {grade.level}
               </option>
             ))}
           </select>
-          {errors?.sex?.message && (
+          {errors?.grade?.message && (
             <p className="text-xs text-red-400">
-              {errors?.sex?.message.toString()}
+              {errors?.grade?.message.toString()}
             </p>
           )}
         </div>

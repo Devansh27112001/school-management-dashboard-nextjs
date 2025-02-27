@@ -23,7 +23,6 @@ const SingleStudentPage = async ({
       where: { id },
       include: { Class: true },
     });
-  console.log(student);
   if (!student) return notFound();
   return (
     <div className="flex-1 p-4 px-2 flex flex-col xl:flex-row gap-4">

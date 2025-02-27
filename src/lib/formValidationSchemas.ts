@@ -96,7 +96,9 @@ export const studentSchema = z.object({
     message: "Sex is required",
   }),
   image: z.string().optional(),
-  grades: z.coerce.number().optional(),
+  grade: z.coerce
+    .number({ message: "The grade must be a number" })
+    .min(1, { message: "Select a valid grade" }),
 });
 
 export type StudentSchema = z.infer<typeof studentSchema>;
