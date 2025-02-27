@@ -57,3 +57,11 @@ export const adjustScheduleToCurrentWeek = (
     };
   });
 };
+
+export const gradeFormat = (grade: number) => {
+  const format: { [key: number]: string } = {
+    1: "st",
+    2: "nd",
+  };
+  return format[grade] || "th";
+};
