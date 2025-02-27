@@ -24,10 +24,10 @@ const StudentForm = ({ type, setOpen, data, relatedData }: FormProps) => {
     type === "create" ? createStudent : updateStudent,
     { success: false, error: false }
   );
-  const [img, setImg] = useState<any>();
+  const [image, setImage] = useState<any>();
   const onSubmit = (data: any) => {
     console.log(data);
-    startTransition(() => formAction({ ...data, image: img }));
+    // startTransition(() => formAction({ ...data, image: image?.secure_url }));
   };
 
   useEffect(() => {
@@ -44,6 +44,16 @@ const StudentForm = ({ type, setOpen, data, relatedData }: FormProps) => {
         Authentication information
       </span>
       <div className="flex justify-between flex-wrap gap-4">
+        {data && (
+          <InputField
+            label="Id"
+            error={errors?.id}
+            register={register}
+            name="id"
+            defaultValue={data?.id}
+            hidden
+          />
+        )}
         <InputField
           label="Username"
           error={errors?.username}
@@ -138,7 +148,7 @@ const StudentForm = ({ type, setOpen, data, relatedData }: FormProps) => {
         {/* SELECT ELEMENT - GRADES */}
         <div className="flex flex-col gap-2 w-full md:w-1/4 group">
           <label className="text-xs text-gray-500 group-focus-within:font-semibold transition-all duration-300">
-            Select grades
+            Select grade
           </label>
           <select
             {...register("grades")}
@@ -164,7 +174,7 @@ const StudentForm = ({ type, setOpen, data, relatedData }: FormProps) => {
         <CldUploadWidget
           uploadPreset="school_management"
           onSuccess={(result, { widget }) => {
-            setImg(result.info);
+            setImage(result.info);
             widget.close();
           }}
         >
@@ -176,9 +186,9 @@ const StudentForm = ({ type, setOpen, data, relatedData }: FormProps) => {
               >
                 <Image src={"/upload.png"} alt="" width={28} height={28} />
                 <span>Upload a photo</span>
-                {img && (
+                {image && (
                   <Image
-                    src={img.secure_url}
+                    src={image.secure_url}
                     alt="Image uploaded"
                     width={48}
                     height={48}

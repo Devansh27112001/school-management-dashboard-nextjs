@@ -91,17 +91,12 @@ export const studentSchema = z.object({
   bloodType: z
     .string()
     .regex(/(A|B|AB|O)[+-]/, { message: "Invalid blood type!" }),
-  birthday: z.date({ message: "Birthday is required" }),
+  birthday: z.coerce.date({ message: "Birthday is required" }),
   sex: z.enum(["MALE", "FEMALE"], {
     message: "Sex is required",
   }),
-  img: z.string().optional(),
-  grades: z
-    .array(z.string())
-    .max(3, {
-      message: "A teacher can have at most 3 grades",
-    })
-    .optional(),
+  image: z.string().optional(),
+  grades: z.coerce.number().optional(),
 });
 
 export type StudentSchema = z.infer<typeof studentSchema>;

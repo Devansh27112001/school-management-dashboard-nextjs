@@ -139,7 +139,7 @@ const SingleStudentPage = async ({
 
       {/* RIGHT */}
       <div className="w-full xl:w-1/3 flex flex-col gap-4">
-        {/* SHORCUT LINKS */}
+        {/* SHORTCUT LINKS */}
         <div className="bg-white p-4 rounded-md">
           <h1 className="text-xl font-semibold">Shortcuts</h1>
           <div className="mt-4 flex flex-wrap gap-4 text-xs text-gray-400">
