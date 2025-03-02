@@ -123,8 +123,15 @@ const StudentForm = ({ type, setOpen, data, relatedData }: FormProps) => {
           error={errors?.birthday}
           register={register}
           name="birthday"
-          defaultValue={data?.birthday}
+          defaultValue={data?.birthday.toISOString().split("T")[0]}
           type="date"
+        />
+        <InputField
+          label="Parent Id"
+          error={errors?.parentId}
+          register={register}
+          name="parentId"
+          defaultValue={data?.parentId}
         />
         {/* SELECT ELEMENT - Sex*/}
         <div className="flex flex-col gap-2 w-full md:w-1/4 group">

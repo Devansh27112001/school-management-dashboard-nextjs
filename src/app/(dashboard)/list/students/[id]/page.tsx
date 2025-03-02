@@ -11,6 +11,7 @@ import { gradeFormat } from "@/lib/format";
 import { Suspense } from "react";
 import StudentAttendanceCard from "@/components/StudentAttendanceCard";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import FormContainer from "@/components/FormContainer";
 
 const SingleStudentPage = async ({
   params,
@@ -27,7 +28,6 @@ const SingleStudentPage = async ({
     where: { id },
     include: { Class: { include: { _count: { select: { lessons: true } } } } },
   });
-  console.log(student);
   if (!student) return notFound();
   return (
     <div className="flex-1 p-4 px-2 flex flex-col xl:flex-row gap-4">
@@ -47,9 +47,14 @@ const SingleStudentPage = async ({
               />
             </div>
             <div className="w-2/3 flex flex-col justify-between gap-4">
-              <h1 className="text-xl font-semibold">
-                {student.name + " " + student.surname}
-              </h1>
+              <div className="flex justify-between items-center">
+                <h1 className="text-xl font-semibold">
+                  {student.name + " " + student.surname}
+                </h1>
+                {role === "admin" && (
+                  <FormContainer table="student" type="update" data={student} />
+                )}
+              </div>
               <p className="text-sm text-gray-500">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
               </p>
