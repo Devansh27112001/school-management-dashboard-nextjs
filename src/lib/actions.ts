@@ -7,6 +7,8 @@ import {
   TeacherSchema,
 } from "./formValidationSchemas";
 import prisma from "./prisma";
+import { role } from "./data";
+import { connect } from "http2";
 
 type currentStateType = {
   success: boolean;
@@ -262,7 +264,55 @@ export const createStudent = async (
   data: StudentSchema
 ) => {
   try {
-    console.log(data);
+    const selectedClass = await prisma.class.findUnique({
+      where: {
+        id: data.classId,
+      },
+      include: { _count: { select: { students: true } } },
+    });
+
+    if (
+      selectedClass &&
+      selectedClass.capacity === selectedClass._count.students
+    ) {
+      return { success: false, error: true };
+    }
+    // const client = await clerkClient();
+    // const user = await client.users.createUser({
+    //   username: data.username,
+    //   firstName: data.name,
+    //   lastName: data.surname,
+    //   password: data.password,
+    //   publicMetadata: { role: "student" },
+    // });
+
+    // await prisma.student.create({
+    //   data: {
+    //     id: user.id,
+    //     name: data.name,
+    //     surname: data.surname,
+    //     email: data.email,
+    //     phone: data.phone,
+    //     address: data.address,
+    //     bloodType: data.bloodType,
+    //     birthday: data.birthday,
+    //     sex: data.sex,
+    //     gradeId: data.gradeId,
+    //     classId: data.classId,
+    //     ...(data.image && { image: data.image }),
+    //     parentId: "",
+    //     attendances: {
+    //       connect: {
+    //         id: undefined,
+    //       },
+    //     },
+    //     results: {
+    //       connect: {
+    //         id: undefined,
+    //       },
+    //     },
+    //   },
+    // });
     return { success: true, error: false };
   } catch (error) {
     console.error(error);

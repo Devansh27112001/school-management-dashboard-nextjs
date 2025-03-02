@@ -1,50 +1,32 @@
-const currentWorkWeek = () => {
+const getLatestMonday = (): Date => {
   const today = new Date();
   const dayOfWeek = today.getDay();
-
-  const startOfweek = today;
-
-  // If day of the week is 0 (Sunday), then the start of the week will be the next day.
-  if (dayOfWeek === 0) {
-    startOfweek.setDate(today.getDate() + 1);
-  }
-
-  // If day of the week is 6 (Saturday), then the start of the week will be the day after tomorrow.
-  if (dayOfWeek === 6) {
-    startOfweek.setDate(today.getDate() + 2);
-  } else {
-    startOfweek.setDate(today.getDate() - (dayOfWeek - 1));
-  }
-
-  startOfweek.setHours(0, 0, 0, 0);
-
-  return { startOfweek };
+  const daysSinceMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+  const latestMonday = today;
+  latestMonday.setDate(today.getDate() - daysSinceMonday);
+  return latestMonday;
 };
 
 export const adjustScheduleToCurrentWeek = (
-  lessons: {
-    title: string;
-    start: Date;
-    end: Date;
-  }[]
+  lessons: { title: string; start: Date; end: Date }[]
 ): { title: string; start: Date; end: Date }[] => {
-  const { startOfweek } = currentWorkWeek();
+  const latestMonday = getLatestMonday();
+
   return lessons.map((lesson) => {
     const lessonDayOfWeek = lesson.start.getDay();
 
     const daysFromMonday = lessonDayOfWeek === 0 ? 6 : lessonDayOfWeek - 1;
 
-    const adjustStartDate = new Date(startOfweek);
+    const adjustedStartDate = new Date(latestMonday);
 
-    adjustStartDate.setDate(startOfweek.getDate() + daysFromMonday);
-    adjustStartDate.setHours(
-      lesson.end.getHours(),
-      lesson.end.getMinutes(),
-      lesson.end.getSeconds()
+    adjustedStartDate.setDate(latestMonday.getDate() + daysFromMonday);
+    adjustedStartDate.setHours(
+      lesson.start.getHours(),
+      lesson.start.getMinutes(),
+      lesson.start.getSeconds()
     );
-
-    const adjustEndDate = new Date(startOfweek);
-    adjustEndDate.setHours(
+    const adjustedEndDate = new Date(adjustedStartDate);
+    adjustedEndDate.setHours(
       lesson.end.getHours(),
       lesson.end.getMinutes(),
       lesson.end.getSeconds()
@@ -52,8 +34,8 @@ export const adjustScheduleToCurrentWeek = (
 
     return {
       title: lesson.title,
-      start: adjustStartDate,
-      end: adjustEndDate,
+      start: adjustedStartDate,
+      end: adjustedEndDate,
     };
   });
 };

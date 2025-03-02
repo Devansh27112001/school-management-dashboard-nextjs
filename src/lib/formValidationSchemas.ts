@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-// Subject schema
+// SUBJECT SCHEMA
 export const subjectSchema = z.object({
   id: z.coerce.number().optional(),
   name: z.string().min(4, {
@@ -10,7 +10,7 @@ export const subjectSchema = z.object({
 });
 export type SubjectSchema = z.infer<typeof subjectSchema>;
 
-// Class schema
+// CLASS SCHEMA
 export const classSchema = z.object({
   id: z.coerce.number().optional(),
   name: z.string().min(1, { message: "Class name is required." }),
@@ -20,7 +20,7 @@ export const classSchema = z.object({
 });
 export type ClassSchema = z.infer<typeof classSchema>;
 
-// Teacher schema
+// TEACHER SCHEMA
 export const teacherSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(1, { message: "First name is required" }),
@@ -69,7 +69,7 @@ export const teacherSchema = z.object({
 });
 export type TeacherSchema = z.infer<typeof teacherSchema>;
 
-// Student schema
+// STUDENT SCHEMA
 export const studentSchema = z.object({
   id: z.number().optional(),
   username: z
@@ -96,9 +96,13 @@ export const studentSchema = z.object({
     message: "Sex is required",
   }),
   image: z.string().optional(),
-  grade: z.coerce
+  gradeId: z.coerce
     .number({ message: "The grade must be a number" })
     .min(1, { message: "Select a valid grade" }),
+  classId: z.coerce
+    .number({ message: "The grade must be a number" })
+    .min(1, { message: "Select a valid class" }),
+  parentId: z.string().min(1, { message: "Parent Id is required" }).optional(),
 });
 
 export type StudentSchema = z.infer<typeof studentSchema>;

@@ -18,8 +18,8 @@ const BigCalenderContainer = async ({
     return {
       title: item.name,
       // Format: YYYY-MM-DD
-      start: new Date(item.startTime),
-      end: new Date(item.endTime),
+      start: item.startTime,
+      end: item.endTime,
     };
   });
 

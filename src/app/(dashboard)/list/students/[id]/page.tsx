@@ -1,5 +1,4 @@
 import Image from "next/image";
-import "react-big-calendar/lib/css/react-big-calendar.css";
 import Announcements from "@/components/Announcements";
 import Link from "next/link";
 import PerformancePieChart from "@/components/PerformancePieChart";
@@ -28,6 +27,7 @@ const SingleStudentPage = async ({
     where: { id },
     include: { Class: { include: { _count: { select: { lessons: true } } } } },
   });
+  console.log(student);
   if (!student) return notFound();
   return (
     <div className="flex-1 p-4 px-2 flex flex-col xl:flex-row gap-4">
