@@ -320,7 +320,7 @@ export const updateStudent = async (
   if (!data.id) return { success: false, error: true };
   try {
     const client = await clerkClient();
-    const updatedUser = await client.users.updateUser(data.id, {
+    await client.users.updateUser(data.id, {
       username: data.username,
       ...(data.password !== "" && { password: data.password }),
       firstName: data.name,
