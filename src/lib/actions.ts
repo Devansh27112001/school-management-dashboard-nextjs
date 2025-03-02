@@ -277,42 +277,32 @@ export const createStudent = async (
     ) {
       return { success: false, error: true };
     }
-    // const client = await clerkClient();
-    // const user = await client.users.createUser({
-    //   username: data.username,
-    //   firstName: data.name,
-    //   lastName: data.surname,
-    //   password: data.password,
-    //   publicMetadata: { role: "student" },
-    // });
+    const client = await clerkClient();
+    const user = await client.users.createUser({
+      username: data.username,
+      firstName: data.name,
+      lastName: data.surname,
+      password: data.password,
+      publicMetadata: { role: "student" },
+    });
 
-    // await prisma.student.create({
-    //   data: {
-    //     id: user.id,
-    //     name: data.name,
-    //     surname: data.surname,
-    //     email: data.email,
-    //     phone: data.phone,
-    //     address: data.address,
-    //     bloodType: data.bloodType,
-    //     birthday: data.birthday,
-    //     sex: data.sex,
-    //     gradeId: data.gradeId,
-    //     classId: data.classId,
-    //     ...(data.image && { image: data.image }),
-    //     parentId: "",
-    //     attendances: {
-    //       connect: {
-    //         id: undefined,
-    //       },
-    //     },
-    //     results: {
-    //       connect: {
-    //         id: undefined,
-    //       },
-    //     },
-    //   },
-    // });
+    await prisma.student.create({
+      data: {
+        id: user.id,
+        username: data.username,
+        name: data.name,
+        surname: data.surname,
+        email: data.email,
+        phone: data.phone,
+        address: data.address,
+        bloodType: data.bloodType,
+        birthday: data.birthday,
+        sex: data.sex,
+        gradeId: data.gradeId,
+        classId: data.classId,
+        parentId: data.parentId,
+      },
+    });
     return { success: true, error: false };
   } catch (error) {
     console.error(error);
