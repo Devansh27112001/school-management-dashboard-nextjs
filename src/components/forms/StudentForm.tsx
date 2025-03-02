@@ -170,7 +170,7 @@ const StudentForm = ({ type, setOpen, data, relatedData }: FormProps) => {
           )}
         </div>
 
-        {/* SELECT ELEMENT - GRADES */}
+        {/* SELECT ELEMENT - CLASSES */}
         <div className="flex flex-col gap-2 w-full md:w-1/4 group">
           <label className="text-xs text-gray-500 group-focus-within:font-semibold transition-all duration-300">
             Select class
@@ -181,11 +181,19 @@ const StudentForm = ({ type, setOpen, data, relatedData }: FormProps) => {
             className="ring-[1.5px] ring-gray-300 p-2 rounded-md w-full focus:ring-blue-300 outline-none transition-all duration-300 text-sm"
           >
             <option value={-1}>--Select a class--</option>
-            {classes?.map((singleClass: { id: number; name: string }) => (
-              <option key={singleClass.id} value={singleClass.id}>
-                {singleClass.name}
-              </option>
-            ))}
+            {classes?.map(
+              (singleClass: {
+                id: number;
+                name: string;
+                capacity: number;
+                _count: { students: number };
+              }) => (
+                <option key={singleClass.id} value={singleClass.id}>
+                  {singleClass.name} -{" "}
+                  {singleClass._count.students + "/" + singleClass.capacity}
+                </option>
+              )
+            )}
           </select>
           {errors?.classId?.message && (
             <p className="text-xs text-red-400">

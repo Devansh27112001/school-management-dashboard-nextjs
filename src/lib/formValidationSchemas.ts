@@ -71,7 +71,7 @@ export type TeacherSchema = z.infer<typeof teacherSchema>;
 
 // STUDENT SCHEMA
 export const studentSchema = z.object({
-  id: z.number().optional(),
+  id: z.string().optional(),
   username: z
     .string()
     .min(3, { message: "Username must be atleast 3 characters long!" })

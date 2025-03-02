@@ -264,6 +264,7 @@ export const createStudent = async (
   data: StudentSchema
 ) => {
   try {
+    // Checking for the class capacity
     const selectedClass = await prisma.class.findUnique({
       where: {
         id: data.classId,
@@ -277,6 +278,8 @@ export const createStudent = async (
     ) {
       return { success: false, error: true };
     }
+
+    // Creating a new user with the role of student in clerk.
     const client = await clerkClient();
     const user = await client.users.createUser({
       username: data.username,
@@ -286,6 +289,7 @@ export const createStudent = async (
       publicMetadata: { role: "student" },
     });
 
+    // Adding the student to the database.
     await prisma.student.create({
       data: {
         id: user.id,
@@ -313,7 +317,35 @@ export const updateStudent = async (
   currentState: currentStateType,
   data: StudentSchema
 ) => {
+  if (!data.id) return { success: false, error: true };
   try {
+    const client = await clerkClient();
+    await client.users.updateUser(data.id, {
+      username: data.username,
+      ...(data.password !== "" && { password: data.password }),
+      firstName: data.name,
+      lastName: data.surname,
+    });
+
+    await prisma.student.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        username: data.username,
+        name: data.name,
+        surname: data.surname,
+        email: data.email,
+        phone: data.phone,
+        address: data.address,
+        bloodType: data.bloodType,
+        birthday: data.birthday,
+        sex: data.sex,
+        gradeId: data.gradeId,
+        classId: data.classId,
+        parentId: data.parentId,
+      },
+    });
     return { success: true, error: false };
   } catch (error) {
     console.error(error);
@@ -324,7 +356,15 @@ export const deleteStudent = async (
   currentState: currentStateType,
   data: FormData
 ) => {
+  const studentId = data.get("id") as string;
   try {
+    const client = await clerkClient();
+    await client.users.deleteUser(studentId);
+    await prisma.student.delete({
+      where: {
+        id: studentId,
+      },
+    });
     return { success: true, error: false };
   } catch (error) {
     console.error(error);
