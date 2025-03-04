@@ -35,7 +35,6 @@ const AttendanceChartContainer = async () => {
     };
 
   resData.forEach((item) => {
-    const itemDate = new Date(item?.date);
     // Here we will get the dayOftheweek from Sunday to Saturday = 0-6. But in the weekDays array, we will have days fo the week from 0 to 4. That is "monday" coming from dayOftheWeek will be 1 but monday is on the 0th index in weekDays array. so, we need to subtract 1 from the dayOftheWeek to get the correct day from the weekDays array.
     if (dayOftheWeek >= 1 && dayOftheWeek <= 5) {
       const dayName = weekDays[dayOftheWeek - 1];

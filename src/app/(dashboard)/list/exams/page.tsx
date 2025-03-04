@@ -1,3 +1,4 @@
+import FormContainer from "@/components/FormContainer";
 import FormModal from "@/components/FormModal";
 import Pagination from "@/components/Pagination";
 import { renderExamsRow } from "@/components/Render";
@@ -111,7 +112,7 @@ const ExamListPage = async ({
               <Image src={"/sort.png"} width={14} height={14} alt={""} />
             </button>
 
-            {role === "admin" && <FormModal type="create" table="exam" />}
+            {role === "teacher" && <FormContainer type="create" table="exam" />}
           </div>
         </div>
       </div>

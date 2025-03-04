@@ -75,6 +75,9 @@ const FormContainer = async ({
         });
         relatedData = { grades: studentGrades, classes: studentClasses };
         break;
+
+      case "exam":
+        break;
       default:
         break;
     }

@@ -185,8 +185,8 @@ export const renderExamsRow = (item: ExamsList, role: string) => {
         <div className="flex gap-2 items-center">
           {(role === "admin" || role === "teacher") && (
             <>
-              <FormModal data={item} type="update" table="exam" />
-              <FormModal id={item.id} type="delete" table="exam" />
+              <FormContainer data={item} type="update" table="exam" />
+              <FormContainer id={item.id} type="delete" table="exam" />
             </>
           )}
         </div>
