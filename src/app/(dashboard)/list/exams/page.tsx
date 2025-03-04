@@ -1,5 +1,4 @@
 import FormContainer from "@/components/FormContainer";
-import FormModal from "@/components/FormModal";
 import Pagination from "@/components/Pagination";
 import { renderExamsRow } from "@/components/Render";
 import Table from "@/components/Table";

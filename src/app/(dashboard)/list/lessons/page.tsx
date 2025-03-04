@@ -80,7 +80,7 @@ const LessonListPage = async ({
               <Image src={"/sort.png"} width={14} height={14} alt={""} />
             </button>
 
-            {role === "admin" && <FormModal table="lesson" type="create" />}
+            {role === "teacher" && <FormModal table="lesson" type="create" />}
           </div>
         </div>
       </div>

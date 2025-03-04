@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import FormModal from "./FormModal";
+import { currentUserId, role } from "@/lib/utils";
 
 export type FormModalContainerProps = {
   table:
@@ -27,7 +28,6 @@ const FormContainer = async ({
   id,
 }: FormModalContainerProps) => {
   let relatedData = {};
-
   if (type !== "delete") {
     switch (table) {
       case "subject":
@@ -77,6 +77,14 @@ const FormContainer = async ({
         break;
 
       case "exam":
+        // If the role is admin, then we want to fetch all the lessons but if the role is teacher, then we want to fetch only those lessons which belong to that particular teacher.
+        const examLessons = await prisma.lesson.findMany({
+          where: {
+            ...(role === "teacher" ? { teacherId: currentUserId! } : {}),
+          },
+          select: { id: true, name: true },
+        });
+        relatedData = { lessons: examLessons };
         break;
       default:
         break;
