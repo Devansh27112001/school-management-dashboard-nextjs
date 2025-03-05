@@ -13,7 +13,6 @@ import { useRouter } from "next/navigation";
 
 const StudentForm = ({ type, setOpen, data, relatedData }: FormProps) => {
   const { grades, classes } = relatedData;
-  console.log(grades, classes);
   const router = useRouter();
   const {
     register,
@@ -27,7 +26,6 @@ const StudentForm = ({ type, setOpen, data, relatedData }: FormProps) => {
   );
   const [image, setImage] = useState<any>();
   const onSubmit = (data: any) => {
-    console.log(data);
     startTransition(() => formAction({ ...data, image: image?.secure_url }));
   };
 

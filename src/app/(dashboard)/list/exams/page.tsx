@@ -111,7 +111,9 @@ const ExamListPage = async ({
               <Image src={"/sort.png"} width={14} height={14} alt={""} />
             </button>
 
-            {role === "teacher" && <FormContainer type="create" table="exam" />}
+            {(role === "teacher" || role === "admin") && (
+              <FormContainer type="create" table="exam" />
+            )}
           </div>
         </div>
       </div>

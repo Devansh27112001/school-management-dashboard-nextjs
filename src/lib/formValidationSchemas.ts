@@ -106,3 +106,16 @@ export const studentSchema = z.object({
 });
 
 export type StudentSchema = z.infer<typeof studentSchema>;
+
+export const examSchema = z.object({
+  id: z.number().optional(),
+  title: z.string().min(1, { message: "Exam title is required" }),
+  startTime: z.string().min(1, { message: "Start time is required" }),
+  endTime: z.string().min(1, { message: "End time is required" }),
+  lessonId: z.coerce.bigint({ message: "Lesson id is required" }),
+  results: z
+    .array(z.string())
+    .min(1, { message: "Atleast one result is required" }),
+});
+
+export type ExamSchema = z.infer<typeof examSchema>;

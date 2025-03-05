@@ -41,16 +41,19 @@ const StudentForm = dynamic(() => import("./forms/StudentForm"), {
   loading: () => <LoadingSpinner />,
 });
 
-// const ParentForm = dynamic(() => import("./forms/ParentForm"), {
-//   loading: () => <LoadingSpinner />,
-// });
-
 const SubjectForm = dynamic(() => import("./forms/SubjectForm"), {
   loading: () => <LoadingSpinner />,
 });
 const ClassForm = dynamic(() => import("./forms/ClassForm"), {
   loading: () => <LoadingSpinner />,
 });
+
+const ExamForm = dynamic(() => import("./forms/ExamForm"), {
+  loading: () => <LoadingSpinner />,
+});
+// const ParentForm = dynamic(() => import("./forms/ParentForm"), {
+//   loading: () => <LoadingSpinner />,
+// });
 
 type FormObject = Record<
   string,
@@ -92,6 +95,15 @@ const form: FormObject = {
   ),
   class: (type, setOpen, data, relatedData) => (
     <ClassForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+
+  exam: (type, data, setOpen, relatedData) => (
+    <ExamForm
       type={type}
       data={data}
       setOpen={setOpen}
