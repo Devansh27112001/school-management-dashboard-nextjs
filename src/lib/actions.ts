@@ -397,3 +397,21 @@ export const updateExam = async (
     return { success: false, error: true };
   }
 };
+
+export const deleteExam = async (
+  currentState: currentStateType,
+  data: FormData
+) => {
+  const examId = data.get("id") as string;
+  try {
+    await prisma.exam.delete({
+      where: {
+        id: parseInt(examId),
+      },
+    });
+    return { success: true, error: false };
+  } catch (error) {
+    console.error(error);
+    return { success: false, error: true };
+  }
+};

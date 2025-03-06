@@ -38,7 +38,7 @@ const StudentForm = ({ type, setOpen, data, relatedData }: FormProps) => {
   }, [state]);
   return (
     <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit)}>
-      <h1 className="">Create a new Student</h1>
+      <h1 className="">{type} Student</h1>
       <span className="text-xs text-gray-400 font-medium">
         Authentication information
       </span>

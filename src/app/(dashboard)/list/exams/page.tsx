@@ -50,15 +50,6 @@ const ExamListPage = async ({
   }
   // ROLE CONDITIONS
 
-  // const roleConditions = {
-  //   teacher: { lesson: { teacherId: currentUserId } },
-  //   student: {
-  //     lesson: { class: { students: { some: { id: currentUserId } } } },
-  //   },
-  //   parent: {
-  //     lesson: { class: { students: { some: { parentId: currentUserId } } } },
-  //   },
-  // };
   switch (role) {
     case "admin":
       break;

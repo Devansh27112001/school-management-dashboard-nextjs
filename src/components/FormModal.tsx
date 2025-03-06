@@ -11,6 +11,7 @@ import {
 import LoadingSpinner from "./LoadingSpinner";
 import {
   deleteClass,
+  deleteExam,
   deleteStudent,
   deleteSubject,
   deleteTeacher,
@@ -24,11 +25,11 @@ const deletionMap: any = {
   class: deleteClass,
   teacher: deleteTeacher,
   student: deleteStudent,
+  exam: deleteExam,
   // parent: deleteClass,
   // announcement: deleteClass,
   // event: deleteClass,
   // lesson: deleteClass,
-  // exam: deleteClass,
   // assignment: deleteClass,
   // result: deleteClass,
   // attendance: deleteClass,
