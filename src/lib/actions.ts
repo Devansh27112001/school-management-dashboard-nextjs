@@ -2,6 +2,7 @@
 import { clerkClient } from "@clerk/nextjs/server";
 import {
   ClassSchema,
+  ExamSchema,
   StudentSchema,
   SubjectSchema,
   TeacherSchema,
@@ -365,6 +366,31 @@ export const deleteStudent = async (
         id: studentId,
       },
     });
+    return { success: true, error: false };
+  } catch (error) {
+    console.error(error);
+    return { success: false, error: true };
+  }
+};
+
+// -----------------------Exam actions--------------------
+export const createExam = async (
+  currentState: currentStateType,
+  data: ExamSchema
+) => {
+  try {
+    return { success: true, error: false };
+  } catch (error) {
+    console.error(error);
+    return { success: false, error: true };
+  }
+};
+
+export const updateExam = async (
+  currentState: currentStateType,
+  data: ExamSchema
+) => {
+  try {
     return { success: true, error: false };
   } catch (error) {
     console.error(error);
