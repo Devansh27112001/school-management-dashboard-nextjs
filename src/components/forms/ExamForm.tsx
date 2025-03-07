@@ -24,6 +24,7 @@ const ExamForm = ({ data, setOpen, relatedData, type }: FormProps) => {
   );
 
   const onSubmit = (data: ExamSchema) => {
+    console.log(data);
     startTransition(() => formAction(data));
   };
 
@@ -58,28 +59,42 @@ const ExamForm = ({ data, setOpen, relatedData, type }: FormProps) => {
           defaultValue={data?.title}
         />
         <InputField
-          label="Start time"
+          label="Start Date"
           name="startTime"
           register={register}
           error={errors?.startTime}
           defaultValue={data?.startTime?.toISOString().split("T")[0]}
-          type="date"
+          type="datetime-local"
         />{" "}
         <InputField
-          label="End time"
+          label="End date"
           name="endTime"
           register={register}
           error={errors?.endTime}
           defaultValue={data?.endTime?.toISOString().split("T")[0]}
-          type="date"
+          type="datetime-local"
         />
-        <InputField
-          label="Lesson"
-          name="lessonId"
-          register={register}
-          error={errors?.lessonId}
-          defaultValue={data?.lessonId}
-        />
+        <div className="flex-col flex gap-2 w-full md:1/4 group">
+          <label className="text-xs text-gray-500 group-focus-within:font-semibold transition-all duration-300">
+            Select lesson
+          </label>
+          <select
+            {...register("lessonId")}
+            defaultValue={data?.lessonId}
+            className="ring-[1.5px] ring-gray-300 p-2 rounded-md w-full focus:ring-blue-300 outline-none transition-all duration-300 text-sm"
+          >
+            {lessons.map((lesson: { id: number; name: string }) => (
+              <option key={lesson.id} value={lesson.id}>
+                {lesson.name}
+              </option>
+            ))}
+          </select>
+          {errors?.lessonId?.message && (
+            <p className="text-xs text-red-500">
+              {errors?.lessonId?.message?.toString()}
+            </p>
+          )}
+        </div>
       </div>
       <button type="submit" className="bg-blue-400 text-white rounded-md p-2">
         {type === "create" ? "create" : "update"}
