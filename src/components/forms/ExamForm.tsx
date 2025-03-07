@@ -25,7 +25,7 @@ const ExamForm = ({ data, setOpen, relatedData, type }: FormProps) => {
 
   const onSubmit = (data: ExamSchema) => {
     console.log(data);
-    startTransition(() => formAction(data));
+    // startTransition(() => formAction(data));
   };
 
   useEffect(() => {
@@ -74,7 +74,7 @@ const ExamForm = ({ data, setOpen, relatedData, type }: FormProps) => {
           defaultValue={data?.endTime?.toISOString().split("T")[0]}
           type="datetime-local"
         />
-        <div className="flex-col flex gap-2 w-full md:1/4 group">
+        <div className="flex-col flex gap-2 w-full md:w-1/4 group">
           <label className="text-xs text-gray-500 group-focus-within:font-semibold transition-all duration-300">
             Select lesson
           </label>
@@ -83,6 +83,7 @@ const ExamForm = ({ data, setOpen, relatedData, type }: FormProps) => {
             defaultValue={data?.lessonId}
             className="ring-[1.5px] ring-gray-300 p-2 rounded-md w-full focus:ring-blue-300 outline-none transition-all duration-300 text-sm"
           >
+            <option value="">---Select a lesson---</option>
             {lessons.map((lesson: { id: number; name: string }) => (
               <option key={lesson.id} value={lesson.id}>
                 {lesson.name}
