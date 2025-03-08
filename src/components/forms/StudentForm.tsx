@@ -35,7 +35,7 @@ const StudentForm = ({ type, setOpen, data, relatedData }: FormProps) => {
       setOpen(false);
       router.refresh();
     }
-  }, [state]);
+  }, [state, router, setOpen, type]);
   return (
     <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit)}>
       <h1 className="">{type} Student</h1>

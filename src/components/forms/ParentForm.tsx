@@ -1,11 +1,10 @@
 "use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import InputField from "../InputField";
 import Image from "next/image";
-import { Dispatch, SetStateAction } from "react";
+import { FormProps } from "@/lib/types";
 
 const schema = z.object({
   username: z
@@ -33,20 +32,14 @@ const schema = z.object({
 
 type Inputs = z.infer<typeof schema>;
 
-type ParentFormProps = {
-  type: "create" | "update";
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  data?: any;
-};
-
-const ParentForm = ({ type, setOpen, data }: ParentFormProps) => {
+const ParentForm = ({ type, data }: FormProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>({ resolver: zodResolver(schema) });
 
-  const onSubmit = (data: any) => {
+  const onSubmit = () => {
     alert("Form submitted successfully");
   };
   return (

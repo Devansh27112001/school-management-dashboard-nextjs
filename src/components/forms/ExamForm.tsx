@@ -33,7 +33,7 @@ const ExamForm = ({ type, setOpen, relatedData, data }: FormProps) => {
       setOpen(false);
       router.refresh();
     }
-  }, [state, router]);
+  }, [state, router, type, setOpen]);
 
   return (
     <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit)}>

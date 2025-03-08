@@ -8,8 +8,6 @@ import {
   TeacherSchema,
 } from "./formValidationSchemas";
 import prisma from "./prisma";
-import { role } from "./data";
-import { connect } from "http2";
 
 type currentStateType = {
   success: boolean;
@@ -193,7 +191,7 @@ export const updateTeacher = async (
   if (!data.id) return { success: false, error: true };
   try {
     const client = await clerkClient();
-    const user = await client.users.updateUser(data.id, {
+    await client.users.updateUser(data.id, {
       username: data.username,
       ...(data.password !== "" && { password: data.password }),
       firstName: data.name,

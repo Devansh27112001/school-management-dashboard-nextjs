@@ -1,5 +1,4 @@
 "use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputField from "../InputField";
@@ -37,7 +36,7 @@ const TeacherForm = ({ type, setOpen, data, relatedData }: FormProps) => {
       setOpen(false);
       router.refresh();
     }
-  }, [state]);
+  }, [state, type, setOpen, router]);
 
   return (
     <form

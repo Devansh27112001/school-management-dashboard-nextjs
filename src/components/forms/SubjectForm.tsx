@@ -40,7 +40,7 @@ const SubjectForm = ({ type, setOpen, data, relatedData }: FormProps) => {
       setOpen(false);
       router.refresh();
     }
-  }, [state]);
+  }, [state, router, setOpen, type]);
 
   // ---------------------------
   return (

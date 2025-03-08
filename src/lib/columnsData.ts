@@ -290,7 +290,7 @@ export const StudentsColumns = (role: string) => {
   ];
 };
 
-export const SubjectsColumns = (role: string) => {
+export const SubjectsColumns = () => {
   return [
     {
       header: "Subject Name",

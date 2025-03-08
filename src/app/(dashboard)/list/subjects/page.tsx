@@ -2,7 +2,6 @@ import Pagination from "@/components/Pagination";
 import { renderSubjectsRow } from "@/components/Render";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
-import { role } from "@/lib/utils";
 import prisma from "@/lib/prisma";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 import { searchParamsType } from "@/lib/types";
@@ -10,15 +9,18 @@ import { Prisma } from "@prisma/client";
 import Image from "next/image";
 import { SubjectsColumns } from "@/lib/columnsData";
 import FormContainer from "@/components/FormContainer";
+import { auth } from "@clerk/nextjs/server";
 
 const SubjectListPage = async ({
   searchParams,
 }: {
   searchParams: searchParamsType;
 }) => {
+  const { sessionClaims } = await auth();
+  const role = (sessionClaims?.metadata as { role: string })?.role;
   const { page = 1, ...queryString } = await searchParams;
   const query: Prisma.SubjectWhereInput = {};
-  const columns = SubjectsColumns(role);
+  const columns = SubjectsColumns();
 
   if (queryString.search) {
     for (const [key, value] of Object.entries(queryString)) {

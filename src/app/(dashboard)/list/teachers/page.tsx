@@ -1,7 +1,6 @@
 import Image from "next/image";
 import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
-import { role } from "@/lib/utils";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
@@ -10,12 +9,15 @@ import { renderTeachersRow } from "@/components/Render";
 import { TeachersColumns } from "@/lib/columnsData";
 import { searchParamsType } from "@/lib/types";
 import FormContainer from "@/components/FormContainer";
+import { auth } from "@clerk/nextjs/server";
 
 const TeachersListPage = async ({
   searchParams,
 }: {
   searchParams: searchParamsType;
 }) => {
+  const { sessionClaims } = await auth();
+  const role = (sessionClaims?.metadata as { role: string })?.role;
   // In NextJs 15, we need to await the searchParams in order to get the query string.
   const { page = 1, ...queryString } = await searchParams;
   const query: Prisma.TeacherWhereInput = {};

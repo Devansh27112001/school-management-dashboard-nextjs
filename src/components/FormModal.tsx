@@ -140,7 +140,7 @@ const FormModal = ({
         setOpen(false);
         router.refresh();
       }
-    }, [state]);
+    }, [state, router]);
 
     return type === "delete" && id ? (
       <form action={formAction} className="p-4 flex flex-col gap-4">

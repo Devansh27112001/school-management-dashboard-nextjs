@@ -7,7 +7,7 @@ import { EventsColumns } from "@/lib/columnsData";
 import prisma from "@/lib/prisma";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 import { searchParamsType } from "@/lib/types";
-import { currentUserId, role } from "@/lib/utils";
+import { auth } from "@clerk/nextjs/server";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
 
@@ -16,6 +16,8 @@ const EventListPage = async ({
 }: {
   searchParams: searchParamsType;
 }) => {
+  const { userId: currentUserId, sessionClaims } = await auth();
+  const role = (sessionClaims?.metadata as { role: string })?.role;
   const { page = 1, ...queryParams } = await searchParams;
   const query: Prisma.EventWhereInput = {};
   const columns = EventsColumns(role);
