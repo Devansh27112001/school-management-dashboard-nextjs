@@ -83,9 +83,7 @@ const form: FormObject = {
       relatedData={relatedData}
     />
   ),
-  // parent: (type, setOpen, data) => (
-  //   <ParentForm type={type} data={data} setOpen={setOpen} />
-  // ),
+
   subject: (type, setOpen, data, relatedData) => (
     <SubjectForm
       type={type}
@@ -103,7 +101,7 @@ const form: FormObject = {
     />
   ),
 
-  exam: (type, data, setOpen, relatedData) => (
+  exam: (type, setOpen, data, relatedData) => (
     <ExamForm
       type={type}
       data={data}

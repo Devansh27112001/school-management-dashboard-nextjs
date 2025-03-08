@@ -1,4 +1,3 @@
-import FormModal from "@/components/FormModal";
 import Pagination from "@/components/Pagination";
 import { renderSubjectsRow } from "@/components/Render";
 import Table from "@/components/Table";

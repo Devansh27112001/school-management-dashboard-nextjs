@@ -4,18 +4,21 @@ import { renderParentsRow } from "@/components/Render";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import { ParentsColumns } from "@/lib/columnsData";
-import { role } from "@/lib/utils";
 import prisma from "@/lib/prisma";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 import { searchParamsType } from "@/lib/types";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
+import { auth } from "@clerk/nextjs/server";
 
 const ParentListPage = async ({
   searchParams,
 }: {
   searchParams: searchParamsType;
 }) => {
+  const { sessionClaims } = await auth();
+  const role = (sessionClaims?.metadata as { role: string })?.role;
+
   const { page = 1, ...queryString } = await searchParams;
   const query: Prisma.ParentWhereInput = {};
   const columns = ParentsColumns(role);

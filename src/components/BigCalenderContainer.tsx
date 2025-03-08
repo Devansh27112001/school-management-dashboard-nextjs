@@ -6,7 +6,7 @@ const BigCalenderContainer = async ({
   type,
   id,
 }: {
-  type: "teacherId" | "classId";
+  type: "teacherId" | "classId" | "parentId";
   id: number | string;
 }) => {
   const dataRes = await prisma.lesson.findMany({

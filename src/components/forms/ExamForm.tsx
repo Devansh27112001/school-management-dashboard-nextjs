@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import InputField from "../InputField";
 
-const ExamForm = ({ data, setOpen, relatedData, type }: FormProps) => {
+const ExamForm = ({ type, setOpen, relatedData, data }: FormProps) => {
   const { lessons } = relatedData;
   const router = useRouter();
   const {
@@ -24,8 +24,7 @@ const ExamForm = ({ data, setOpen, relatedData, type }: FormProps) => {
   );
 
   const onSubmit = (data: ExamSchema) => {
-    console.log(data);
-    // startTransition(() => formAction(data));
+    startTransition(() => formAction(data));
   };
 
   useEffect(() => {
@@ -34,7 +33,7 @@ const ExamForm = ({ data, setOpen, relatedData, type }: FormProps) => {
       setOpen(false);
       router.refresh();
     }
-  }, [state]);
+  }, [state, router]);
 
   return (
     <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit)}>

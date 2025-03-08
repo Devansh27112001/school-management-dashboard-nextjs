@@ -3,19 +3,22 @@ import Pagination from "@/components/Pagination";
 import { renderResultsRow } from "@/components/Render";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
-import { currentUserId, role } from "@/lib/utils";
 import prisma from "@/lib/prisma";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 import { searchParamsType } from "@/lib/types";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
 import { ResultsColumns } from "@/lib/columnsData";
+import { auth } from "@clerk/nextjs/server";
 
 const ResultListPage = async ({
   searchParams,
 }: {
   searchParams: searchParamsType;
 }) => {
+  const { userId: currentUserId, sessionClaims } = await auth();
+  const role = (sessionClaims?.metadata as { role: string })?.role;
+
   const { page = 1, ...queryParams } = await searchParams;
   const query: Prisma.ResultWhereInput = {};
   const columns = ResultsColumns(role);

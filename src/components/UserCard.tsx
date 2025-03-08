@@ -6,7 +6,7 @@ interface UserCardProps {
 }
 
 const UserCard = async ({ type }: UserCardProps) => {
-  const modelMap = {
+  const modelMap: Record<typeof type, any> = {
     admin: prisma.admin,
     student: prisma.student,
     parent: prisma.parent,

@@ -9,13 +9,15 @@ import { searchParamsType } from "@/lib/types";
 import { Prisma } from "@prisma/client";
 import { renderAssignmentsRow } from "@/components/Render";
 import { AssignmentsColumns } from "@/lib/columnsData";
-import { currentUserId, role } from "@/lib/utils";
+import { auth } from "@clerk/nextjs/server";
 
 const AssignmentListPage = async ({
   searchParams,
 }: {
   searchParams: searchParamsType;
 }) => {
+  const { userId: currentUserId, sessionClaims } = await auth();
+  const role = (sessionClaims?.metadata as { role: string })?.role;
   const { page = 1, ...queryParams } = await searchParams;
   const query: Prisma.AssignmentWhereInput = {};
   const columns = AssignmentsColumns(role);
